@@ -1,0 +1,8 @@
+{
+  "gitflow4code.features": [
+    {
+      "name": "feature/ta-readme",
+      "base": "develop"
+    }
+  ]
+}
