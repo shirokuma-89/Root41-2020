@@ -234,18 +234,6 @@ class _LED {
   // none
 } LED;
 
-class _LCD {
- public:
-  int output = 0;
-
-  int data = NULL;
-  String unit = "NULL";
-
-  unsigned long timer;
-
- private:
-} LCD;
-
 class _carpet {
  public:
   int tile = 1;  // 0がパンチカーペット　　1がタイルカーペット
