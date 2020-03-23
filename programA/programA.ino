@@ -216,11 +216,6 @@ class _LED {
   void changeAll(int red, int green, int blue);
   void changeAll(unsigned long _color);
   void degShow(int d, unsigned long _color = 'hogehoge');
-  void lineShow(void);
-  void topShow(void);
-
-  bool white = false;
-  bool dist = false;
 
   int bright = 150;
 
@@ -233,8 +228,7 @@ class _LED {
   unsigned long WHITE;
   unsigned long PURPLE;
   unsigned long LIME;
-
-  unsigned long timer;
+  unsigned long NONE;
 
  private:
   // none

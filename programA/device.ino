@@ -6,6 +6,7 @@ void _device::initialize(void) {
   LED.WHITE = RGBLED.Color(255, 255, 255);
   LED.PURPLE = RGBLED.Color(255, 0, 200);
   LED.LIME = RGBLED.Color(120, 255, 14);
+  LED.NONE = RGBLED.Color(0, 0, 0);
 
   Wire.begin();
 
