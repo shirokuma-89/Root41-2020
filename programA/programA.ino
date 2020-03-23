@@ -146,32 +146,17 @@ class _line {
 class _motor {
  public:
   _motor(void);
-
   void directDrive(int* p);
   void drive(int _deg, int _power, bool _stop = false);
   void speed(void);
 
-  int val[3];
-  float cValue[3];
-
-  const int move = 60;
-
-  unsigned long moveTimer = 0;
-  int integral = 0;
-
-  int calcVal[3][360];
+  int val[4];
 
  private:
-  int front = 0;
-  int _front;
   float Kp;
   float Ki;
   float Kd;
-  float Km;
-
-  int correctionVal = 0;
-  int error;
-
+  
 } motor;
 
 class _gyro {
