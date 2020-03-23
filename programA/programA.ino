@@ -176,21 +176,17 @@ class _motor {
 
 class _gyro {
  public:
+  void setting(void);
   int read(void);
   int differentialRead(void);
-  bool pickUp(void);
-  void setting(void);
 
   int deg;
   int differentialDeg = 0;
   int eeprom[6];
   int offset;
 
-  bool pickUpAns = false;
-
  private:
-  unsigned long pickUpTimer;
-  bool p_az;
+  // none
 } gyro;
 
 class _tof {
