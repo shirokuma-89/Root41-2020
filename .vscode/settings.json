@@ -3,6 +3,10 @@
     {
       "name": "feature/ta-makeDirectory",
       "base": "develop"
+    },
+    {
+      "name": "feature/ta-makeTemplate",
+      "base": "develop"
     }
   ]
 }
