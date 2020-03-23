@@ -192,9 +192,9 @@ class _gyro {
 class _tof {
  public:
   int read(void);
-  int dist;
 
  private:
+  int _dist;
 } tof;
 
 class _device {
