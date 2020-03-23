@@ -234,18 +234,6 @@ class _LED {
   // none
 } LED;
 
-class _carpet {
- public:
-  int tile = 1;  // 0がパンチカーペット　　1がタイルカーペット
-
-  int _lineWhited[2] = {15, 17};
-  int _lineWhitedT[2] = {19, 10};  //タイマーのやつ
-
-  float _motorPower[2] = {1.0, 1.0};
-
- private:
-} carpet;
-
 void setup(void) {
   device.initialize();
   device.mode = 0;
