@@ -62,34 +62,6 @@ void _device::initialize(void) {
   gyro.eeprom[3] = (EEPROM[7] * 256) + EEPROM[8];
   gyro.eeprom[4] = (EEPROM[9] * 256) + EEPROM[10];
   gyro.eeprom[5] = (EEPROM[11] * 256) + EEPROM[12];
-
-  for (int i = 0; i <= 359; i++) {
-    float s;
-    motor.calcVal[0][i] = int(sin(radians(i - 300)) * 100.0);
-    motor.calcVal[1][i] = int(sin(radians(i - 60)) * 100.0);
-    motor.calcVal[2][i] = int(sin(radians(i - 180)) * 100.0);
-
-    if (abs(motor.calcVal[0][i]) < abs(motor.calcVal[1][i])) {
-      if (abs(motor.calcVal[1][i]) < abs(motor.calcVal[2][i])) {
-        s = 100.0 / (float)abs(motor.calcVal[2][i]);
-      } else {
-        s = 100.0 / (float)abs(motor.calcVal[1][i]);
-      }
-    } else {
-      if (abs(motor.calcVal[0][i]) < abs(motor.calcVal[2][i])) {
-        s = 100.0 / (float)abs(motor.calcVal[2][i]);
-      } else {
-        s = 100.0 / (float)abs(motor.calcVal[0][i]);
-      }
-    }
-    motor.calcVal[0][i] = round((float)motor.calcVal[0][i] * s);
-    motor.calcVal[1][i] = round((float)motor.calcVal[1][i] * s);
-    motor.calcVal[2][i] = round((float)motor.calcVal[2][i] * s);
-
-    motor.calcVal[0][i] = round((float)motor.calcVal[0][i] * motor.cValue[0]);
-    motor.calcVal[1][i] = round((float)motor.calcVal[1][i] * motor.cValue[1]);
-    motor.calcVal[2][i] = round((float)motor.calcVal[2][i] * motor.cValue[2]);
-  }
 }
 
 void _device::check(void) {
