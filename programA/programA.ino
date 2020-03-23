@@ -19,10 +19,6 @@ int LINE[20] = {30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
 #define SW_1 23
 #define SW_RESET 25
 
-#define BUZ_1 14
-#define BUZ_2 15
-#define BUZ_3 16
-
 //インスタンス作成
 Adafruit_NeoPixel RGBLED = Adafruit_NeoPixel(16, 28, NEO_GRB + NEO_KHZ800);
 FaBoLCDmini_AQM0802A lcd;
@@ -32,46 +28,15 @@ class _ball {
  public:
   void read(int* b);
   void calc(void);
-  void keeper(void);
-
-  unsigned long lineOut;
-  unsigned long lineTimer;
-
+  
   int val[16];
-  int _val[16];
-  int speed = 80;
   int top;
   int deg;
-  int Ldeg;
-  int dist;
-  int cm;
-  int left = 0;
-  int tdeg;
 
   bool exist;
-  bool hold = false;
-  bool turn;
-  bool emg;
-
-  int right;
-  int _right;
-
-  float degLPF = 0.2;
-
-  unsigned long keeperOut;
-  unsigned long keeperTime;
 
  private:
-  int _top;
-  int _deg;
-  int exCount = true;
-
-  float x;
-  float y;
-
   float LPF = 0.24;
-
-  unsigned long holdTimer;
 
 } ball;
 
@@ -199,5 +164,6 @@ void loop(void) {
     //処理
 
     //駆動
+    
   }
 }
