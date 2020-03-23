@@ -79,68 +79,11 @@ class _line {
  public:
   _line(void);
   void read(void);
-  void process(void);
 
-  bool flag;
   bool val[20];
-  bool touch;
-  bool firstTime = false;
-
-  float deg = 1000;
-  float Sdeg = 1000;
-  float Ldeg = 1000;
-
-  int col;
-  int whited;
-  int logs[20];
-  int root1[3] = {100, 100, 100};
-  int root2[3] = {100, 100, 100};
-  bool rootsave;
-  int direction;
-  int height1;
-  int height2;
-  int first = 100;
-  int second = 100;
-  int last;
-  int now;
-  int right;
-  int left;
-  int way;
-  int autodeg;
-  int lock;
-  int mode;
-  int weight = 10;
-  int sigdeg;
-  int _deg;
-  float rDeg;
-  float nDeg;
-  int rError;
-  int nError;
-  float firstX;
-  float firstY;
-  float firstCalc;
-
-  float vector[20][2];
-  float firstDeg;
-  float x;
-  float y;
-  float Nx;
-  float Ny;
-  float gap;
-  float _x;
-  float _y;
-  float backupDeg;
-  float offsetX = 1.3;
-  float offsetY = 1;
-
-  unsigned long stopTimer;
-  unsigned long overTimer;
-  unsigned long lockTimer;
-  unsigned long _millis;
-  unsigned long Gmillis;
 
  private:
-  bool _flag;
+  // none
 } line;
 
 class _motor {
@@ -156,7 +99,7 @@ class _motor {
   float Kp;
   float Ki;
   float Kd;
-  
+
 } motor;
 
 class _gyro {
