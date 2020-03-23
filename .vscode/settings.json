@@ -1,0 +1,12 @@
+{
+  "gitflow4code.features": [
+    {
+      "name": "feature/ta-makeDirectory",
+      "base": "develop"
+    },
+    {
+      "name": "feature/ta-makeTemplate",
+      "base": "develop"
+    }
+  ]
+}
