@@ -21,19 +21,19 @@ int LINE[20] = {30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
 
 //インスタンス作成
 Adafruit_NeoPixel RGBLED = Adafruit_NeoPixel(16, 28, NEO_GRB + NEO_KHZ800);
-FaBoLCDmini_AQM0802A lcd;
 VL53L0X TOF;
 
 class _ball {
  public:
   void read(int* b);
   void calc(void);
-  
+
+  bool exist;
+
   int val[16];
   int top;
   int deg;
-
-  bool exist;
+  int dist;
 
  private:
   float LPF = 0.24;
@@ -110,6 +110,9 @@ class _LED {
   void changeAll(unsigned long _color);
   void degShow(int d, unsigned long _color = 'hogehoge');
 
+  bool white = false;
+  bool dist = true;
+
   int bright = 150;
 
   unsigned long defaltColor;
@@ -164,6 +167,5 @@ void loop(void) {
     //処理
 
     //駆動
-    
   }
 }
