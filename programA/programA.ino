@@ -130,6 +130,13 @@ class _LED {
   // none
 } LED;
 
+class _kicker {
+ public:
+  // none
+ private:
+  // none
+} kicker;
+
 void setup(void) {
   device.initialize();
   device.mode = 0;
