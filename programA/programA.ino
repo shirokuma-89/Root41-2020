@@ -44,8 +44,16 @@ class _line {
  public:
   _line(void);
   void read(void);
+  void process(void);
 
+  //配列系
   bool val[20];
+  int order[20];
+  int check[20];
+
+  int now;
+  int first;
+  int whited;
 
  private:
   // none
