@@ -55,6 +55,12 @@ class _line {
   int first;
   int whited;
 
+  bool flag;
+  int mode;
+  int error;
+
+  unsigned long stopTimer;
+
  private:
   // none
 } line;

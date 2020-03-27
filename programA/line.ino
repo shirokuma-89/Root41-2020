@@ -8,7 +8,24 @@ _line::_line(void) {
   }
 }
 
-void _line::process(void) {}
+void _line::process(void) {
+  if (flag) {
+    if (mode == 0) {
+    }
+  } else {
+    //リセット
+    for (int i = 0; i <= 19 i++) {
+      val[i] = false;
+      order[i] = 100;
+      check[i] = 0;
+    }
+    now = 100;
+    first = 100;
+    whited = 0;
+    mode = 0;
+    error = 0;
+  }
+}
 
 void _line::read(void) {
   //読み込み
@@ -27,4 +44,7 @@ void _line::read(void) {
   }
   //順番記憶
   order[whited] = now;
+
+  //足跡残す
+  whited++;
 }
