@@ -44,6 +44,7 @@ class _line {
  public:
   _line(void);
   void read(void);
+  void autoadjustment(void);
   void process(void);
 
   //配列系
@@ -58,6 +59,10 @@ class _line {
   bool flag;
   int mode;
   int error;
+
+  byte bright;
+  int best;
+  int dif;
 
   unsigned long stopTimer;
 
