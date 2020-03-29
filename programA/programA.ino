@@ -15,6 +15,8 @@ int BALL[16] = {A0, A1, A2,  A3,  A4,  A5,  A6,  A7,
 int LINE[20] = {30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
                 40, 41, 42, 43, 44, 45, 46, 47, 48, 49};
 
+#define LINE_BRIGHT 12
+
 #define SW_2 22
 #define SW_1 23
 #define SW_RESET 25
@@ -44,8 +46,27 @@ class _line {
  public:
   _line(void);
   void read(void);
+  void autoadjustment(void);
+  void process(void);
 
+  //配列系
   bool val[20];
+  int order[20];
+  int check[20];
+
+  int now;
+  int first;
+  int whited;
+
+  bool flag;
+  int mode;
+  int error;
+
+  byte bright;
+  int best;
+  int dif;
+
+  unsigned long stopTimer;
 
  private:
   // none
@@ -145,6 +166,8 @@ void setup(void) {
 
   gyro.setting();
   gyro.read();
+
+  line.autoadjustment();
 
   //起動イルミネーション
   for (int i = 0; i <= 15; i++) {
