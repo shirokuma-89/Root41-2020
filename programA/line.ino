@@ -50,14 +50,12 @@ void _line::read(void) {
       }
       if (check[i] == 0) {
         now = i;
+        order[whited] = now;
+        whited++;
+        check[i] = 1;
       }
     } else {
       val[i] = false;
     }
   }
-  //順番記憶
-  order[whited] = now;
-
-  //足跡残す
-  whited++;
 }
