@@ -38,14 +38,12 @@ void _device::initialize(void) {
     //青号機
     device.robot = true;
 
-    LED.defaltColor = RGBLED.Color(0, 150, 255);
-    LED.subColor = RGBLED.Color(0, 0, 255);
+    LED.defaltColor = RGBLED.Color(0, 0, 255);
   } else {
     //赤号機
     device.robot = false;
 
-    LED.defaltColor = RGBLED.Color(255, 100, 0);
-    LED.subColor = RGBLED.Color(255, 0, 0);
+    LED.defaltColor = RGBLED.Color(255, 0, 0);
   }
 
   gyro.eeprom[0] = (EEPROM[1] * 256) + EEPROM[2];

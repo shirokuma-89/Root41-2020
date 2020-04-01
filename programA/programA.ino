@@ -137,7 +137,6 @@ class _LED {
   int bright = 150;
 
   unsigned long defaltColor;
-  unsigned long subColor;
   unsigned long RED;
   unsigned long BLUE;
   unsigned long GREEN;
