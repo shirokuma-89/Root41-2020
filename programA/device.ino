@@ -17,7 +17,7 @@ void _device::initialize(void) {
 
   RGBLED.begin();
   RGBLED.setBrightness(LED.bright);
-  LED.changeAll(LED.GREEN);
+  LED.changeAll(LED.BLUE);
   RGBLED.show();
 
   for (int i = 0; i <= 15; i++) {
@@ -35,15 +35,15 @@ void _device::initialize(void) {
   pinMode(SW_RESET, INPUT_PULLUP);
 
   if (EEPROM[0] == 1) {
-    //青号機
+    //緑号機
     device.robot = true;
 
-    LED.defaltColor = RGBLED.Color(0, 0, 255);
+    LED.defaltColor = LED.GREEN;
   } else {
     //赤号機
     device.robot = false;
 
-    LED.defaltColor = RGBLED.Color(255, 0, 0);
+    LED.defaltColor = LED.RED;
   }
 
   gyro.eeprom[0] = (EEPROM[1] * 256) + EEPROM[2];
