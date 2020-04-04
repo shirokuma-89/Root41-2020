@@ -133,8 +133,10 @@ class _LED {
 
   bool white = false;
   bool dist = true;
+  bool setting = false;
 
   int bright = 150;
+  int settingMode = 0;
 
   unsigned long defaultColor;
   unsigned long RED;
@@ -199,23 +201,67 @@ void loop(void) {
     //ボタンによるUI処理
     if (!digitalRead(SW_RESET)) {
       if (!digitalRead(SW_1)) {
-        LED.changeAll(LED.PURPLE);
+        LED.changeAll(LED.BLUE);
         RGBLED.show();
-        delay(100);  //チャッタリング防止
+
+        delay(20);  //チャッタリング防止
+        while (!digitalRead(SW_RESET)) {
+        }
+        delay(20);
 
         while (true) {
           if (!digitalRead(SW_RESET)) {  //戻るボタン
             break;
           }
+
+          if (!digitalRead(SW_1)) {
+            LED.settingMode = 1;
+            LED.setting = true;
+            LED.changeAll(LED.RED);
+            RGBLED.show();
+            delay(1000);
+            break;
+          }
+
+          if (!digitalRead(SW_2)) {
+            LED.settingMode = 2;
+            LED.setting = true;
+            LED.changeAll(LED.PURPLE);
+            RGBLED.show();
+            delay(1000);
+            break;
+          }
         }
 
       } else if (!digitalRead(SW_2)) {
-        LED.changeAll(LED.LIME);
+        LED.changeAll(LED.YELLOW);
         RGBLED.show();
-        delay(100);  //チャッタリング防止
+
+        delay(20);  //チャッタリング防止
+        while (!digitalRead(SW_RESET)) {
+        }
+        delay(20);
 
         while (true) {
           if (!digitalRead(SW_RESET)) {  //戻るボタン
+            break;
+          }
+
+          if (!digitalRead(SW_1)) {
+            LED.settingMode = 3;
+            LED.setting = true;
+            LED.changeAll(LED.RED);
+            RGBLED.show();
+            delay(1000);
+            break;
+          }
+
+          if (!digitalRead(SW_2)) {
+            LED.settingMode = 4;
+            LED.setting = true;
+            LED.changeAll(LED.PURPLE);
+            RGBLED.show();
+            delay(1000);
             break;
           }
         }

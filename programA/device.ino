@@ -66,4 +66,6 @@ void _device::check(void) {
   } else if (!digitalRead(SW_2)) {
     device.mode = 2;
   }
+
+  LED.setting = false;
 }
