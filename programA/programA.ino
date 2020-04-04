@@ -206,7 +206,7 @@ void loop(void) {
         delay(20);  //チャッタリング防止
         while (!digitalRead(SW_RESET)) {
         }
-        delay(20);
+        delay(200);
 
         while (true) {
           if (!digitalRead(SW_RESET)) {  //戻るボタン
@@ -235,7 +235,7 @@ void loop(void) {
         delay(20);  //チャッタリング防止
         while (!digitalRead(SW_RESET)) {
         }
-        delay(20);
+        delay(200);
 
         while (true) {
           if (!digitalRead(SW_RESET)) {  //戻るボタン

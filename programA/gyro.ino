@@ -124,9 +124,6 @@ int ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset;
 void _gyro::calibrationEEPROM(void) {
   accelgyro.initialize();
 
-  while (Serial.available() && Serial.read())
-    ;  // empty buffer
-
   accelgyro.setXAccelOffset(0);
   accelgyro.setYAccelOffset(0);
   accelgyro.setZAccelOffset(0);
