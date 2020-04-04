@@ -21,6 +21,8 @@ int LINE[20] = {30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
 #define SW_2 25
 #define SW_RESET 23
 
+#define SOLENOID 27
+
 //インスタンス作成
 Adafruit_NeoPixel RGBLED = Adafruit_NeoPixel(16, 28, NEO_GRB + NEO_KHZ800);
 VL53L0X TOF;
@@ -146,6 +148,7 @@ class _LED {
   unsigned long WHITE;
   unsigned long PURPLE;
   unsigned long LIME;
+  unsigned long ORANGE;
   unsigned long NONE;
 
  private:
@@ -206,16 +209,33 @@ void loop(void) {
           }
 
           if (!digitalRead(SW_1)) {
-            LED.changeAll(LED.RED);
+            LED.changeAll(LED.ORANGE);
             RGBLED.show();
-            delay(1000);
+            line.autoadjustment();
+            LED.animation1();
             break;
           }
 
           if (!digitalRead(SW_2)) {
-            LED.changeAll(LED.PURPLE);
+            LED.changeAll(LED.LIME);
             RGBLED.show();
-            delay(1000);
+
+            while (true) {
+              LED.changeAll(LED.LIME);
+              RGBLED.show();
+              if (!digitalRead(SW_2)) {
+                LED.changeAll(LED.YELLOW);
+                RGBLED.show();
+                digitalWrite(SOLENOID, HIGH);
+                delay(200);
+                digitalWrite(SOLENOID, LOW);
+                delay(1200);
+              }
+
+              if (!digitalRead(SW_RESET)) {
+                break;
+              }
+            }
             break;
           }
         }

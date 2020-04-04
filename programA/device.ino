@@ -5,7 +5,8 @@ void _device::initialize(void) {
   LED.YELLOW = RGBLED.Color(255, 255, 0);
   LED.WHITE = RGBLED.Color(255, 255, 255);
   LED.PURPLE = RGBLED.Color(255, 0, 200);
-  LED.LIME = RGBLED.Color(120, 255, 14);
+  LED.ORANGE = RGBLED.Color(255, 100, 0);
+  LED.LIME = RGBLED.Color(100, 255, 50);
   LED.NONE = RGBLED.Color(0, 0, 0);
 
   Wire.begin();
@@ -33,6 +34,8 @@ void _device::initialize(void) {
   pinMode(SW_1, INPUT_PULLUP);
   pinMode(SW_2, INPUT_PULLUP);
   pinMode(SW_RESET, INPUT_PULLUP);
+
+  pinMode(SOLENOID, 27);
 
   if (EEPROM[0] == 1) {
     //緑号機
