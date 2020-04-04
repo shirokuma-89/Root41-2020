@@ -91,6 +91,7 @@ class _motor {
 class _gyro {
  public:
   void setting(void);
+  void calibrationEEPROM(void);
   int read(void);
   int differentialRead(void);
 
@@ -133,10 +134,8 @@ class _LED {
 
   bool white = false;
   bool dist = true;
-  bool setting = false;
 
   int bright = 150;
-  int settingMode = 0;
 
   unsigned long defaultColor;
   unsigned long RED;
@@ -215,8 +214,6 @@ void loop(void) {
           }
 
           if (!digitalRead(SW_1)) {
-            LED.settingMode = 1;
-            LED.setting = true;
             LED.changeAll(LED.RED);
             RGBLED.show();
             delay(1000);
@@ -224,8 +221,6 @@ void loop(void) {
           }
 
           if (!digitalRead(SW_2)) {
-            LED.settingMode = 2;
-            LED.setting = true;
             LED.changeAll(LED.PURPLE);
             RGBLED.show();
             delay(1000);
@@ -248,17 +243,13 @@ void loop(void) {
           }
 
           if (!digitalRead(SW_1)) {
-            LED.settingMode = 3;
-            LED.setting = true;
-            LED.changeAll(LED.RED);
+            LED.changeAll(LED.PURPLE);
             RGBLED.show();
-            delay(1000);
+            gyro.calibrationEEPROM();
             break;
           }
 
           if (!digitalRead(SW_2)) {
-            LED.settingMode = 4;
-            LED.setting = true;
             LED.changeAll(LED.PURPLE);
             RGBLED.show();
             delay(1000);

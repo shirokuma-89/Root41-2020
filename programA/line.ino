@@ -1,4 +1,5 @@
 ISR(timer5Event) {
+  //ラインの記述はここに
   line.read();
 }
 
