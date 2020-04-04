@@ -118,6 +118,7 @@ class _device {
  public:
   void initialize(void);
   void check(void);
+  void UI(void);
 
   bool robot;
 
@@ -147,6 +148,7 @@ class _LED {
   unsigned long YELLOW;
   unsigned long WHITE;
   unsigned long PURPLE;
+  unsigned long MINT;
   unsigned long LIME;
   unsigned long ORANGE;
   unsigned long NONE;
@@ -193,86 +195,7 @@ void loop(void) {
     motor.drive(NULL, NULL, true);
 
     //ボタンによるUI処理
-    if (!digitalRead(SW_RESET)) {
-      if (!digitalRead(SW_1)) {
-        LED.changeAll(LED.BLUE);
-        RGBLED.show();
-
-        delay(20);  //チャッタリング防止
-        while (!digitalRead(SW_RESET)) {
-        }
-        delay(200);
-
-        while (true) {
-          if (!digitalRead(SW_RESET)) {  //戻るボタン
-            break;
-          }
-
-          if (!digitalRead(SW_1)) {
-            LED.changeAll(LED.ORANGE);
-            RGBLED.show();
-            line.autoadjustment();
-            LED.animation1();
-            break;
-          }
-
-          if (!digitalRead(SW_2)) {
-            LED.changeAll(LED.LIME);
-            RGBLED.show();
-
-            while (true) {
-              LED.changeAll(LED.LIME);
-              RGBLED.show();
-              if (!digitalRead(SW_2)) {
-                LED.changeAll(LED.YELLOW);
-                RGBLED.show();
-                digitalWrite(SOLENOID, HIGH);
-                delay(200);
-                digitalWrite(SOLENOID, LOW);
-                delay(1200);
-              }
-
-              if (!digitalRead(SW_RESET)) {
-                break;
-              }
-            }
-            break;
-          }
-        }
-
-      } else if (!digitalRead(SW_2)) {
-        LED.changeAll(LED.YELLOW);
-        RGBLED.show();
-
-        delay(20);  //チャッタリング防止
-        while (!digitalRead(SW_RESET)) {
-        }
-        delay(200);
-
-        while (true) {
-          if (!digitalRead(SW_RESET)) {  //戻るボタン
-            break;
-          }
-
-          if (!digitalRead(SW_1)) {
-            LED.changeAll(LED.PURPLE);
-            RGBLED.show();
-            gyro.calibrationEEPROM();
-            break;
-          }
-
-          if (!digitalRead(SW_2)) {
-            LED.changeAll(LED.GREEN);
-            RGBLED.show();
-            gyro.setting();
-            gyro.read();
-            LED.animation1();
-            delay(500);
-            break;
-          }
-        }
-      }
-    }
+    device.UI();
   } else if (device.mode == 1) {  //駆動中
     //処理
 

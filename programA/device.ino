@@ -6,7 +6,8 @@ void _device::initialize(void) {
   LED.WHITE = RGBLED.Color(255, 255, 255);
   LED.PURPLE = RGBLED.Color(255, 0, 200);
   LED.ORANGE = RGBLED.Color(255, 100, 0);
-  LED.LIME = RGBLED.Color(100, 255, 50);
+  LED.MINT = RGBLED.Color(100, 255, 50);
+  LED.LIME = RGBLED.Color(190, 255, 0);
   LED.NONE = RGBLED.Color(0, 0, 0);
 
   Wire.begin();
@@ -68,5 +69,89 @@ void _device::check(void) {
     device.mode = 1;
   } else if (!digitalRead(SW_2)) {
     device.mode = 2;
+  }
+}
+
+void _device::UI(void) {
+  if (!digitalRead(SW_RESET)) {
+    if (!digitalRead(SW_1)) {
+      LED.changeAll(LED.BLUE);
+      RGBLED.show();
+
+      delay(20);  //チャッタリング防止
+      while (!digitalRead(SW_RESET)) {
+      }
+      delay(200);
+
+      while (true) {
+        if (!digitalRead(SW_RESET)) {  //戻るボタン
+          break;
+        }
+
+        if (!digitalRead(SW_1)) {
+          LED.changeAll(LED.ORANGE);
+          RGBLED.show();
+          line.autoadjustment();
+          LED.animation1();
+          delay(500);
+          break;
+        }
+
+        if (!digitalRead(SW_2)) {
+          LED.changeAll(LED.MINT);
+          RGBLED.show();
+
+          while (true) {
+            LED.changeAll(LED.MINT);
+            RGBLED.show();
+            if (!digitalRead(SW_2)) {
+              LED.changeAll(LED.LIME);
+              RGBLED.show();
+              digitalWrite(SOLENOID, HIGH);
+              delay(200);
+              digitalWrite(SOLENOID, LOW);
+              delay(1200);
+            }
+
+            if (!digitalRead(SW_RESET)) {
+              break;
+            }
+          }
+          break;
+        }
+      }
+
+    } else if (!digitalRead(SW_2)) {
+      LED.changeAll(LED.YELLOW);
+      RGBLED.show();
+
+      delay(20);  //チャッタリング防止
+      while (!digitalRead(SW_RESET)) {
+      }
+      delay(200);
+
+      while (true) {
+        if (!digitalRead(SW_RESET)) {  //戻るボタン
+          break;
+        }
+
+        if (!digitalRead(SW_1)) {
+          LED.changeAll(LED.PURPLE);
+          RGBLED.show();
+          gyro.calibrationEEPROM();
+          break;
+        }
+
+        if (!digitalRead(SW_2)) {
+          LED.changeAll(LED.GREEN);
+          RGBLED.show();
+          gyro.setting();
+          gyro.read();
+          LED.animation1();
+          delay(500);
+          break;
+        }
+      }
+    }
   }
 }
