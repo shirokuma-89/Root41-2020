@@ -17,9 +17,11 @@ int LINE[20] = {30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
 
 #define LINE_BRIGHT 12
 
-#define SW_2 22
-#define SW_1 23
-#define SW_RESET 25
+#define SW_1 22
+#define SW_2 25
+#define SW_RESET 23
+
+#define SOLENOID 27
 
 //インスタンス作成
 Adafruit_NeoPixel RGBLED = Adafruit_NeoPixel(16, 28, NEO_GRB + NEO_KHZ800);
@@ -91,6 +93,7 @@ class _motor {
 class _gyro {
  public:
   void setting(void);
+  void calibrationEEPROM(void);
   int read(void);
   int differentialRead(void);
 
@@ -115,6 +118,7 @@ class _device {
  public:
   void initialize(void);
   void check(void);
+  void UI(void);
 
   bool robot;
 
@@ -130,21 +134,23 @@ class _LED {
   void changeAll(int red, int green, int blue);
   void changeAll(unsigned long _color);
   void degShow(int d, unsigned long _color = 'hogehoge');
+  void animation1(void);
 
   bool white = false;
   bool dist = true;
 
   int bright = 150;
 
-  unsigned long defaltColor;
-  unsigned long subColor;
+  unsigned long defaultColor;
   unsigned long RED;
   unsigned long BLUE;
   unsigned long GREEN;
   unsigned long YELLOW;
   unsigned long WHITE;
   unsigned long PURPLE;
+  unsigned long MINT;
   unsigned long LIME;
+  unsigned long ORANGE;
   unsigned long NONE;
 
  private:
@@ -159,6 +165,9 @@ class _kicker {
 } kicker;
 
 void setup(void) {
+  RGBLED.begin();
+  RGBLED.show();
+
   device.initialize();
   device.mode = 0;
 
@@ -170,16 +179,7 @@ void setup(void) {
   line.autoadjustment();
 
   //起動イルミネーション
-  for (int i = 0; i <= 15; i++) {
-    RGBLED.begin();
-    RGBLED.setBrightness(LED.bright);
-    LED.changeAll(0, 0, 0);
-    for (int k = 0; k <= i; k++) {
-      RGBLED.setPixelColor(k, LED.WHITE);
-    }
-    RGBLED.show();
-    delay(15);
-  }
+  LED.animation1();
 
   delay(500);
 
@@ -193,6 +193,9 @@ void loop(void) {
     gyro.deg = gyro.read();
     LED.gyroShow();
     motor.drive(NULL, NULL, true);
+
+    //ボタンによるUI処理
+    device.UI();
   } else if (device.mode == 1) {  //駆動中
     //処理
 

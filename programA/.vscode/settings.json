@@ -1,7 +1,11 @@
 {
   "gitflow4code.features": [
     {
-      "name": "feature/ak-line",
+      "name": "feature/ta-makeKickerClass",
+      "base": "develop"
+    },
+    {
+      "name": "feature/ta-ui-building",
       "base": "develop"
     }
   ]

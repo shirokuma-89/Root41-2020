@@ -1,4 +1,5 @@
 ISR(timer5Event) {
+  //ラインの記述はここに
   line.read();
 }
 
@@ -14,7 +15,7 @@ void _line::process(void) {
     }
   } else {
     //リセット
-    for (int i = 0; i <= 19 i++) {
+    for (int i = 0; i <= 19; i++) {
       val[i] = false;
       order[i] = 100;
       check[i] = 0;
@@ -28,7 +29,7 @@ void _line::process(void) {
 }
 
 void _line::autoadjustment(void) {
-  for (int i = 0; i <= 255; i++;) {
+  for (int i = 0; i <= 255; i++) {
     bright = i;
     analogWrite(LINE_BRIGHT, bright);
     delay(2);
