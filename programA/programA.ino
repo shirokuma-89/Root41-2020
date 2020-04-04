@@ -158,6 +158,9 @@ class _kicker {
 } kicker;
 
 void setup(void) {
+  RGBLED.begin();
+  RGBLED.show();
+  
   device.initialize();
   device.mode = 0;
 
@@ -192,8 +195,21 @@ void loop(void) {
     gyro.deg = gyro.read();
     LED.gyroShow();
     motor.drive(NULL, NULL, true);
-    
+
     //ボタンによるUI処理
+    if (!digitalRead(SW_RESET)) {
+      if (!digitalRead(SW_1)) {
+        while (true) {
+          LED.changeAll(LED.PURPLE);
+          RGBLED.show();
+        }
+      } else if (!digitalRead(SW_2)) {
+        while (true) {
+          LED.changeAll(LED.LIME);
+          RGBLED.show();
+        }
+      }
+    }
   } else if (device.mode == 1) {  //駆動中
     //処理
 

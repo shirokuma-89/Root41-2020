@@ -60,15 +60,7 @@ void _device::check(void) {
   RGBLED.clear();
 
   if (!digitalRead(SW_RESET)) {
-    if ((!digitalRead(SW_1) || !digitalRead(SW_2)) && device.mode == 0) {
-      RGBLED.begin();
-      LED.changeAll(LED.LIME);
-      RGBLED.show();
-      gyro.setting();
-      delay(200);
-    } else {
-      device.mode = 0;
-    }
+    device.mode = 0;
   } else if (!digitalRead(SW_1)) {
     device.mode = 1;
   } else if (!digitalRead(SW_2)) {
