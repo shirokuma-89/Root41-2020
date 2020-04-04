@@ -160,7 +160,7 @@ class _kicker {
 void setup(void) {
   RGBLED.begin();
   RGBLED.show();
-  
+
   device.initialize();
   device.mode = 0;
 
@@ -199,14 +199,25 @@ void loop(void) {
     //ボタンによるUI処理
     if (!digitalRead(SW_RESET)) {
       if (!digitalRead(SW_1)) {
+        LED.changeAll(LED.PURPLE);
+        RGBLED.show();
+        delay(100);  //チャッタリング防止
+
         while (true) {
-          LED.changeAll(LED.PURPLE);
-          RGBLED.show();
+          if (!digitalRead(SW_RESET)) {  //戻るボタン
+            break;
+          }
         }
+
       } else if (!digitalRead(SW_2)) {
+        LED.changeAll(LED.LIME);
+        RGBLED.show();
+        delay(100);  //チャッタリング防止
+
         while (true) {
-          LED.changeAll(LED.LIME);
-          RGBLED.show();
+          if (!digitalRead(SW_RESET)) {  //戻るボタン
+            break;
+          }
         }
       }
     }
