@@ -7,6 +7,10 @@
     {
       "name": "feature/ta-ui-building",
       "base": "develop"
+    },
+    {
+      "name": "feature/ta-motor",
+      "base": "develop"
     }
   ]
 }
