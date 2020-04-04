@@ -38,12 +38,12 @@ void _device::initialize(void) {
     //緑号機
     device.robot = true;
 
-    LED.defaltColor = LED.GREEN;
+    LED.defaultColor = LED.GREEN;
   } else {
     //赤号機
     device.robot = false;
 
-    LED.defaltColor = LED.RED;
+    LED.defaultColor = LED.RED;
   }
 
   gyro.eeprom[0] = (EEPROM[1] * 256) + EEPROM[2];

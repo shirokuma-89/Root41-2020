@@ -25,12 +25,12 @@ void _LED::gyroShow(unsigned long _color = 'hogehoge') {
     RGBLED.setPixelColor((light + 13) % 16, 255, 255, 255);
   } else {
     if (_color == 'hogehoge') {
-      RGBLED.setPixelColor(light, LED.defaltColor);
-      RGBLED.setPixelColor((light + 1) % 16, LED.defaltColor);
-      RGBLED.setPixelColor((light + 2) % 16, LED.defaltColor);
-      RGBLED.setPixelColor((light + 15) % 16, LED.defaltColor);
-      RGBLED.setPixelColor((light + 14) % 16, LED.defaltColor);
-      RGBLED.setPixelColor((light + 13) % 16, LED.defaltColor);
+      RGBLED.setPixelColor(light, LED.defaultColor);
+      RGBLED.setPixelColor((light + 1) % 16, LED.defaultColor);
+      RGBLED.setPixelColor((light + 2) % 16, LED.defaultColor);
+      RGBLED.setPixelColor((light + 15) % 16, LED.defaultColor);
+      RGBLED.setPixelColor((light + 14) % 16, LED.defaultColor);
+      RGBLED.setPixelColor((light + 13) % 16, LED.defaultColor);
       
     } else {
       RGBLED.setPixelColor(light, _color);
@@ -57,7 +57,7 @@ void _LED::degShow(int d, unsigned long _color = 'hogehoge') {
   }
 
   if (_color == 'hogehoge') {
-    _color = LED.defaultColor;
+    _color = defaultColor;
   }
 
   int _d;

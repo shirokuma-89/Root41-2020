@@ -17,9 +17,9 @@ int LINE[20] = {30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
 
 #define LINE_BRIGHT 12
 
-#define SW_2 22
-#define SW_1 23
-#define SW_RESET 25
+#define SW_1 22
+#define SW_2 25
+#define SW_RESET 23
 
 //インスタンス作成
 Adafruit_NeoPixel RGBLED = Adafruit_NeoPixel(16, 28, NEO_GRB + NEO_KHZ800);
@@ -136,7 +136,7 @@ class _LED {
 
   int bright = 150;
 
-  unsigned long defaltColor;
+  unsigned long defaultColor;
   unsigned long RED;
   unsigned long BLUE;
   unsigned long GREEN;
@@ -192,6 +192,8 @@ void loop(void) {
     gyro.deg = gyro.read();
     LED.gyroShow();
     motor.drive(NULL, NULL, true);
+    
+    //ボタンによるUI処理
   } else if (device.mode == 1) {  //駆動中
     //処理
 
