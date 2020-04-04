@@ -131,6 +131,7 @@ class _LED {
   void changeAll(int red, int green, int blue);
   void changeAll(unsigned long _color);
   void degShow(int d, unsigned long _color = 'hogehoge');
+  void animation1(void);
 
   bool white = false;
   bool dist = true;
@@ -173,16 +174,7 @@ void setup(void) {
   line.autoadjustment();
 
   //起動イルミネーション
-  for (int i = 0; i <= 15; i++) {
-    RGBLED.begin();
-    RGBLED.setBrightness(LED.bright);
-    LED.changeAll(0, 0, 0);
-    for (int k = 0; k <= i; k++) {
-      RGBLED.setPixelColor(k, LED.WHITE);
-    }
-    RGBLED.show();
-    delay(15);
-  }
+  LED.animation1();
 
   delay(500);
 
@@ -250,9 +242,12 @@ void loop(void) {
           }
 
           if (!digitalRead(SW_2)) {
-            LED.changeAll(LED.PURPLE);
+            LED.changeAll(LED.GREEN);
             RGBLED.show();
-            delay(1000);
+            gyro.setting();
+            gyro.read();
+            LED.animation1();
+            delay(500);
             break;
           }
         }

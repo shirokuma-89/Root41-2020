@@ -116,3 +116,16 @@ void _LED::changeAll(unsigned long _color) {
     }
   }
 }
+
+void _LED::animation1(void) {
+  for (int i = 0; i <= 15; i++) {
+    RGBLED.begin();
+    RGBLED.setBrightness(bright);
+    LED.changeAll(0, 0, 0);
+    for (int k = 0; k <= i; k++) {
+      RGBLED.setPixelColor(k, WHITE);
+    }
+    RGBLED.show();
+    delay(15);
+  }
+}

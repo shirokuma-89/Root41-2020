@@ -179,16 +179,7 @@ void _gyro::calibrationEEPROM(void) {
     EEPROM[11] = highByte(az_offset);
     EEPROM[12] = lowByte(az_offset);
     setting();
-    for (int i = 0; i <= 15; i++) {
-      RGBLED.begin();
-      RGBLED.setBrightness(LED.bright);
-      LED.changeAll(0, 0, 0);
-      for (int k = 0; k <= i; k++) {
-        RGBLED.setPixelColor(k, LED.WHITE);
-      }
-      RGBLED.show();
-      delay(15);
-    }
+    LED.animation1();
     delay(500);
     return;
   }
@@ -248,7 +239,7 @@ void calibration() {
     LED.changeAll(LED.NONE);
     RGBLED.show();
     delay(300);
-    LED.changeAll(LED.defaultColor);
+    LED.changeAll(LED.RED);
     RGBLED.show();
 
     if (abs(mean_ax) <= acel_deadzone)
