@@ -11,6 +11,10 @@
     {
       "name": "feature/ta-motor",
       "base": "develop"
+    },
+    {
+      "name": "feature/ta-line-base-building",
+      "base": "develop"
     }
   ]
 }
