@@ -30,15 +30,7 @@ void _line::process(void) {
 
 void _line::autoadjustment(void) {
   for (int i = 0; i <= 255; i++) {
-    bright = i;
-    analogWrite(LINE_BRIGHT, bright);
-    delay(2);
-    if (abs(!digitalRead(LINE[14]) - !digitalRead(LINE[4])) >= dif) {
-      dif = abs(!digitalRead(LINE[14]) - !digitalRead(LINE[4]));
-      best = i;
-    }
   }
-  bright = best;
 }
 
 void _line::read(void) {
