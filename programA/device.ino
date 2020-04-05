@@ -69,8 +69,10 @@ void _device::check(void) {
     device.mode = 0;
   } else if (!digitalRead(SW_1)) {
     device.mode = 1;
+    analogWrite(LINE_BRIGHT, line.bright);
   } else if (!digitalRead(SW_2)) {
     device.mode = 2;
+    analogWrite(LINE_BRIGHT, line.bright);
   }
 }
 
