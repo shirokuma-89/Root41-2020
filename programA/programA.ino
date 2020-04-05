@@ -64,8 +64,7 @@ class _line {
   int mode;
   int error;
 
-  byte bright;
-  int best;
+  int bright;
   int dif;
 
   unsigned long stopTimer;
