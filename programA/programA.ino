@@ -134,6 +134,7 @@ class _LED {
   void changeAll(unsigned long _color);
   void degShow(int d, unsigned long _color = 'hogehoge');
   void animation1(void);
+  void animation2(void);
 
   bool white = false;
   bool dist = true;
@@ -177,8 +178,7 @@ void setup(void) {
 
   //起動イルミネーション
   LED.animation1();
-
-  delay(500);
+  LED.animation2();
 
   gyro.read();
 }

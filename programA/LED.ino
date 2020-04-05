@@ -129,3 +129,12 @@ void _LED::animation1(void) {
     delay(15);
   }
 }
+
+void _LED::animation2(void) {
+  if (!digitalRead(SW_RESET) && !digitalRead(SW_1)) {
+    while(true){
+      
+    }
+  }
+  delay(500);
+}
