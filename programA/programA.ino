@@ -176,8 +176,6 @@ void setup(void) {
   gyro.setting();
   gyro.read();
 
-  line.autoadjustment();
-
   //起動イルミネーション
   LED.animation1();
 
