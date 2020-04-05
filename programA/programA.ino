@@ -64,8 +64,7 @@ class _line {
   int mode;
   int error;
 
-  byte bright;
-  int best;
+  int bright;
   int dif;
 
   unsigned long stopTimer;
@@ -176,8 +175,6 @@ void setup(void) {
   gyro.setting();
   gyro.read();
 
-  line.autoadjustment();
-
   //起動イルミネーション
   LED.animation1();
 
@@ -193,6 +190,7 @@ void loop(void) {
     gyro.deg = gyro.read();
     LED.gyroShow();
     motor.drive(NULL, NULL, true);
+    analogWrite(LINE_BRIGHT, 10);
 
     //ボタンによるUI処理
     device.UI();

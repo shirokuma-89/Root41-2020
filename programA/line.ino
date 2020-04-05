@@ -29,16 +29,59 @@ void _line::process(void) {
 }
 
 void _line::autoadjustment(void) {
-  for (int i = 0; i <= 255; i++) {
-    bright = i;
-    analogWrite(LINE_BRIGHT, bright);
-    delay(2);
-    if (abs(!digitalRead(LINE[14]) - !digitalRead(LINE[4])) >= dif) {
-      dif = abs(!digitalRead(LINE[14]) - !digitalRead(LINE[4]));
-      best = i;
+  int valA = 255;
+  int valA_pin = NULL;
+  int valCount = 0;
+  bool valZ[20];
+  bool valB[20];
+  int valC = 255;
+  for (int i = 0; i <= 19; i++) {
+    valB[i] = false;
+    valZ[i] = true;
+  }
+
+  for (int i = 200; i <= 230; i += 10) {
+    analogWrite(LINE_BRIGHT, i);
+    Serial.println(valA);
+    for (int j = 0; j <= 19; j++) {
+      valZ[j] = true;
+    }
+    for (int j = 0; j < 30; j++) {
+      for (int k = 0; k < 20; k++) {
+        valZ[k] = valZ[k] & !digitalRead(LINE[k]);
+      }
+      delay(10);
+    }
+    for (int j = 0; j < 20; j++) {
+      if (valZ[j] && valA == 255) {
+        valA = i;
+      }
     }
   }
-  bright = best;
+  for (int i = 230; i <= 255; i += 2) {
+    analogWrite(LINE_BRIGHT, i);
+    Serial.println(valA);
+    for (int j = 0; j <= 19; j++) {
+      valZ[j] = true;
+    }
+    for (int j = 0; j < 30; j++) {
+      for (int k = 0; k < 20; k++) {
+        valZ[k] = valZ[k] & !digitalRead(LINE[k]);
+      }
+      delay(10);
+    }
+    for (int j = 0; j < 20; j++) {
+      if (valZ[j] && valA == 255) {
+        valA = i;
+      }
+    }
+  }
+
+  bright = (valC + valA) / 2;
+  bright = constrain(bright, 0, 255);
+  EEPROM[13] = bright;
+
+  analogWrite(LINE_BRIGHT, bright);
 }
 
 void _line::read(void) {

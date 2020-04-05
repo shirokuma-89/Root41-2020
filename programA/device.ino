@@ -29,7 +29,7 @@ void _device::initialize(void) {
   pinMode(BALL_HOLD, INPUT);
 
   for (int i = 0; i <= 19; i++) {
-    pinMode(LINE[i], INPUT);
+    pinMode(LINE[i], INPUT_PULLUP);
   }
 
   pinMode(SW_1, INPUT_PULLUP);
@@ -56,6 +56,8 @@ void _device::initialize(void) {
   gyro.eeprom[3] = (EEPROM[7] * 256) + EEPROM[8];
   gyro.eeprom[4] = (EEPROM[9] * 256) + EEPROM[10];
   gyro.eeprom[5] = (EEPROM[11] * 256) + EEPROM[12];
+
+  line.bright = EEPROM[13];
 }
 
 void _device::check(void) {
@@ -67,8 +69,10 @@ void _device::check(void) {
     device.mode = 0;
   } else if (!digitalRead(SW_1)) {
     device.mode = 1;
+    analogWrite(LINE_BRIGHT, line.bright);
   } else if (!digitalRead(SW_2)) {
     device.mode = 2;
+    analogWrite(LINE_BRIGHT, line.bright);
   }
 }
 
