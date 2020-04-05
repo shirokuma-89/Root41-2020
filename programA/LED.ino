@@ -127,7 +127,5 @@ void _LED::animation1(void) {
     }
     RGBLED.show();
     delay(15);
-    analogWrite(LINE_BRIGHT, round((float)line.bright / 16 * (float)i));
   }
-  analogWrite(LINE_BRIGHT, line.bright);
 }
