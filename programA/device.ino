@@ -56,9 +56,15 @@ void _device::initialize(void) {
   gyro.eeprom[3] = (EEPROM[7] * 256) + EEPROM[8];
   gyro.eeprom[4] = (EEPROM[9] * 256) + EEPROM[10];
   gyro.eeprom[5] = (EEPROM[11] * 256) + EEPROM[12];
+
+  line.bright = EEPROM[13];
+
+  analogWrite(LINE_BRIGHT, line.bright);
 }
 
 void _device::check(void) {
+  Serial.println(line.bright);
+
   RGBLED.show();
   RGBLED.begin();
   RGBLED.clear();

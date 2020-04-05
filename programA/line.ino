@@ -29,8 +29,43 @@ void _line::process(void) {
 }
 
 void _line::autoadjustment(void) {
-  for (int i = 0; i <= 255; i++) {
+  int valA = 0;
+  int valA_pin = NULL;
+  int valCount = 0;
+  float valZ;
+  bool valB[20];
+  int valC = 255;
+  for (int i = 0; i <= 19; i++) {
+    valB[i] = false;
   }
+  for (int i = 0; i <= 255; i++) {
+    analogWrite(LINE_BRIGHT, i);
+    Serial.println(valA);
+    delay(10);
+    for (int j = 0; j <= 19; j++) {
+      valZ = 0;
+      for (int k = 0; k < 10; k++) {
+        valZ += (1 - 0.7) * (!digitalRead(LINE[j]) - valZ);
+      }
+
+      if (round(valZ) && !valA) {
+        valA = i;
+        valA_pin = j;
+      }
+      if (round(valZ) && !valB[j]) {
+        valCount++;
+        valB[j] = true;
+        if (valCount >= 10) {
+          valC = i;
+        }
+      }
+    }
+  }
+  bright = (valC + valA * 16) / 2;
+  bright = constrain(bright, 0, 255);
+  EEPROM[13] = bright;
+
+  analogWrite(LINE_BRIGHT, bright);
 }
 
 void _line::read(void) {
