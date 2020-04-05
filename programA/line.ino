@@ -40,7 +40,7 @@ void _line::autoadjustment(void) {
     valZ[i] = true;
   }
 
-  for (int i = 200; i <= 235; i += 10) {
+  for (int i = 200; i <= 230; i += 10) {
     analogWrite(LINE_BRIGHT, i);
     Serial.println(valA);
     for (int j = 0; j <= 19; j++) {
@@ -58,7 +58,7 @@ void _line::autoadjustment(void) {
       }
     }
   }
-  for (int i = 235; i <= 255; i += 1) {
+  for (int i = 230; i <= 255; i += 2) {
     analogWrite(LINE_BRIGHT, i);
     Serial.println(valA);
     for (int j = 0; j <= 19; j++) {
