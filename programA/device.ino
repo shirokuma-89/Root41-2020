@@ -26,6 +26,7 @@ void _device::initialize(void) {
   pinMode(BALL_RESET, OUTPUT);
   pinMode(BALL_HOLD, INPUT);
 
+  pinMode(LINE_BRIGHT, OUTPUT);
   for (int i = 0; i <= 19; i++) {
     pinMode(LINE[i], INPUT);
   }

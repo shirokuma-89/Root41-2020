@@ -27,7 +27,7 @@ void _line::process(void) {
   }
 }
 
-void _line::autoadjustment(void) {
+void _line::autoAdjustment(void) {
   for (int i = 0; i <= 255; i++;) {
     bright = i;
     analogWrite(LINE_BRIGHT, bright);

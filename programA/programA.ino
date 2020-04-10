@@ -111,6 +111,13 @@ class _tof {
   int _dist;
 } tof;
 
+class _position {
+ public:
+  int get(void);
+
+ private:
+}
+
 class _device {
  public:
   void initialize(void);
@@ -166,8 +173,6 @@ void setup(void) {
 
   gyro.setting();
   gyro.read();
-
-  line.autoadjustment();
 
   //起動イルミネーション
   for (int i = 0; i <= 15; i++) {
