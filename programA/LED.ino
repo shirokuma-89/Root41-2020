@@ -129,3 +129,37 @@ void _LED::animation1(void) {
     delay(15);
   }
 }
+
+void _LED::animation2(void) {
+  if (!digitalRead(SW_RESET) && !digitalRead(SW_1)) {
+    delay(500);
+    while (true) {
+      changeAll(LED.NONE);
+      colorWipe(RGBLED.Color(255, 0, 0), 50);
+      colorWipe(RGBLED.Color(0, 255, 0), 50);
+      colorWipe(RGBLED.Color(0, 0, 255), 50);
+      rainbow(10);
+    }
+  }
+  delay(500);
+}
+
+void colorWipe(uint32_t color, int wait) {
+  for (int i = 0; i < RGBLED.numPixels(); i++) {
+    RGBLED.setPixelColor(i, color);
+    RGBLED.show();
+    delay(wait);
+  }
+}
+
+void rainbow(int wait) {
+  for (long firstPixelHue = 0; firstPixelHue < 5 * 65536;
+       firstPixelHue += 256) {
+    for (int i = 0; i < RGBLED.numPixels(); i++) {
+      int pixelHue = firstPixelHue + (i * 65536L / RGBLED.numPixels());
+      RGBLED.setPixelColor(i, RGBLED.gamma32(RGBLED.ColorHSV(pixelHue)));
+    }
+    RGBLED.show();
+    delay(wait);
+  }
+}
