@@ -89,7 +89,6 @@ class _motor {
 
   int integral = 0;
   int front = 0;
-  int _front;
 } motor;
 
 class _gyro {
