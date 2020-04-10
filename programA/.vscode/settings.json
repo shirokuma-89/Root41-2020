@@ -19,6 +19,10 @@
     {
       "name": "feature/ta-led",
       "base": "develop"
+    },
+    {
+      "name": "feature/motor",
+      "base": "develop"
     }
   ]
 }

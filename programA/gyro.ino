@@ -134,14 +134,14 @@ void _gyro::calibrationEEPROM(void) {
   if (state == 0) {
     meansensors();
     state++;
-    delay(100);
+    device.waitTime(100);
   }
 
   if (state == 1) {
     Serial.println("\nCalculating offsets...");
     calibration();
     state++;
-    delay(100);
+    device.waitTime(100);
   }
 
   if (state == 2) {
@@ -180,7 +180,7 @@ void _gyro::calibrationEEPROM(void) {
     EEPROM[12] = lowByte(az_offset);
     setting();
     LED.animation1();
-    delay(500);
+    device.waitTime(500);
     return;
   }
 }
@@ -211,7 +211,7 @@ void meansensors() {
       mean_gz = buff_gz / buffersize;
     }
     i++;
-    delay(2);  // Needed so we don't get repeated measures
+    device.waitTime(2);  // Needed so we don't get repeated measures
   }
 }
 
@@ -238,7 +238,7 @@ void calibration() {
 
     LED.changeAll(LED.NONE);
     RGBLED.show();
-    delay(300);
+    device.waitTime(300);
     LED.changeAll(LED.RED);
     RGBLED.show();
 

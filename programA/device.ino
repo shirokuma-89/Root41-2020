@@ -1,4 +1,6 @@
 void _device::initialize(void) {
+  TCCR0B = (TCCR0B & 0b11111000) | 0x04;
+
   LED.RED = RGBLED.Color(255, 0, 0);
   LED.BLUE = RGBLED.Color(0, 0, 255);
   LED.GREEN = RGBLED.Color(0, 255, 0);
@@ -82,10 +84,10 @@ void _device::UI(void) {
       LED.changeAll(LED.BLUE);
       RGBLED.show();
 
-      delay(20);  //チャッタリング防止
+      device.waitTime(20);  //チャッタリング防止
       while (!digitalRead(SW_RESET)) {
       }
-      delay(200);
+      device.waitTime(200);
 
       while (true) {
         if (!digitalRead(SW_RESET)) {  //戻るボタン
@@ -97,7 +99,7 @@ void _device::UI(void) {
           RGBLED.show();
           line.autoadjustment();
           LED.animation1();
-          delay(500);
+          device.waitTime(500);
           break;
         }
 
@@ -112,9 +114,9 @@ void _device::UI(void) {
               LED.changeAll(LED.LIME);
               RGBLED.show();
               digitalWrite(SOLENOID, HIGH);
-              delay(200);
+              device.waitTime(200);
               digitalWrite(SOLENOID, LOW);
-              delay(1200);
+              device.waitTime(1200);
             }
 
             if (!digitalRead(SW_RESET)) {
@@ -129,10 +131,10 @@ void _device::UI(void) {
       LED.changeAll(LED.YELLOW);
       RGBLED.show();
 
-      delay(20);  //チャッタリング防止
+      device.waitTime(20);  //チャッタリング防止
       while (!digitalRead(SW_RESET)) {
       }
-      delay(200);
+      device.waitTime(200);
 
       while (true) {
         if (!digitalRead(SW_RESET)) {  //戻るボタン
@@ -152,10 +154,18 @@ void _device::UI(void) {
           gyro.setting();
           gyro.read();
           LED.animation1();
-          delay(500);
+          device.waitTime(500);
           break;
         }
       }
     }
   }
+}
+
+void _device::getTime(void) {
+  return millis() * 4;
+}
+
+void _device::waitTime(unsigned long _time) {
+  delay(_time / 4);
 }
