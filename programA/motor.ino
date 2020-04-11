@@ -21,14 +21,20 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
   if (!_stop) {
     gyro.deg = gyro.read();
 
-    //姿勢制御
-    // Kp = 3.1;    //比例定数
-    // Ki = 0.65;   //積分定数
-    // Kd = -0.45;  //微分定数
+    int minimum = 0;
 
-    Kp = 1.6;   //比例定数
-    Ki = 0.05;  //積分定数
-    Kd = 0.23;  //微分定数
+    //姿勢制御
+    if (_deg == NULL && _power == NULL) {
+      Kp = 3.9;  //比例定数
+      Ki = 0.05;   //積分定数
+      Kd = 0.17;
+
+      minimum = 50;
+    } else {
+      Kp = 1.6;   //比例定数
+      Ki = 0.05;  //積分定数
+      Kd = 0.23;  //微分定数
+    }
 
     direction = gyro.deg;
     direction = direction > 180 ? direction - 360 : direction;
@@ -39,14 +45,14 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
     int _direction = (gyro.differentialRead() * Kd) * -1;  //微分制御
     if (direction >= 0) {
       direction += _direction;
-      direction = constrain(direction, 10, 355);
+      direction = constrain(direction, 10 + minimum, 355);
     } else {
       direction += _direction;
-      direction = constrain(direction, -355, -10);
+      direction = constrain(direction, -355, -10 - minimum);
     }
 
     //機体が前を向いたら積分していたものをクリアする
-    if (gyro.deg <= 2 || gyro.deg >= 358) {
+    if (gyro.deg <= 3 || gyro.deg >= 357) {
       integral = 0;
       direction = 0;
     }

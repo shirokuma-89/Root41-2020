@@ -122,7 +122,7 @@ class _device {
   void UI(void);
   void getTime(void);
   void waitTime(unsigned long _time);
-  
+
   bool robot;
 
   int mode = 0;
@@ -204,5 +204,11 @@ void loop(void) {
 
     //駆動
     motor.drive(0, 100);
+  } else if (device.mode == 2) {  //駆動中
+    //処理
+    LED.gyroShow();
+
+    //駆動
+    motor.drive(NULL, NULL);
   }
 }
