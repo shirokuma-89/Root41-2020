@@ -204,19 +204,19 @@ void loop(void) {
     device.UI();
   } else if (device.mode == 1) {  //駆動中
     //処理
-    LED.gyroShow();
+    LED.degShow(ball.deg);
     ball.read(ball.val);
     ball.calc();
 
-    // motor.deg = ball.deg;
-    motor.deg += 7;
-    motor.deg %= 360;
+    motor.deg = ball.deg;
+    // motor.deg += 7;
+    // motor.deg %= 360;
 
     //駆動
     motor.timer = device.getTime();
-    while (device.getTime() - motor.timer <= 20) {
-      motor.drive(motor.deg, 90);
-      if (device.getTime() - motor.timer >= 3) {
+    while (device.getTime() - motor.timer <= 30) {
+      motor.drive(motor.deg, 100);
+      if (device.getTime() - motor.timer >= 5) {
         digitalWrite(BALL_RESET, HIGH);
       }
     }

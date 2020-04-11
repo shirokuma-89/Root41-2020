@@ -1,10 +1,12 @@
 void _ball::read(int* b) {
   for (int i = 0; i <= 15; i++) {
     *(b + i) += (1 - LPF) * (analogRead(BALL[i]) - *(b + i));
-    if (*(b + i) <= 120) {
+    if (*(b + i) <= 100) {
       *(b + i) = 1000;
     }
   }
+  *(b + 3) = 1000;
+  *(b + 1) = 1000;
   digitalWrite(BALL_RESET, LOW);
 }
 
