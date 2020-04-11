@@ -25,8 +25,8 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
 
     //姿勢制御
     if (_deg == NULL && _power == NULL) {
-      Kp = 3.9;  //比例定数
-      Ki = 0.05;   //積分定数
+      Kp = 3.9;   //比例定数
+      Ki = 0.05;  //積分定数
       Kd = 0.17;
 
       minimum = 50;
@@ -84,8 +84,10 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
       for (int i = 0; i < 4; i++) {
         if (direction >= 0) {
           val[i] *= float(valTemp[3] - direction) / 255.0;
+          val[i] *= float(float(_power) / 100.0);
         } else {
           val[i] *= abs(float(valTemp[1] - direction)) / 255.0;
+          val[i] *= float(float(_power) / 100.0);
         }
         val[i] += direction;
       }
