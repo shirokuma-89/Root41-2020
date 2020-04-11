@@ -23,6 +23,14 @@
     {
       "name": "feature/motor",
       "base": "develop"
+    },
+    {
+      "name": "feature/ta-ball",
+      "base": "develop"
+    },
+    {
+      "name": "feature/ta-ball",
+      "base": "develop"
     }
   ],
   "files.associations": {

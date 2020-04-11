@@ -81,6 +81,10 @@ class _motor {
   void speed(void);
 
   int val[4];
+  int calcVal[4][360];
+  int deg;
+
+  unsigned long timer;
 
  private:
   float Kp;
@@ -120,7 +124,7 @@ class _device {
   void initialize(void);
   void check(void);
   void UI(void);
-  void getTime(void);
+  unsigned long getTime(void);
   void waitTime(unsigned long _time);
 
   bool robot;
@@ -201,9 +205,21 @@ void loop(void) {
   } else if (device.mode == 1) {  //駆動中
     //処理
     LED.gyroShow();
+    ball.read(ball.val);
+    ball.calc();
+
+    // motor.deg = ball.deg;
+    motor.deg += 7;
+    motor.deg %= 360;
 
     //駆動
-    motor.drive(0, 100);
+    motor.timer = device.getTime();
+    while (device.getTime() - motor.timer <= 20) {
+      motor.drive(motor.deg, 90);
+      if (device.getTime() - motor.timer >= 3) {
+        digitalWrite(BALL_RESET, HIGH);
+      }
+    }
   } else if (device.mode == 2) {  //駆動中
     //処理
     LED.gyroShow();

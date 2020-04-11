@@ -31,9 +31,9 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
 
       minimum = 50;
     } else {
-      Kp = 1.6;   //比例定数
-      Ki = 0.05;  //積分定数
-      Kd = 0.23;  //微分定数
+      Kp = 1.9;   //比例定数
+      Ki = 0.08;  //積分定数
+      Kd = 0.28;  //微分定数
     }
 
     direction = gyro.deg;
@@ -62,31 +62,16 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
         val[i] = direction;
       }
     } else {
-      val[0] = 255;
-      val[1] = -255;
-      val[2] = 255;
-      val[3] = -255;
-
-      int valTemp[4];
-      memcpy(valTemp, val, sizeof(val));
-      for (int i = 0; i < 4; ++i) {
-        for (int j = i + 1; j < 4; ++j) {
-          if (valTemp[i] >= valTemp[j]) {
-            int temp = valTemp[i];
-            valTemp[i] = valTemp[j];
-            valTemp[j] = temp;
-          }
-        }
+      for (int i = 0; i < 4; i++) {
+        val[i] = calcVal[i][_deg];
       }
-
-      // direction = constrain(direction, -100, 100);
 
       for (int i = 0; i < 4; i++) {
         if (direction >= 0) {
-          val[i] *= float(valTemp[3] - direction) / 255.0;
+          val[i] *= float(255 - direction) / 255.0;
           val[i] *= float(float(_power) / 100.0);
         } else {
-          val[i] *= abs(float(valTemp[1] - direction)) / 255.0;
+          val[i] *= abs(float(-255 - direction)) / 255.0;
           val[i] *= float(float(_power) / 100.0);
         }
         val[i] += direction;
