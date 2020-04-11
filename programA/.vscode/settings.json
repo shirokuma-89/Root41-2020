@@ -19,6 +19,15 @@
     {
       "name": "feature/ta-led",
       "base": "develop"
+    },
+    {
+      "name": "feature/motor",
+      "base": "develop"
     }
-  ]
+  ],
+  "files.associations": {
+    "*.ino": "cpp",
+    "*.pde": "cpp",
+    "cmath": "cpp"
+  }
 }

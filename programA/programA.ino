@@ -87,6 +87,8 @@ class _motor {
   float Ki;
   float Kd;
 
+  int integral = 0;
+  int direction = 0;
 } motor;
 
 class _gyro {
@@ -118,6 +120,8 @@ class _device {
   void initialize(void);
   void check(void);
   void UI(void);
+  void getTime(void);
+  void waitTime(unsigned long _time);
 
   bool robot;
 
@@ -196,7 +200,15 @@ void loop(void) {
     device.UI();
   } else if (device.mode == 1) {  //駆動中
     //処理
+    LED.gyroShow();
 
     //駆動
+    motor.drive(0, 100);
+  } else if (device.mode == 2) {  //駆動中
+    //処理
+    LED.gyroShow();
+
+    //駆動
+    motor.drive(NULL, NULL);
   }
 }

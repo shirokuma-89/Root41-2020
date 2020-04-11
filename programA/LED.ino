@@ -126,13 +126,13 @@ void _LED::animation1(void) {
       RGBLED.setPixelColor(k, WHITE);
     }
     RGBLED.show();
-    delay(15);
+    device.waitTime(15);
   }
 }
 
 void _LED::animation2(void) {
   if (!digitalRead(SW_RESET) && !digitalRead(SW_1)) {
-    delay(500);
+    device.waitTime(500);
     while (true) {
       changeAll(LED.NONE);
       colorWipe(RGBLED.Color(255, 0, 0), 50);
@@ -141,14 +141,14 @@ void _LED::animation2(void) {
       rainbow(10);
     }
   }
-  delay(500);
+  device.waitTime(500);
 }
 
 void colorWipe(uint32_t color, int wait) {
   for (int i = 0; i < RGBLED.numPixels(); i++) {
     RGBLED.setPixelColor(i, color);
     RGBLED.show();
-    delay(wait);
+    device.waitTime(wait);
   }
 }
 
@@ -160,6 +160,6 @@ void rainbow(int wait) {
       RGBLED.setPixelColor(i, RGBLED.gamma32(RGBLED.ColorHSV(pixelHue)));
     }
     RGBLED.show();
-    delay(wait);
+    device.waitTime(wait);
   }
 }

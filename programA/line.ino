@@ -50,7 +50,7 @@ void _line::autoadjustment(void) {
       for (int k = 0; k < 20; k++) {
         valZ[k] = valZ[k] & !digitalRead(LINE[k]);
       }
-      delay(10);
+      device.waitTime(10);
     }
     for (int j = 0; j < 20; j++) {
       if (valZ[j] && valA == 255) {
@@ -68,7 +68,7 @@ void _line::autoadjustment(void) {
       for (int k = 0; k < 20; k++) {
         valZ[k] = valZ[k] & !digitalRead(LINE[k]);
       }
-      delay(10);
+      device.waitTime(10);
     }
     for (int j = 0; j < 20; j++) {
       if (valZ[j] && valA == 255) {
