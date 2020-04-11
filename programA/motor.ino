@@ -22,34 +22,38 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
     gyro.deg = gyro.read();
 
     //姿勢制御
-    Kp = 3.1;    //比例定数
-    Ki = 0.65;   //積分定数
-    Kd = -0.45;  //微分定数
+    // Kp = 3.1;    //比例定数
+    // Ki = 0.65;   //積分定数
+    // Kd = -0.45;  //微分定数
 
-    front = gyro.deg;
-    front = front > 180 ? front - 360 : front;
-    if (abs(front) <= 50)
-      integral += front;
-    front *= Kp * -1;                             //比例制御
-    front -= integral * Ki;                       //積分制御
-    int _front = (gyro.differentialRead() * Kd);  //微分制御
-    if (front >= 0) {
-      front += _front;
-      front = constrain(front, 10, 255);
+    Kp = 1.6;  //比例定数
+    Ki = 0.05;    //積分定数
+    Kd = -0.23;   //微分定数
+
+    direction = gyro.deg;
+    direction = direction > 180 ? direction - 360 : direction;
+    if (abs(direction) <= 50)
+      integral += direction;
+    direction *= Kp * -1;                             //比例制御
+    direction -= integral * Ki;                       //積分制御
+    int _direction = (gyro.differentialRead() * Kd);  //微分制御
+    if (direction >= 0) {
+      direction += _direction;
+      direction = constrain(direction, 10, 355);
     } else {
-      front += _front;
-      front = constrain(front, -255, -10);
+      direction += _direction;
+      direction = constrain(direction, -355, -10);
     }
 
     //機体が前を向いたら積分していたものをクリアする
-    if (gyro.deg <= 5 || gyro.deg >= 355) {
+    if (gyro.deg <= 2 || gyro.deg >= 358) {
       integral = 0;
-      front = 0;
+      direction = 0;
     }
 
     if (_deg == NULL && _power == NULL) {
       for (int i = 0; i < 4; i++) {
-        val[i] = front;
+        val[i] = direction;
       }
     } else {
       val[0] = 255;
@@ -59,9 +63,9 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
 
       int valTemp[4];
       memcpy(valTemp, val, sizeof(val));
-      for (i = 0; i < total; ++i) {
-        for (j = i + 1; j < total; ++j) {
-          if (valTemp[i] > valTemp[j]) {
+      for (int i = 0; i < 4; ++i) {
+        for (int j = i + 1; j < 4; ++j) {
+          if (valTemp[i] >= valTemp[j]) {
             int temp = valTemp[i];
             valTemp[i] = valTemp[j];
             valTemp[j] = temp;
@@ -69,9 +73,15 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
         }
       }
 
+      // direction = constrain(direction, -100, 100);
+
       for (int i = 0; i < 4; i++) {
-        val[i] *= (valTemp[3] - front) / 255;
-        val[i] += front;
+        if (direction >= 0) {
+          val[i] *= float(valTemp[3] - direction) / 255.0;
+        } else {
+          val[i] *= abs(float(valTemp[1] - direction)) / 255.0;
+        }
+        val[i] += direction;
       }
     }
   }

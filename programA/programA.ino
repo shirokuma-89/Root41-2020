@@ -88,7 +88,7 @@ class _motor {
   float Kd;
 
   int integral = 0;
-  int front = 0;
+  int direction = 0;
 } motor;
 
 class _gyro {
@@ -203,6 +203,6 @@ void loop(void) {
     LED.gyroShow();
 
     //駆動
-    motor.drive(NULL, NULL);
+    motor.drive(0, 100);
   }
 }
