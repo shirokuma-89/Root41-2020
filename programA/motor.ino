@@ -26,17 +26,17 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
     // Ki = 0.65;   //積分定数
     // Kd = -0.45;  //微分定数
 
-    Kp = 1.6;  //比例定数
-    Ki = 0.05;    //積分定数
-    Kd = -0.23;   //微分定数
+    Kp = 1.6;   //比例定数
+    Ki = 0.05;  //積分定数
+    Kd = 0.23;  //微分定数
 
     direction = gyro.deg;
     direction = direction > 180 ? direction - 360 : direction;
     if (abs(direction) <= 50)
       integral += direction;
-    direction *= Kp * -1;                             //比例制御
-    direction -= integral * Ki;                       //積分制御
-    int _direction = (gyro.differentialRead() * Kd);  //微分制御
+    direction *= Kp * -1;                                  //比例制御
+    direction -= integral * Ki;                            //積分制御
+    int _direction = (gyro.differentialRead() * Kd) * -1;  //微分制御
     if (direction >= 0) {
       direction += _direction;
       direction = constrain(direction, 10, 355);
