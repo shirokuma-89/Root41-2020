@@ -39,8 +39,12 @@ class _ball {
   int deg;
   int dist;
 
+  int speed;
+
  private:
   float LPF = 0.24;
+
+  unsigned long holdTimer;
 
 } ball;
 
@@ -78,11 +82,11 @@ class _motor {
   _motor(void);
   void directDrive(int* p);
   void drive(int _deg, int _power, bool _stop = false);
-  void speed(void);
 
   int val[4];
   int calcVal[4][360];
   int deg;
+  int speed;
 
   unsigned long timer;
 
@@ -167,9 +171,15 @@ class _LED {
 
 class _kicker {
  public:
-  // none
+  void kick(bool status);
+
+  bool val;
+
  private:
-  // none
+  bool _val = false;
+
+  unsigned long protectionTimer = 0;
+  unsigned long kickTimer = 0;
 } kicker;
 
 void setup(void) {
@@ -208,18 +218,20 @@ void loop(void) {
     ball.read(ball.val);
     ball.calc();
 
+    //設定
     motor.deg = ball.deg;
-    // motor.deg += 7;
-    // motor.deg %= 360;
+    motor.speed = ball.speed;
 
     //駆動
     motor.timer = device.getTime();
     while (device.getTime() - motor.timer <= 30) {
-      motor.drive(motor.deg, 100);
+      motor.drive(motor.deg, motor.speed);
       if (device.getTime() - motor.timer >= 5) {
         digitalWrite(BALL_RESET, HIGH);
       }
     }
+
+    kicker.kick(kicker.val);
   } else if (device.mode == 2) {  //駆動中
     //処理
     LED.gyroShow();

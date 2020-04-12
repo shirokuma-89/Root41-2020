@@ -21,4 +21,18 @@ void _ball::calc(void) {
   deg = top * 22.5;
 
   Serial.println(top);
+
+  //ホールド処理
+  if (!digitalRead(BALL_HOLD)) {
+    holdTimer = device.getTime();
+    kicker.val = false;
+    ball.speed = 85;
+  }
+
+  if (digitalRead(BALL_HOLD)) {
+    if (device.getTime() - holdTimer >= 100) {
+      kicker.val = true;
+    }
+    ball.speed = 100;
+  }
 }

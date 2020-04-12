@@ -17,8 +17,8 @@ void _device::initialize(void) {
     float s;
     motor.calcVal[0][i] = round(sin(radians(i - 315)) * 100.0);
     motor.calcVal[1][i] = round(sin(radians(i - 45)) * 100.0);
-    motor.calcVal[2][i] = round(sin(radians(i - 225)) * 100.0);
-    motor.calcVal[3][i] = round(sin(radians(i - 135)) * 100.0);
+    motor.calcVal[2][i] = round(sin(radians(i - 240)) * 100.0);
+    motor.calcVal[3][i] = round(sin(radians(i - 120)) * 100.0);
 
     int valTemp[4];
     for (int k = 0; k < 4; k++) {
