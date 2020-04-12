@@ -149,7 +149,7 @@ class _LED {
   void animation2(void);
 
   bool white = false;
-  bool dist = true;
+  bool dist = false;
 
   int bright = 150;
 
@@ -223,6 +223,8 @@ void loop(void) {
     motor.speed = ball.speed;
 
     //駆動
+    kicker.kick(kicker.val);
+
     motor.timer = device.getTime();
     do {
       motor.drive(motor.deg, motor.speed);
@@ -230,8 +232,6 @@ void loop(void) {
         digitalWrite(BALL_RESET, HIGH);
       }
     } while (device.getTime() - motor.timer <= 30);
-
-    kicker.kick(kicker.val);
   } else if (device.mode == 2) {  //駆動中
     //処理
     LED.gyroShow();

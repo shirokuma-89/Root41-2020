@@ -61,6 +61,8 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
       for (int i = 0; i < 4; i++) {
         val[i] = direction;
       }
+
+      LED.changeAll(LED.BLUE);
     } else {
       for (int i = 0; i < 4; i++) {
         val[i] = calcVal[i][_deg];
