@@ -5,8 +5,7 @@ void _ball::read(int* b) {
       *(b + i) = 1000;
     }
   }
-  *(b + 3) = 1000;
-  *(b + 1) = 1000;
+
   digitalWrite(BALL_RESET, LOW);
 }
 
@@ -26,7 +25,7 @@ void _ball::calc(void) {
   if (!digitalRead(BALL_HOLD)) {
     holdTimer = device.getTime();
     kicker.val = false;
-    ball.speed = 85;
+    ball.speed = 100;
   }
 
   if (digitalRead(BALL_HOLD)) {
