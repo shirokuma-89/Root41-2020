@@ -224,12 +224,12 @@ void loop(void) {
 
     //駆動
     motor.timer = device.getTime();
-    while (device.getTime() - motor.timer <= 30) {
+    do {
       motor.drive(motor.deg, motor.speed);
       if (device.getTime() - motor.timer >= 5) {
         digitalWrite(BALL_RESET, HIGH);
       }
-    }
+    } while (device.getTime() - motor.timer <= 30);
 
     kicker.kick(kicker.val);
   } else if (device.mode == 2) {  //駆動中
