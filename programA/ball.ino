@@ -30,7 +30,7 @@ void _ball::calc(void) {
   }
 
   if (digitalRead(BALL_HOLD)) {
-    if (device.getTime() - holdTimer >= 100) {
+    if (device.getTime() - holdTimer >= 50) {
       kicker.val = true;
     }
     ball.speed = 100;

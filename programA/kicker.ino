@@ -1,6 +1,6 @@
 void _kicker::kick(bool status) {
   static bool mode = false;
-  if (status != _val && status && device.getTime() - protectionTimer >= 2000) {
+  if (status != _val && status && device.getTime() - protectionTimer >= 1000) {
     mode = true;
     kickTimer = device.getTime();
     digitalWrite(SOLENOID, HIGH);
