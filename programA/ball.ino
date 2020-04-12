@@ -24,18 +24,23 @@ void _ball::calc(void) {
     exist = true;
     deg = top * 22.5;
 
-    dist = constrain(map(existCount, 4, 10, 5, 0), 0, 5);
-    if (dist <= 1)
+    dist = constrain(map(existCount, 2, 9, 5, 0), 0, 5);
+    if (dist <= 2)
       dist = 0;
 
     int offset = 0;
-    offset = dist * 18;
+    offset = dist * 15;
 
-    // if (val[top] <= 290 && dist <= 3)
-    //   offset += 60;
+    if (val[top] <= 220 && dist <= 3) {
+      offset += 40;
+      offset = constrain(offset, -60, 60);
+    }
 
-    offset = constrain(offset, -90, 90);
-    if (top > 1 && top < 15) {
+    offset = constrain(offset, -95, 95);
+    if (top != 0) {
+      if (top < 3 || top > 13) {
+        offset *= 0.4;
+      }
       if (deg >= 180) {
         deg -= offset;
       } else {
@@ -55,7 +60,7 @@ void _ball::calc(void) {
     }
 
     if (digitalRead(BALL_HOLD)) {
-      if (device.getTime() - holdTimer >= 50) {
+      if (device.getTime() - holdTimer >= 100) {
         kicker.val = true;
       }
       speed = 100;
