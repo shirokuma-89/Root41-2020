@@ -115,7 +115,9 @@ class _tof {
 
 class _position {
  public:
-  int get(void);
+  void reflection(int _type);
+
+  int reliability;  //信頼度
 
  private:
 }
