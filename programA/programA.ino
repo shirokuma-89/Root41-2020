@@ -31,6 +31,7 @@ class _ball {
  public:
   void read(int* b);
   void calc(void);
+  void readDistance(void);
 
   bool exist;
 
@@ -42,7 +43,7 @@ class _ball {
   int speed;
 
  private:
-  float LPF = 0.24;
+  float LPF = 0.3;
 
   unsigned long holdTimer;
 
@@ -216,6 +217,7 @@ void loop(void) {
     //処理
     LED.degShow(ball.deg);
     ball.read(ball.val);
+    ball.readDistance();
     ball.calc();
 
     //設定
@@ -228,10 +230,10 @@ void loop(void) {
     motor.timer = device.getTime();
     do {
       motor.drive(motor.deg, motor.speed);
-      if (device.getTime() - motor.timer >= 5) {
+      if (device.getTime() - motor.timer >= 4) {
         digitalWrite(BALL_RESET, HIGH);
       }
-    } while (device.getTime() - motor.timer <= 30);
+    } while (device.getTime() - motor.timer <= 25);
   } else if (device.mode == 2) {  //駆動中
     //処理
     LED.gyroShow();
