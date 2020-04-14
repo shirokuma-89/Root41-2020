@@ -38,7 +38,8 @@ class _ball {
   int val[16];
   int top;
   int deg;
-  int dist;
+  
+  float dist;
 
   int speed;
 
