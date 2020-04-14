@@ -32,6 +32,13 @@ void _ball::calc(void) {
     exist = true;
     deg = top * 22.5;
 
+    if (deg >= 180) {
+      deg -= 360;
+    }
+    deg = round((float)deg * (float)sqrt(abs(deg)) * (float)0.096);
+    deg += 720;
+    deg %= 360;
+
     int offset = 0;
     offset = dist * 17;
 
@@ -41,10 +48,10 @@ void _ball::calc(void) {
 
     if (top >= 2 && top <= 16 - 2) {
       if (top <= 2 || top >= 16 - 2)
-        offset *= 0.7;
+        offset *= 0.8;
 
       if (top >= 5 && top <= 16 - 5)
-        offset *= 1.0;
+        offset *= 0.7;
 
       if (deg >= 180) {
         deg -= offset;
