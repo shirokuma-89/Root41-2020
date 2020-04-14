@@ -35,28 +35,36 @@ void _ball::calc(void) {
     if (deg >= 180) {
       deg -= 360;
     }
-    deg = round((float)deg * (float)sqrt(abs(deg)) * (float)0.099);
+    deg = round((float)deg * (float)sqrt(abs(deg)) * (float)0.094);
     deg += 720;
     deg %= 360;
 
     int offset = 0;
     offset = dist * 17;
 
-    offset = constrain(offset, -95, 95);
-
     const int error = 3;
 
-    if (top >= 2 && top <= 16 - 2) {
-      if (top <= 2 || top >= 16 - 2)
-        offset *= 0.8;
+    int topDiff = abs(top > 8 ? top - 16 : top);
 
-      if (top >= 5 && top <= 16 - 5)
-        offset *= 0.6;
+    if (topDiff >= 1) {
+      if (topDiff == 1)
+        offset *= 0.5;
 
-      if (min(min(val[8], 1000), 1000) <= 270) {
+      if (topDiff == 2)
+        offset *= 0.74;
+
+      if (topDiff > 2 && topDiff < 5) {
+        offset *= 1.2;
+      }
+
+      if (topDiff >= 6)
+        offset *= 0.45;
+
+      if (val[8] <= 270) {
         offset += 30;
         LED.changeAll(LED.WHITE);
       }
+      offset = constrain(offset, -95, 95);
 
       if (top >= 8) {
         deg -= offset;
@@ -115,7 +123,7 @@ void _ball::readDistance(void) {
     tempDist = min(val[(top + 2) % 16], val[(top + 14) % 16]);
   }
 
-  dist = constrain(myMap(tempDist, 330, 480, 5, 0), 0, 5);
+  dist = constrain(myMap(tempDist, 310, 470, 5, 0), 0, 5);
 
   Serial.println(dist);
 }
