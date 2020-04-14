@@ -33,18 +33,18 @@ void _ball::calc(void) {
     deg = top * 22.5;
 
     int offset = 0;
-    offset = dist * 18;
+    offset = dist * 19;
 
     offset = constrain(offset, -95, 95);
 
     const int error = 3;
 
-    if (top != 0) {
-      if (top <= error || top >= 16 - error)
-        offset *= 0.9;
+    if (top >= 2 && top <= 16 - 2) {
+      if (top <= 2 || top >= 16 - 2)
+        offset *= 0.7;
 
-      if (top <= 1 || top >= 16 - 1)
-        offset *= 0.5;
+      if (top >= 5 && top <= 16 - 5)
+        offset *= 1.2;
 
       if (deg >= 180) {
         deg -= offset;
@@ -58,21 +58,21 @@ void _ball::calc(void) {
       holdTimer = device.getTime();
       kicker.val = false;
       if (val[top] <= 300 && top > 4 && top < 12) {
-        speed = 90;
+        speed = 100;
       } else if (val[top] <= 300 && top > 1 && top < 15) {
-        speed = 90;
+        speed = 100;
       } else {
         speed = 100;
       }
     }
 
-    if (val[0] <= 300 && deg == 0) {
-      if (val[15] > val[1] + 100) {
-        deg = 15;
-      } else if (val[15] < val[1] - 100) {
-        deg = 345;
-      }
-    }
+    // if (val[0] <= 300 && deg == 0) {
+    //   if (val[15] > val[1] + 30) {
+    //     deg = 20;
+    //   } else if (val[15] < val[1] - 30) {
+    //     deg = 340;
+    //   }
+    // }
 
     if (digitalRead(BALL_HOLD) && !(top > 0 && top < 16)) {
       if (device.getTime() - holdTimer >= 100) {
@@ -95,11 +95,17 @@ void _ball::calc(void) {
 void _ball::readDistance(void) {
   static float tempDist;
   if (true) {  // trueでローパス
-    tempDist += (1 - 0.35) *
-                (min(val[(top + 3) % 16], val[(top + 13) % 16]) - tempDist);
+    tempDist += (1 - 0.25) *
+                (min(val[(top + 2) % 16], val[(top + 14) % 16]) - tempDist);
   } else {
-    tempDist = min(val[(top + 3) % 16], val[(top + 13) % 16]);
+    tempDist = min(val[(top + 2) % 16], val[(top + 14) % 16]);
   }
 
-  dist = constrain(map(tempDist, 400, 500, 5, 0), 0, 5);
+  dist = constrain(myMap(tempDist, 295, 460, 5, 0), 0, 6);
+
+  Serial.println(dist);
+}
+
+float myMap(float x, float in_min, float in_max, float out_min, float out_max) {
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
