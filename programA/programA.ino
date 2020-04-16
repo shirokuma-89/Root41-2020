@@ -38,7 +38,7 @@ class _ball {
   int val[16];
   int top;
   int deg;
-  
+
   float dist;
 
   int speed;
@@ -47,6 +47,7 @@ class _ball {
   float LPF = 0.3;
 
   unsigned long holdTimer;
+  unsigned long topTimer;
 
 } ball;
 
@@ -153,7 +154,7 @@ class _LED {
   bool white = false;
   bool dist = false;
 
-  int bright = 150;
+  int bright = 255;
 
   unsigned long defaultColor;
   unsigned long RED;
