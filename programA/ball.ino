@@ -28,7 +28,7 @@ void _ball::calc(void) {
 
     int offset = 0;
 
-    offset += dist * (abs(deg) * 0.064 + 9);
+    offset += dist * (abs(deg) * 0.03 + 12);
 
     deg += 720;
     deg %= 360;
@@ -42,7 +42,12 @@ void _ball::calc(void) {
         offset *= 0.2;
 
       if (topDiff == 2)
-        offset *= 0.8;
+        offset *= 0.9;
+
+      if (min(min(val[7], val[8]), val[9]) <= 270) {
+        offset *= 3;
+        offset = constrain(offset, 0, 85);
+      }
 
       if (top >= 8) {
         deg -= offset;
@@ -55,10 +60,9 @@ void _ball::calc(void) {
     if (!digitalRead(BALL_HOLD)) {
       holdTimer = device.getTime();
       kicker.val = false;
-      if (val[top] <= 300 && top > 4 && top < 12) {
+      if (dist >= 3 && top > 1 && top < 15) {
         speed = 100;
-      } else if (val[top] <= 300 && top > 1 && top < 15) {
-        speed = 80;
+        LED.changeAll(LED.WHITE);
       } else {
         speed = 100;
       }
@@ -89,13 +93,17 @@ void _ball::calc(void) {
 void _ball::readDistance(void) {
   static float tempDist;
   if (false) {  // trueでローパス
-    tempDist += (1 - 0.15) *
-                (min(val[(top + 2) % 16], val[(top + 14) % 16]) - tempDist);
+    tempDist +=
+        (1 - 0.1) * (min(val[(top + 2) % 16], val[(top + 14) % 16]) - tempDist);
   } else {
-    tempDist = min(val[(top + 2) % 16], val[(top + 14) % 16]);
+    if (top != 4 && top != 12) {
+      tempDist = min(val[(top + 2) % 16], val[(top + 14) % 16]);
+    } else {
+      tempDist = min(val[(top + 1) % 16], val[(top + 15) % 16]);
+    }
   }
 
-  dist = constrain(myMap(tempDist, 340, 450, 5, 0), 0, 5);
+  dist = constrain(myMap(tempDist, 290, 440, 5, 0), 0, 6);
 
   Serial.println(dist);
 }
