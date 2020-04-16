@@ -54,7 +54,7 @@ void _ball::calc(void) {
         offset *= 0.7;
 
       if (topDiff > 2 && topDiff < 6) {
-        offset *= 9.93;
+        offset *= 0.93;
       }
 
       if (topDiff >= 6)
