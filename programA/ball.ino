@@ -42,9 +42,9 @@ void _ball::calc(void) {
     int offset = 0;
     // offset = dist * 17;
 
-    offset += abs(deg) * dist * 0.06;
+    offset += abs(deg) * dist * 0.09;
 
-    offset += round(dist * 8);
+    offset += round(dist * 5);
 
     deg += 720;
     deg %= 360;
@@ -59,19 +59,6 @@ void _ball::calc(void) {
 
       if (topDiff == 2)
         offset *= 0.8;
-
-      // if (topDiff > 2 && topDiff < 6) {
-      //   offset *= 0.93;
-      // }
-
-      // if (topDiff >= 6)
-      //   offset *= 0.7;
-      //
-      //   if (val[8] <= 270) {
-      //     offset += 30;
-      //     LED.changeAll(LED.WHITE);
-      //   }
-      //   offset = constrain(offset, -95, 95);
 
       if (top >= 8) {
         deg -= offset;
