@@ -2,16 +2,6 @@ void _ball::read(int* b) {
   for (int i = 0; i <= 15; i++) {
     // *(b + i) += (1 - LPF) * (analogRead(BALL[i]) - *(b + i));
     *(b + i) = analogRead(BALL[i]);
-
-    // *b *= 1.07;
-    // if (*(b + i) <= 100) {
-    //   *(b + i) = 1000;
-    // }
-
-    // *(b + 2) *= 0.9;
-    // *(b + 6) *= 0.9;
-    // *(b + 10) *= 0.9;
-    // *(b + 14) *= 0.9;
   }
 
   digitalWrite(BALL_RESET, LOW);
@@ -36,15 +26,10 @@ void _ball::calc(void) {
       deg -= 360;
     }
 
-    // deg = round((float)deg * (float)sqrt(abs(deg)) *
-    //             (float)myMap(dist, 0, 5, 0.07, 0.096));  // 0.093
-
     int offset = 0;
-    // offset = dist * 17;
 
-    offset += abs(deg) * dist * 0.09;
-
-    offset += round(dist * 5);
+    offset += abs(deg) * dist * 0.094;
+    offset += round(dist * 5.2);
 
     deg += 720;
     deg %= 360;
@@ -80,14 +65,12 @@ void _ball::calc(void) {
       }
     }
 
-    // if (val[0] <= 220 && deg == 0) {
-    //   if (val[15] > val[1] + 50) {
-    //     deg = 20;
-    //     LED.changeAll(LED.WHITE);
-    //   } else if (val[15] < val[1] - 50) {
-    //     deg = 340;
-    //     LED.changeAll(LED.WHITE);
-    //   }
+    if (val[0] <= 250 && top == 0) {
+      topTimer = device.getTime();
+    }
+    
+    // if(device.getTime() - topTimer <= 200){
+    //   deg = 0;
     // }
 
     if (digitalRead(BALL_HOLD) && !(top > 2 && top < 14)) {
@@ -117,7 +100,7 @@ void _ball::readDistance(void) {
     tempDist = min(val[(top + 2) % 16], val[(top + 14) % 16]);
   }
 
-  dist = constrain(myMap(tempDist, 300, 440, 5, 0), 1, 5);
+  dist = constrain(myMap(tempDist, 320, 450, 5, 0), 0, 5);
 
   Serial.println(dist);
 }
