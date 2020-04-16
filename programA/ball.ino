@@ -28,8 +28,7 @@ void _ball::calc(void) {
 
     int offset = 0;
 
-    offset += abs(deg) * dist * 0.094;
-    offset += round(dist * 5.2);
+    offset += dist * (abs(deg) * 0.044 + 12);
 
     deg += 720;
     deg %= 360;
@@ -68,7 +67,7 @@ void _ball::calc(void) {
     if (val[0] <= 250 && top == 0) {
       topTimer = device.getTime();
     }
-    
+
     // if(device.getTime() - topTimer <= 200){
     //   deg = 0;
     // }
