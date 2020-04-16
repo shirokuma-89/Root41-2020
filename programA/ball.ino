@@ -68,10 +68,6 @@ void _ball::calc(void) {
       topTimer = device.getTime();
     }
 
-    // if(device.getTime() - topTimer <= 200){
-    //   deg = 0;
-    // }
-
     if (digitalRead(BALL_HOLD) && !(top > 2 && top < 14)) {
       if (device.getTime() - holdTimer >= 100) {
         kicker.val = true;
