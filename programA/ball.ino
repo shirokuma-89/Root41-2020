@@ -35,12 +35,19 @@ void _ball::calc(void) {
     if (deg >= 180) {
       deg -= 360;
     }
-    deg = round((float)deg * (float)sqrt(abs(deg)) * (float)0.092);
-    deg += 720;
-    deg %= 360;
+
+    // deg = round((float)deg * (float)sqrt(abs(deg)) *
+    //             (float)myMap(dist, 0, 5, 0.07, 0.096));  // 0.093
 
     int offset = 0;
-    offset = dist * 17;
+    // offset = dist * 17;
+
+    offset += abs(deg) * dist * 0.06;
+
+    offset += round(dist * 8);
+
+    deg += 720;
+    deg %= 360;
 
     const int error = 3;
 
@@ -48,23 +55,23 @@ void _ball::calc(void) {
 
     if (topDiff >= 1) {
       if (topDiff == 1)
-        offset *= 0.6;
+        offset *= 0.4;
 
       if (topDiff == 2)
-        offset *= 0.7;
+        offset *= 0.8;
 
-      if (topDiff > 2 && topDiff < 6) {
-        offset *= 0.93;
-      }
+      // if (topDiff > 2 && topDiff < 6) {
+      //   offset *= 0.93;
+      // }
 
-      if (topDiff >= 6)
-        offset *= 0.7;
-
-      if (val[8] <= 270) {
-        offset += 30;
-        LED.changeAll(LED.WHITE);
-      }
-      offset = constrain(offset, -95, 95);
+      // if (topDiff >= 6)
+      //   offset *= 0.7;
+      //
+      //   if (val[8] <= 270) {
+      //     offset += 30;
+      //     LED.changeAll(LED.WHITE);
+      //   }
+      //   offset = constrain(offset, -95, 95);
 
       if (top >= 8) {
         deg -= offset;
@@ -123,7 +130,7 @@ void _ball::readDistance(void) {
     tempDist = min(val[(top + 2) % 16], val[(top + 14) % 16]);
   }
 
-  dist = constrain(myMap(tempDist, 300, 450, 5, 0), 0, 5);
+  dist = constrain(myMap(tempDist, 300, 440, 5, 0), 1, 5);
 
   Serial.println(dist);
 }

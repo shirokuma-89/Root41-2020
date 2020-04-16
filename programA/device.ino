@@ -41,6 +41,16 @@ void _device::initialize(void) {
     motor.calcVal[3][i] = round((float)motor.calcVal[3][i] * s);
   }
 
+  for (int i = 0; i <= 180; i++) {
+    if (i < 60) {
+      ball.sinDeg[i] = i * 2;
+    } else if (i < 120) {
+      ball.sinDeg[i] = round(0.83 * float(i)) + 70;
+    } else {
+      ball.sinDeg[i] = round(0.166 * float(i)) + 150;
+    }
+  }
+
   Wire.begin();
 
   TOF.init();

@@ -38,7 +38,9 @@ class _ball {
   int val[16];
   int top;
   int deg;
-  
+
+  int sinDeg[180];
+
   float dist;
 
   int speed;
