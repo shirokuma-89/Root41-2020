@@ -108,19 +108,23 @@ class _gyro {
 class _tof {
  public:
   int read(void);
+  int _dist;
 
  private:
-  int _dist;
 } tof;
 
 class _position {
  public:
   void reflection(int _type);
+  void get(void);
 
+  bool rock;
+  int side[4];
+  int vertical[4];
   int reliability;  //信頼度
 
  private:
-}
+} position;
 
 class _device {
  public:
@@ -148,7 +152,7 @@ class _LED {
   bool white = false;
   bool dist = true;
 
-  int bright = 150;
+  int bright = 50;
 
   unsigned long defaultColor;
   unsigned long RED;

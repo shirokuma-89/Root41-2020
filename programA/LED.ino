@@ -157,7 +157,7 @@ void rainbow(int wait) {
        firstPixelHue += 256) {
     for (int i = 0; i < RGBLED.numPixels(); i++) {
       int pixelHue = firstPixelHue + (i * 65536L / RGBLED.numPixels());
-      RGBLED.setPixelColor(i, RGBLED.gamma32(RGBLED.ColorHSV(pixelHue)));
+      // RGBLED.setPixelColor(i, RGBLED.gamma32(RGBLED.ColorHSV(pixelHue)));
     }
     RGBLED.show();
     delay(wait);
