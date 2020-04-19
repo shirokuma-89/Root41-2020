@@ -1,6 +1,6 @@
 void _device::initialize(void) {
   TCCR0B = (TCCR0B & 0b11111000) | 0x04;
-  // TCCR1B = (TCCR1B & 0b11111000) | 0x01; 
+  // TCCR1B = (TCCR1B & 0b11111000) | 0x01;
 
   LED.RED = RGBLED.Color(255, 0, 0);
   LED.BLUE = RGBLED.Color(0, 0, 255);
@@ -12,6 +12,34 @@ void _device::initialize(void) {
   LED.MINT = RGBLED.Color(100, 255, 50);
   LED.LIME = RGBLED.Color(190, 255, 0);
   LED.NONE = RGBLED.Color(0, 0, 0);
+
+  for (int i = 0; i <= 359; i++) {
+    float s;
+    motor.calcVal[0][i] = round(sin(radians(i - 300)) * 100.0);
+    motor.calcVal[1][i] = round(sin(radians(i - 60)) * 100.0);
+    motor.calcVal[2][i] = round(sin(radians(i - 225)) * 100.0);
+    motor.calcVal[3][i] = round(sin(radians(i - 135)) * 100.0);
+
+    int valTemp[4];
+    for (int k = 0; k < 4; k++) {
+      valTemp[k] = motor.calcVal[k][i];
+    }
+
+    for (int k = 0; k < 4; ++k) {
+      for (int j = k + 1; j < 4; ++j) {
+        if (abs(valTemp[k]) >= abs(valTemp[j])) {
+          int temp = valTemp[k];
+          valTemp[k] = valTemp[j];
+          valTemp[j] = temp;
+        }
+      }
+    }
+    s = 255.0 / float(abs(valTemp[3]));
+    motor.calcVal[0][i] = round((float)motor.calcVal[0][i] * s);
+    motor.calcVal[1][i] = round((float)motor.calcVal[1][i] * s);
+    motor.calcVal[2][i] = round((float)motor.calcVal[2][i] * s);
+    motor.calcVal[3][i] = round((float)motor.calcVal[3][i] * s);
+  }
 
   Wire.begin();
 
@@ -163,7 +191,7 @@ void _device::UI(void) {
   }
 }
 
-void _device::getTime(void) {
+unsigned long _device::getTime(void) {
   return millis() * 4;
 }
 

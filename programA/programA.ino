@@ -15,7 +15,7 @@ int BALL[16] = {A0, A1, A2,  A3,  A4,  A5,  A6,  A7,
 int LINE[20] = {30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
                 40, 41, 42, 43, 44, 45, 46, 47, 48, 49};
 
-#define LINE_BRIGHT 12
+#define LINE_BRIGHT 46
 
 #define SW_1 22
 #define SW_2 25
@@ -31,16 +31,23 @@ class _ball {
  public:
   void read(int* b);
   void calc(void);
+  void readDistance(void);
 
   bool exist;
 
   int val[16];
   int top;
   int deg;
-  int dist;
+
+  float dist;
+
+  int speed;
 
  private:
-  float LPF = 0.24;
+  float LPF = 0.3;
+
+  unsigned long holdTimer;
+  unsigned long topTimer;
 
 } ball;
 
@@ -78,9 +85,13 @@ class _motor {
   _motor(void);
   void directDrive(int* p);
   void drive(int _deg, int _power, bool _stop = false);
-  void speed(void);
 
   int val[4];
+  int calcVal[4][360];
+  int deg;
+  int speed;
+
+  unsigned long timer;
 
  private:
   float Kp;
@@ -120,7 +131,7 @@ class _device {
   void initialize(void);
   void check(void);
   void UI(void);
-  void getTime(void);
+  unsigned long getTime(void);
   void waitTime(unsigned long _time);
 
   bool robot;
@@ -141,9 +152,9 @@ class _LED {
   void animation2(void);
 
   bool white = false;
-  bool dist = true;
+  bool dist = false;
 
-  int bright = 150;
+  int bright = 255;
 
   unsigned long defaultColor;
   unsigned long RED;
@@ -163,9 +174,15 @@ class _LED {
 
 class _kicker {
  public:
-  // none
+  void kick(bool status);
+
+  bool val;
+
  private:
-  // none
+  bool _val = false;
+
+  unsigned long protectionTimer = 0;
+  unsigned long kickTimer = 0;
 } kicker;
 
 void setup(void) {
@@ -200,10 +217,25 @@ void loop(void) {
     device.UI();
   } else if (device.mode == 1) {  //駆動中
     //処理
-    LED.gyroShow();
+    LED.degShow(ball.deg);
+    ball.read(ball.val);
+    ball.readDistance();
+    ball.calc();
+
+    //設定
+    motor.deg = ball.deg;
+    motor.speed = ball.speed;
 
     //駆動
-    motor.drive(0, 100);
+    kicker.kick(kicker.val);
+
+    motor.timer = device.getTime();
+    do {
+      motor.drive(motor.deg, motor.speed);
+      if (device.getTime() - motor.timer >= 10) {
+        digitalWrite(BALL_RESET, HIGH);
+      }
+    } while (device.getTime() - motor.timer <= 35);
   } else if (device.mode == 2) {  //駆動中
     //処理
     LED.gyroShow();

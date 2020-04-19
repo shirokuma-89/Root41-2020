@@ -65,7 +65,7 @@ void _LED::degShow(int d, unsigned long _color = 'hogehoge') {
   if (dist == true) {
     _d = ball.dist;
   } else {
-    _d = 2;
+    _d = 1;
   }
 
   if (LED.white) {
