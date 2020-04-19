@@ -126,6 +126,15 @@ class _tof {
   int _dist;
 } tof;
 
+class _position {
+ public:
+  void reflection(int _type);
+
+  int reliability;  //信頼度
+
+ private:
+}
+
 class _device {
  public:
   void initialize(void);
