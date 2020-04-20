@@ -55,7 +55,7 @@ class _line {
  public:
   _line(void);
   void read(void);
-  void autoadjustment(void);
+  void brightnessAdjust(void);
   void process(void);
 
   //配列系

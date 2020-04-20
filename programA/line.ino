@@ -28,7 +28,7 @@ void _line::process(void) {
   }
 }
 
-void _line::autoadjustment(void) {
+void _line::brightnessAdjust(void) {
   int valA = 255;
   int valA_pin = NULL;
   int valCount = 0;

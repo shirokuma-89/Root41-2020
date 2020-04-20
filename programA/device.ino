@@ -126,7 +126,7 @@ void _device::UI(void) {
         if (!digitalRead(SW_1)) {
           LED.changeAll(LED.ORANGE);
           RGBLED.show();
-          line.autoadjustment();
+          line.brightnessAdjust();
           LED.animation1();
           device.waitTime(500);
           break;
