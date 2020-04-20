@@ -44,7 +44,7 @@ class _ball {
   int speed;
 
  private:
-  float LPF = 0.3;
+  float LPF = 0.4;
 
   unsigned long holdTimer;
   unsigned long topTimer;
@@ -235,7 +235,7 @@ void loop(void) {
     motor.timer = device.getTime();
     do {
       motor.drive(motor.deg, motor.speed);
-      if (device.getTime() - motor.timer >= 15) {
+      if (device.getTime() - motor.timer >= 5) {
         digitalWrite(BALL_RESET, HIGH);
       }
     } while (device.getTime() - motor.timer <= 30);
