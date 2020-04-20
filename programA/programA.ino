@@ -189,7 +189,10 @@ void setup(void) {
   RGBLED.begin();
   RGBLED.show();
 
+  TWBR = 12;
+
   device.initialize();
+  TWBR = 12;
   device.mode = 0;
 
   Serial.begin(115200);
@@ -232,10 +235,10 @@ void loop(void) {
     motor.timer = device.getTime();
     do {
       motor.drive(motor.deg, motor.speed);
-      if (device.getTime() - motor.timer >= 10) {
+      if (device.getTime() - motor.timer >= 15) {
         digitalWrite(BALL_RESET, HIGH);
       }
-    } while (device.getTime() - motor.timer <= 35);
+    } while (device.getTime() - motor.timer <= 30);
   } else if (device.mode == 2) {  //駆動中
     //処理
     LED.gyroShow();

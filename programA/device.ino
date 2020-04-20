@@ -53,9 +53,9 @@ void _device::initialize(void) {
   LED.changeAll(LED.BLUE);
   RGBLED.show();
 
-  for (int i = 0; i <= 15; i++) {
-    pinMode(BALL[i], INPUT);
-  }
+  // for (int i = 0; i <= 15; i++) {
+  //   pinMode(BALL[i], INPUT);
+  // }
   pinMode(BALL_RESET, OUTPUT);
   pinMode(BALL_HOLD, INPUT);
 

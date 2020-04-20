@@ -42,7 +42,8 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
       integral += direction;
     direction *= Kp * -1;                                  //比例制御
     direction -= integral * Ki;                            //積分制御
-    int _direction = (gyro.differentialRead() * Kd) * -1;  //微分制御
+    int _direction = 0;
+    // (gyro.differentialRead() * Kd) * -1;  //微分制御
     if (direction >= 0) {
       direction += _direction;
       direction = constrain(direction, 10 + minimum, 355);
