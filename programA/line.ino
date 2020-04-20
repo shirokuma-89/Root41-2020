@@ -40,41 +40,7 @@ void _line::brightnessAdjust(void) {
     valZ[i] = true;
   }
 
-  for (int i = 200; i <= 230; i += 10) {
-    analogWrite(LINE_BRIGHT, i);
-    Serial.println(valA);
-    for (int j = 0; j <= 19; j++) {
-      valZ[j] = true;
-    }
-    for (int j = 0; j < 30; j++) {
-      for (int k = 0; k < 20; k++) {
-        valZ[k] = valZ[k] & !digitalRead(LINE[k]);
-      }
-      device.waitTime(10);
-    }
-    for (int j = 0; j < 20; j++) {
-      if (valZ[j] && valA == 255) {
-        valA = i;
-      }
-    }
-  }
-  for (int i = 230; i <= 255; i += 2) {
-    analogWrite(LINE_BRIGHT, i);
-    Serial.println(valA);
-    for (int j = 0; j <= 19; j++) {
-      valZ[j] = true;
-    }
-    for (int j = 0; j < 30; j++) {
-      for (int k = 0; k < 20; k++) {
-        valZ[k] = valZ[k] & !digitalRead(LINE[k]);
-      }
-      device.waitTime(10);
-    }
-    for (int j = 0; j < 20; j++) {
-      if (valZ[j] && valA == 255) {
-        valA = i;
-      }
-    }
+  for (int i = 0; i <= 230; i += 10) {
   }
 
   bright = (valC + valA) / 2;
