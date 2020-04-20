@@ -29,25 +29,42 @@ void _line::process(void) {
 }
 
 void _line::brightnessAdjust(void) {
-  int valA = 255;
-  int valA_pin = NULL;
-  int valCount = 0;
-  bool valZ[20];
-  bool valB[20];
-  int valC = 255;
-  for (int i = 0; i <= 19; i++) {
-    valB[i] = false;
-    valZ[i] = true;
+  int lowestBright = 255;  //最低値
+  int highestBright = 255;
+  int accumulation = 0;
+  bool reacted[20] = {};
+
+  for (int i = 0; i <= 255; i++) {
+    analogWrite(46, i);
+    for (int j = 0; j <= 19; j++) {
+      pinMode(LINE[j], INPUT);
+      bool val = !digitalRead(LINE[j]);
+      if (val) {
+        if (lowestBright == 255) {
+          lowestBright = i;
+        }
+        if (!reacted[j]) {
+          accumulation++;
+        }
+        reacted[j] = true;
+      }
+      Serial.print(val);
+    }
+    Serial.println("");
+    if (accumulation >= 8) {
+      highestBright = i;
+      // break;
+    }
+    //    delay(0);
   }
 
-  for (int i = 0; i <= 230; i += 10) {
-  }
-
-  bright = (valC + valA) / 2;
+  bright = (lowestBright + highestBright * 2) / 3;
   bright = constrain(bright, 0, 255);
   EEPROM[13] = bright;
 
   analogWrite(LINE_BRIGHT, bright);
+
+  Serial.println(bright);
 }
 
 void _line::read(void) {
