@@ -13,9 +13,9 @@ int BALL[16] = {A0, A1, A2,  A3,  A4,  A5,  A6,  A7,
 #define BALL_HOLD 29
 
 int LINE[20] = {30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
-                40, 41, 42, 43, 44, 45, 24, 47, 48, 49};
+                40, 41, 42, 43, 44, 45, 46, 47, 48, 49};
 
-#define LINE_BRIGHT 46
+#define LINE_BRIGHT 12
 
 #define SW_1 22
 #define SW_2 25
@@ -112,7 +112,7 @@ class _gyro {
   int deg;
   int differentialDeg = 0;
   int eeprom[6];
-  int offset;
+  int offsetVal;
 
  private:
   // none
@@ -189,10 +189,10 @@ void setup(void) {
   RGBLED.begin();
   RGBLED.show();
 
-  TWBR = 12;
+  // TWBR = 12;
 
   device.initialize();
-  TWBR = 12;
+  // TWBR = 12;
   device.mode = 0;
 
   Serial.begin(115200);
@@ -204,7 +204,9 @@ void setup(void) {
   LED.animation1();
   LED.animation2();
 
-  gyro.read();
+  for (int i = 0; i < 10; i++) {
+    gyro.offsetVal = gyro.read();
+  }
 }
 
 void loop(void) {
@@ -226,15 +228,22 @@ void loop(void) {
     ball.calc();
 
     //設定
-    motor.deg = ball.deg;
+    // motor.deg = ball.deg;
     motor.speed = ball.speed;
+
+    motor.deg = 0;
 
     //駆動
     kicker.kick(kicker.val);
 
     motor.timer = device.getTime();
     do {
-      motor.drive(motor.deg, motor.speed);
+      // motor.drive(motor.deg, 100);
+      motor.val[0] = 255;
+      motor.val[1] = -255;
+      motor.val[2] = 255;
+      motor.val[3] = -255;
+      motor.directDrive(motor.val);
       if (device.getTime() - motor.timer >= 5) {
         digitalWrite(BALL_RESET, HIGH);
       }

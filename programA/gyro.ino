@@ -52,6 +52,8 @@ RESTART:
   dmpReady = true;
 
   packetSize = mpu.dmpGetFIFOPacketSize();
+
+  offsetVal = 0;
 }
 
 //角度取得
@@ -71,7 +73,7 @@ int _gyro::read(void) {
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
     Gyro_Now = degrees(ypr[0]);  // + 180;
-    Gyro = Gyro_Now - offset;
+    Gyro = Gyro_Now - offsetVal;
     while (Gyro <= 0) {
       Gyro += 360;
     }

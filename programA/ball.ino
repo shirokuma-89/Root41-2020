@@ -1,9 +1,12 @@
 void _ball::read(int* b) {
   // digitalWrite(BALL_RESET, HIGH);
   for (int i = 0; i <= 15; i++) {
-    *(b + i) += (1 - LPF) * (analogRead(BALL[i]) - *(b + i));
-    // *(b + i) = analogRead(BALL[i]);
+    // *(b + i) += (1 - LPF) * (analogRead(BALL[i]) - *(b + i));
+    *(b + i) = analogRead(BALL[i]);
+    Serial.print(*(b + i));
+    Serial.print(" ");
   }
+  Serial.println(" ");
   digitalWrite(BALL_RESET, LOW);
 }
 
