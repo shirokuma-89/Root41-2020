@@ -228,22 +228,22 @@ void loop(void) {
     ball.calc();
 
     //設定
-    // motor.deg = ball.deg;
+    motor.deg = ball.deg;
     motor.speed = ball.speed;
 
-    motor.deg = 0;
+    // motor.deg = 0;
 
     //駆動
     kicker.kick(kicker.val);
 
     motor.timer = device.getTime();
     do {
-      // motor.drive(motor.deg, 100);
-      motor.val[0] = 255;
-      motor.val[1] = -255;
-      motor.val[2] = 255;
-      motor.val[3] = -255;
-      motor.directDrive(motor.val);
+      motor.drive(motor.deg, 100);
+      // motor.val[0] = 255;
+      // motor.val[1] = -255;
+      // motor.val[2] = 255;
+      // motor.val[3] = -255;
+      // motor.directDrive(motor.val);
       if (device.getTime() - motor.timer >= 5) {
         digitalWrite(BALL_RESET, HIGH);
       }
