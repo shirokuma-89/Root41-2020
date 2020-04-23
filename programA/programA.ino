@@ -133,7 +133,7 @@ class _position {
   int reliability;  //信頼度
 
  private:
-}
+} position;
 
 class _device {
  public:
