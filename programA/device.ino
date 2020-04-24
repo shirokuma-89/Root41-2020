@@ -1,10 +1,10 @@
 void _device::initialize(void) {
   TCCR0B = (TCCR0B & 0b11111000) | 0x04;
   TCCR1B = (TCCR1B & 0b11111000) | 0x04;
-  TCCR4B = (TCCR4B & 0b11111000) | 0x04;
   TCCR2B = (TCCR2B & 0b11111000) | 0x04;
   TCCR3B = (TCCR3B & 0b11111000) | 0x04;
-  
+  TCCR4B = (TCCR4B & 0b11111000) | 0x04;
+
   LED.RED = RGBLED.Color(255, 0, 0);
   LED.BLUE = RGBLED.Color(0, 0, 255);
   LED.GREEN = RGBLED.Color(0, 255, 0);
@@ -90,8 +90,6 @@ void _device::initialize(void) {
   gyro.eeprom[3] = (EEPROM[7] * 256) + EEPROM[8];
   gyro.eeprom[4] = (EEPROM[9] * 256) + EEPROM[10];
   gyro.eeprom[5] = (EEPROM[11] * 256) + EEPROM[12];
-
-  line.bright = EEPROM[13];
 }
 
 void _device::check(void) {
@@ -131,7 +129,10 @@ void _device::UI(void) {
         if (!digitalRead(SW_1)) {
           LED.changeAll(LED.ORANGE);
           RGBLED.show();
-          line.brightnessAdjust();
+          gyro.deg = gyro.read();
+          if (gyro.deg != 0) {
+            gyro.offsetVal += gyro.deg;
+          }
           LED.animation1();
           device.waitTime(500);
           break;

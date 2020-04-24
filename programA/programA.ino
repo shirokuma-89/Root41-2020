@@ -136,6 +136,8 @@ class _device {
   unsigned long getTime(void);
   void waitTime(unsigned long _time);
 
+  unsigned long startTimer;
+
   bool robot;
 
   int mode = 0;
@@ -191,10 +193,8 @@ void setup(void) {
   RGBLED.begin();
   RGBLED.show();
 
-  TWBR = 12;
-
   device.initialize();
-  TWBR = 12;
+  // TWBR = 12;
   device.mode = 0;
 
   Serial.begin(115200);
@@ -209,6 +209,8 @@ void setup(void) {
   LED.animation2();
 
   gyro.offsetRead();
+
+  device.startTimer = device.getTime();
 }
 
 void loop(void) {
@@ -222,10 +224,27 @@ void loop(void) {
 
     //ボタンによるUI処理
     device.UI();
+
+    //ジャイロ補正
+    if (device.getTime() - device.startTimer <= 1000) {
+      if (gyro.deg != 0) {
+        gyro.offsetVal += gyro.deg;
+      }
+      while (gyro.offsetVal < 0) {
+        gyro.offsetVal += 360;
+      }
+      gyro.offsetVal %= 360;
+    }
   } else if (device.mode == 1) {  //駆動中
     //処理
-    // LED.degShow(ball.deg);
-    LED.gyroShow();
+    LED.degShow(ball.deg);
+    if (gyro.deg >= 360) {
+      LED.changeAll(LED.WHITE);
+    }
+    if (gyro.deg <= -1) {
+      LED.changeAll(LED.RED);
+    }
+    // LED.gyroShow();
     ball.read(ball.val);
     ball.readDistance();
     ball.calc();
@@ -239,12 +258,7 @@ void loop(void) {
 
     motor.timer = device.getTime();
     do {
-      motor.drive(0, 100);
-      // motor.val[0] = 255;
-      // motor.val[1] = -255;
-      // motor.val[2] = 255;
-      // motor.val[3] = -255;
-      // motor.directDrive(motor.val);
+      motor.drive(motor.deg, motor.speed);
       if (device.getTime() - motor.timer >= 5) {
         digitalWrite(BALL_RESET, HIGH);
       }

@@ -41,8 +41,8 @@ RESTART:
   mpu.setXGyroOffset(eeprom[0]);
   mpu.setYGyroOffset(eeprom[1]);
   mpu.setZGyroOffset(eeprom[2]);
-  mpu.setXAccelOffset(eeprom[3]);
-  mpu.setYAccelOffset(eeprom[4]);
+  // mpu.setXAccelOffset(eeprom[3]);
+  // mpu.setYAccelOffset(eeprom[4]);
   mpu.setZAccelOffset(eeprom[5]);
   mpu.setDMPEnabled(true);
 
@@ -79,7 +79,11 @@ int _gyro::read(void) {
     }
     Gyro %= 360;
   }
-  return (720 - Gyro - offsetVal) % 360;
+  int tempDeg = ((360 - Gyro) % 360 - offsetVal + 720) % 360;
+  while (tempDeg < 0) {
+    tempDeg += 360;
+  }
+  return tempDeg % 360;
 }
 
 //角速度取得
@@ -280,16 +284,25 @@ void calibration() {
 }
 
 void _gyro::offsetRead(void) {
-  if (!device.robot) {
-    for (int i = 0; i < 150; i++) {
-      deg = gyro.read();
-      device.waitTime(3);
-    }
+  offsetVal = 0;
+  Serial.println(gyro.read());
+  offsetVal = deg;
+  Serial.println(offsetVal);
 
-    offsetVal = 0;
-    Serial.println(gyro.read());
-    offsetVal = deg;
-    Serial.println(offsetVal);
-    Serial.println(gyro.read());
+  // for (int i = 0; i < 150; i++) {
+  //   deg = gyro.read();
+  // }
+
+  // delay(100);
+
+  if (deg != 0) {
+    offsetVal += deg;
   }
+
+  while (offsetVal < 0) {
+    offsetVal += 360;
+  }
+  offsetVal %= 360;
+
+  Serial.println(gyro.read());
 }
