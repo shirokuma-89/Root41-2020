@@ -27,11 +27,11 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
     //姿勢制御
     if (_deg == NULL && _power == NULL) {
       Kp = 2;     //比例定数
-      Ki = 0.01;  //積分定数
+      Ki = 0.02;  //積分定数
 
-      minimum = 50;
+      minimum = 70;
     } else {
-      Kp = 2;   //比例定数
+      Kp = 2.1;   //比例定数
       Ki = 0.01;  //積分定数
     }
 
@@ -41,18 +41,14 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
       integral += direction;
     direction *= Kp * -1;        //比例制御
     direction -= integral * Ki;  //積分制御
-    int _direction = 0;
-    // _direction = (gyro.deg - gyroOld) * 10;
     if (direction >= 0) {
-      direction += _direction;
       direction = constrain(direction, 10 + minimum, 355);
     } else {
-      direction += _direction;
       direction = constrain(direction, -355, -10 - minimum);
     }
 
     //機体が前を向いたら積分していたものをクリアする
-    if (gyro.deg <= 3 || gyro.deg >= 357) {
+    if (gyro.deg <= 5 || gyro.deg >= 355) {
       integral = 0;
       direction = 0;
     }

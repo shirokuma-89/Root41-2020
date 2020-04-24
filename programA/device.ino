@@ -4,7 +4,7 @@ void _device::initialize(void) {
   TCCR4B = (TCCR4B & 0b11111000) | 0x04;
   TCCR2B = (TCCR2B & 0b11111000) | 0x04;
   TCCR3B = (TCCR3B & 0b11111000) | 0x04;
-
+  
   LED.RED = RGBLED.Color(255, 0, 0);
   LED.BLUE = RGBLED.Color(0, 0, 255);
   LED.GREEN = RGBLED.Color(0, 255, 0);

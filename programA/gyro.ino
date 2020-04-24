@@ -280,14 +280,16 @@ void calibration() {
 }
 
 void _gyro::offsetRead(void) {
-  for (int i = 0; i < 150; i++) {
-    deg = gyro.read();
-    device.waitTime(3);
-  }
+  if (!device.robot) {
+    for (int i = 0; i < 150; i++) {
+      deg = gyro.read();
+      device.waitTime(3);
+    }
 
-  offsetVal = 0;
-  Serial.println(gyro.read());
-  offsetVal = deg;
-  Serial.println(offsetVal);
-  Serial.println(gyro.read());
+    offsetVal = 0;
+    Serial.println(gyro.read());
+    offsetVal = deg;
+    Serial.println(offsetVal);
+    Serial.println(gyro.read());
+  }
 }
