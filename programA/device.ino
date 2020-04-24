@@ -63,7 +63,7 @@ void _device::initialize(void) {
   pinMode(BALL_HOLD, INPUT);
 
   for (int i = 0; i <= 19; i++) {
-    pinMode(LINE[i], INPU_PULLUP);
+    pinMode(LINE[i], INPUT_PULLUP);
   }
 
   pinMode(SW_1, INPUT_PULLUP);

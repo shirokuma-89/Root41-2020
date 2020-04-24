@@ -33,6 +33,21 @@ void _LED::gyroShow(unsigned long _color = 'hogehoge') {
         RGBLED.setPixelColor((light + 15) % 16, LED.defaultColor);
         RGBLED.setPixelColor((light + 14) % 16, LED.defaultColor);
         RGBLED.setPixelColor((light + 13) % 16, LED.defaultColor);
+        if (light == 0) {
+          if (gyro.deg <= 180) {
+            if (device.robot) {
+              RGBLED.setPixelColor((light + 13) % 16, LED.MINT);
+            } else {
+              RGBLED.setPixelColor((light + 13) % 16, LED.PURPLE);
+            }
+          } else {
+            if (device.robot) {
+              RGBLED.setPixelColor((light + 2) % 16, LED.MINT);
+            } else {
+              RGBLED.setPixelColor((light + 2) % 16, LED.PURPLE);
+            }
+          }
+        }
 
       } else {
         RGBLED.setPixelColor(light, _color);
