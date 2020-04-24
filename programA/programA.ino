@@ -209,8 +209,6 @@ void setup(void) {
   LED.animation2();
 
   gyro.offsetRead();
-
-  device.startTimer = device.getTime();
 }
 
 void loop(void) {

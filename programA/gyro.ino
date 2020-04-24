@@ -305,4 +305,6 @@ void _gyro::offsetRead(void) {
   offsetVal %= 360;
 
   Serial.println(gyro.read());
+
+  device.startTimer = device.getTime();
 }
