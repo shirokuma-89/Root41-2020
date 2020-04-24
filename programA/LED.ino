@@ -127,6 +127,7 @@ void _LED::animation1(void) {
     }
     RGBLED.show();
     device.waitTime(15);
+    gyro.deg = gyro.read();
   }
 }
 

@@ -100,12 +100,14 @@ class _motor {
 
   int integral = 0;
   int direction = 0;
+  int gyroOld;
 } motor;
 
 class _gyro {
  public:
   void setting(void);
   void calibrationEEPROM(void);
+  void offsetRead(void);
   int read(void);
   int differentialRead(void);
 
@@ -189,24 +191,24 @@ void setup(void) {
   RGBLED.begin();
   RGBLED.show();
 
-  // TWBR = 12;
+  TWBR = 12;
 
   device.initialize();
-  // TWBR = 12;
+  TWBR = 12;
   device.mode = 0;
 
   Serial.begin(115200);
+  Serial.println("Root41 2020");
+  Serial.print("Robot Number:");
+  Serial.println(device.robot + 1);
 
   gyro.setting();
-  gyro.read();
 
   //起動イルミネーション
   LED.animation1();
   LED.animation2();
 
-  for (int i = 0; i < 10; i++) {
-    gyro.offsetVal = gyro.read();
-  }
+  gyro.offsetRead();
 }
 
 void loop(void) {
@@ -222,7 +224,8 @@ void loop(void) {
     device.UI();
   } else if (device.mode == 1) {  //駆動中
     //処理
-    LED.degShow(ball.deg);
+    // LED.degShow(ball.deg);
+    LED.gyroShow();
     ball.read(ball.val);
     ball.readDistance();
     ball.calc();
@@ -231,14 +234,12 @@ void loop(void) {
     motor.deg = ball.deg;
     motor.speed = ball.speed;
 
-    // motor.deg = 0;
-
     //駆動
     kicker.kick(kicker.val);
 
     motor.timer = device.getTime();
     do {
-      motor.drive(motor.deg, 100);
+      motor.drive(0, 100);
       // motor.val[0] = 255;
       // motor.val[1] = -255;
       // motor.val[2] = 255;

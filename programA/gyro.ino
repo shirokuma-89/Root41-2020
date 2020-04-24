@@ -38,12 +38,12 @@ RESTART:
     goto RESTART;  //初期化失敗
   }
 
-  mpu.setXGyroOffset(gyro.eeprom[0]);
-  mpu.setYGyroOffset(gyro.eeprom[1]);
-  mpu.setZGyroOffset(gyro.eeprom[2]);
-  mpu.setXAccelOffset(gyro.eeprom[3]);
-  mpu.setYAccelOffset(gyro.eeprom[4]);
-  mpu.setZAccelOffset(gyro.eeprom[5]);
+  mpu.setXGyroOffset(eeprom[0]);
+  mpu.setYGyroOffset(eeprom[1]);
+  mpu.setZGyroOffset(eeprom[2]);
+  mpu.setXAccelOffset(eeprom[3]);
+  mpu.setYAccelOffset(eeprom[4]);
+  mpu.setZAccelOffset(eeprom[5]);
   mpu.setDMPEnabled(true);
 
   attachInterrupt(0, dmpDataReady, RISING);
@@ -73,13 +73,13 @@ int _gyro::read(void) {
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
     Gyro_Now = degrees(ypr[0]);  // + 180;
-    Gyro = Gyro_Now - offsetVal;
+    Gyro = Gyro_Now;
     while (Gyro <= 0) {
       Gyro += 360;
     }
     Gyro %= 360;
   }
-  return (360 - Gyro) % 360;
+  return (720 - Gyro - offsetVal) % 360;
 }
 
 //角速度取得
@@ -277,4 +277,17 @@ void calibration() {
     if (ready >= 2)
       break;
   }
+}
+
+void _gyro::offsetRead(void) {
+  for (int i = 0; i < 150; i++) {
+    deg = gyro.read();
+    device.waitTime(3);
+  }
+
+  offsetVal = 0;
+  Serial.println(gyro.read());
+  offsetVal = deg;
+  Serial.println(offsetVal);
+  Serial.println(gyro.read());
 }

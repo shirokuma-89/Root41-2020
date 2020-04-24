@@ -52,11 +52,11 @@ void _ball::calc(void) {
         offset = constrain(offset, 0, 85);
       }
 
-      // if (top >= 8) {
-      //   deg -= offset;
-      // } else {
-      //   deg += offset;
-      // }
+      if (top >= 8) {
+        deg -= offset;
+      } else {
+        deg += offset;
+      }
     }
 
     //ホールド処理
@@ -84,7 +84,7 @@ void _ball::calc(void) {
       deg = 0;
     }
 
-    // LED.dist = true;
+    LED.dist = true;
 
   } else {  //ボールなし
     exist = false;

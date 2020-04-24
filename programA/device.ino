@@ -179,6 +179,7 @@ void _device::UI(void) {
           LED.changeAll(LED.PURPLE);
           RGBLED.show();
           gyro.calibrationEEPROM();
+          gyro.offsetRead();
           break;
         }
 
@@ -188,6 +189,7 @@ void _device::UI(void) {
           gyro.setting();
           gyro.read();
           LED.animation1();
+          gyro.offsetRead();
           device.waitTime(500);
           break;
         }

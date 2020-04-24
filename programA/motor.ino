@@ -19,31 +19,30 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
   }
 
   if (!_stop) {
+    gyroOld = gyro.deg;
     gyro.deg = gyro.read();
 
     int minimum = 0;
 
     //姿勢制御
     if (_deg == NULL && _power == NULL) {
-      Kp = 3.9;   //比例定数
-      Ki = 0.05;  //積分定数
-      Kd = 0.17;
+      Kp = 2;     //比例定数
+      Ki = 0.01;  //積分定数
 
       minimum = 50;
     } else {
-      Kp = 1.9;   //比例定数
-      Ki = 0.08;  //積分定数
-      Kd = 0.28;  //微分定数
+      Kp = 2;   //比例定数
+      Ki = 0.01;  //積分定数
     }
 
     direction = gyro.deg;
     direction = direction > 180 ? direction - 360 : direction;
     if (abs(direction) <= 50)
       integral += direction;
-    direction *= Kp * -1;                                  //比例制御
-    direction -= integral * Ki;                            //積分制御
+    direction *= Kp * -1;        //比例制御
+    direction -= integral * Ki;  //積分制御
     int _direction = 0;
-    _direction = (gyro.differentialRead() * Kd) * -1;  //微分制御
+    // _direction = (gyro.deg - gyroOld) * 10;
     if (direction >= 0) {
       direction += _direction;
       direction = constrain(direction, 10 + minimum, 355);
