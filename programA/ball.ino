@@ -1,9 +1,12 @@
 void _ball::read(int* b) {
+  // digitalWrite(BALL_RESET, HIGH);
   for (int i = 0; i <= 15; i++) {
     // *(b + i) += (1 - LPF) * (analogRead(BALL[i]) - *(b + i));
     *(b + i) = analogRead(BALL[i]);
+    Serial.print(*(b + i));
+    Serial.print(" ");
   }
-
+  Serial.println(" ");
   digitalWrite(BALL_RESET, LOW);
 }
 
@@ -62,7 +65,7 @@ void _ball::calc(void) {
       kicker.val = false;
       if (dist >= 3 && top > 1 && top < 15) {
         speed = 100;
-        LED.changeAll(LED.WHITE);
+        // LED.changeAll(LED.WHITE);
       } else {
         speed = 100;
       }
@@ -105,7 +108,7 @@ void _ball::readDistance(void) {
 
   dist = constrain(myMap(tempDist, 290, 440, 5, 0), 0, 6);
 
-  Serial.println(dist);
+  // Serial.println(dist);
 }
 
 float myMap(float x, float in_min, float in_max, float out_min, float out_max) {

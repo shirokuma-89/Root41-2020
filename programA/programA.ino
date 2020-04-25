@@ -15,7 +15,7 @@ int BALL[16] = {A0, A1, A2,  A3,  A4,  A5,  A6,  A7,
 int LINE[20] = {30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
                 40, 41, 42, 43, 44, 45, 46, 47, 48, 49};
 
-#define LINE_BRIGHT 46
+#define LINE_BRIGHT 12
 
 #define SW_1 22
 #define SW_2 25
@@ -44,7 +44,7 @@ class _ball {
   int speed;
 
  private:
-  float LPF = 0.3;
+  float LPF = 0.4;
 
   unsigned long holdTimer;
   unsigned long topTimer;
@@ -55,7 +55,7 @@ class _line {
  public:
   _line(void);
   void read(void);
-  void autoadjustment(void);
+  void brightnessAdjust(void);
   void process(void);
 
   //配列系
@@ -100,19 +100,21 @@ class _motor {
 
   int integral = 0;
   int direction = 0;
+  int gyroOld;
 } motor;
 
 class _gyro {
  public:
   void setting(void);
   void calibrationEEPROM(void);
+  void offsetRead(void);
   int read(void);
   int differentialRead(void);
 
   int deg;
   int differentialDeg = 0;
   int eeprom[6];
-  int offset;
+  int offsetVal;
 
  private:
   // none
@@ -140,8 +142,11 @@ class _device {
   void initialize(void);
   void check(void);
   void UI(void);
+  void discharge(void);
   unsigned long getTime(void);
   void waitTime(unsigned long _time);
+
+  unsigned long startTimer;
 
   bool robot;
 
@@ -199,18 +204,24 @@ void setup(void) {
   RGBLED.show();
 
   device.initialize();
+  // TWBR = 12;
   device.mode = 0;
 
   Serial.begin(115200);
+  Serial.println("Root41 2020");
+  Serial.print("Robot Number:");
+  Serial.println(device.robot + 1);
 
   gyro.setting();
-  gyro.read();
 
   //起動イルミネーション
   LED.animation1();
   LED.animation2();
+  
+  //放電モード
+  device.discharge();
 
-  gyro.read();
+  gyro.offsetRead();
 }
 
 void loop(void) {
@@ -224,9 +235,27 @@ void loop(void) {
 
     //ボタンによるUI処理
     device.UI();
+
+    //ジャイロ補正
+    if (device.getTime() - device.startTimer <= 1000) {
+      if (gyro.deg != 0) {
+        gyro.offsetVal += gyro.deg;
+      }
+      while (gyro.offsetVal < 0) {
+        gyro.offsetVal += 360;
+      }
+      gyro.offsetVal %= 360;
+    }
   } else if (device.mode == 1) {  //駆動中
     //処理
     LED.degShow(ball.deg);
+    if (gyro.deg >= 360) {
+      LED.changeAll(LED.WHITE);
+    }
+    if (gyro.deg <= -1) {
+      LED.changeAll(LED.RED);
+    }
+    // LED.gyroShow();
     ball.read(ball.val);
     ball.readDistance();
     ball.calc();
@@ -241,10 +270,10 @@ void loop(void) {
     motor.timer = device.getTime();
     do {
       motor.drive(motor.deg, motor.speed);
-      if (device.getTime() - motor.timer >= 10) {
+      if (device.getTime() - motor.timer >= 5) {
         digitalWrite(BALL_RESET, HIGH);
       }
-    } while (device.getTime() - motor.timer <= 35);
+    } while (device.getTime() - motor.timer <= 30);
   } else if (device.mode == 2) {  //駆動中
     //処理
     LED.gyroShow();
