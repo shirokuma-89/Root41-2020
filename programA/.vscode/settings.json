@@ -35,6 +35,10 @@
     {
       "name": "feature/ta-sqrt-ball",
       "base": "feature/ta-ball"
+    },
+    {
+      "name": "feature/ta-util",
+      "base": "develop"
     }
   ],
   "files.associations": {

@@ -38,12 +38,12 @@ RESTART:
     goto RESTART;  //初期化失敗
   }
 
-  mpu.setXGyroOffset(gyro.eeprom[0]);
-  mpu.setYGyroOffset(gyro.eeprom[1]);
-  mpu.setZGyroOffset(gyro.eeprom[2]);
-  mpu.setXAccelOffset(gyro.eeprom[3]);
-  mpu.setYAccelOffset(gyro.eeprom[4]);
-  mpu.setZAccelOffset(gyro.eeprom[5]);
+  mpu.setXGyroOffset(eeprom[0]);
+  mpu.setYGyroOffset(eeprom[1]);
+  mpu.setZGyroOffset(eeprom[2]);
+  // mpu.setXAccelOffset(eeprom[3]);
+  // mpu.setYAccelOffset(eeprom[4]);
+  mpu.setZAccelOffset(eeprom[5]);
   mpu.setDMPEnabled(true);
 
   attachInterrupt(0, dmpDataReady, RISING);
@@ -52,6 +52,8 @@ RESTART:
   dmpReady = true;
 
   packetSize = mpu.dmpGetFIFOPacketSize();
+
+  offsetVal = 0;
 }
 
 //角度取得
@@ -71,13 +73,17 @@ int _gyro::read(void) {
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
     Gyro_Now = degrees(ypr[0]);  // + 180;
-    Gyro = Gyro_Now - offset;
+    Gyro = Gyro_Now;
     while (Gyro <= 0) {
       Gyro += 360;
     }
     Gyro %= 360;
   }
-  return (360 - Gyro) % 360;
+  int tempDeg = ((360 - Gyro) % 360 - offsetVal + 720) % 360;
+  while (tempDeg < 0) {
+    tempDeg += 360;
+  }
+  return tempDeg % 360;
 }
 
 //角速度取得
@@ -275,4 +281,30 @@ void calibration() {
     if (ready >= 2)
       break;
   }
+}
+
+void _gyro::offsetRead(void) {
+  offsetVal = 0;
+  Serial.println(gyro.read());
+  offsetVal = deg;
+  Serial.println(offsetVal);
+
+  // for (int i = 0; i < 150; i++) {
+  //   deg = gyro.read();
+  // }
+
+  // delay(100);
+
+  if (deg != 0) {
+    offsetVal += deg;
+  }
+
+  while (offsetVal < 0) {
+    offsetVal += 360;
+  }
+  offsetVal %= 360;
+
+  Serial.println(gyro.read());
+
+  device.startTimer = device.getTime();
 }

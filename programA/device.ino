@@ -1,6 +1,9 @@
 void _device::initialize(void) {
   TCCR0B = (TCCR0B & 0b11111000) | 0x04;
-  // TCCR1B = (TCCR1B & 0b11111000) | 0x01;
+  TCCR1B = (TCCR1B & 0b11111000) | 0x04;
+  TCCR2B = (TCCR2B & 0b11111000) | 0x04;
+  TCCR3B = (TCCR3B & 0b11111000) | 0x04;
+  TCCR4B = (TCCR4B & 0b11111000) | 0x04;
 
   LED.RED = RGBLED.Color(255, 0, 0);
   LED.BLUE = RGBLED.Color(0, 0, 255);
@@ -53,9 +56,9 @@ void _device::initialize(void) {
   LED.changeAll(LED.BLUE);
   RGBLED.show();
 
-  for (int i = 0; i <= 15; i++) {
-    pinMode(BALL[i], INPUT);
-  }
+  // for (int i = 0; i <= 15; i++) {
+  //   pinMode(BALL[i], INPUT);
+  // }
   pinMode(BALL_RESET, OUTPUT);
   pinMode(BALL_HOLD, INPUT);
 
@@ -88,8 +91,6 @@ void _device::initialize(void) {
   gyro.eeprom[3] = (EEPROM[7] * 256) + EEPROM[8];
   gyro.eeprom[4] = (EEPROM[9] * 256) + EEPROM[10];
   gyro.eeprom[5] = (EEPROM[11] * 256) + EEPROM[12];
-
-  line.bright = EEPROM[13];
 }
 
 void _device::check(void) {
@@ -101,10 +102,12 @@ void _device::check(void) {
     device.mode = 0;
   } else if (!digitalRead(SW_1)) {
     device.mode = 1;
-    analogWrite(LINE_BRIGHT, line.bright);
+    // analogWrite(LINE_BRIGHT, line.bright);
+    digitalWrite(LINE_BRIGHT, HIGH);
   } else if (!digitalRead(SW_2)) {
     device.mode = 2;
-    analogWrite(LINE_BRIGHT, line.bright);
+    digitalWrite(LINE_BRIGHT, HIGH);
+    // analogWrite(LINE_BRIGHT, line.bright);
   }
 }
 
@@ -127,7 +130,10 @@ void _device::UI(void) {
         if (!digitalRead(SW_1)) {
           LED.changeAll(LED.ORANGE);
           RGBLED.show();
-          line.autoadjustment();
+          gyro.deg = gyro.read();
+          if (gyro.deg != 0) {
+            gyro.offsetVal += gyro.deg;
+          }
           LED.animation1();
           device.waitTime(500);
           break;
@@ -175,6 +181,7 @@ void _device::UI(void) {
           LED.changeAll(LED.PURPLE);
           RGBLED.show();
           gyro.calibrationEEPROM();
+          gyro.offsetRead();
           break;
         }
 
@@ -184,6 +191,7 @@ void _device::UI(void) {
           gyro.setting();
           gyro.read();
           LED.animation1();
+          gyro.offsetRead();
           device.waitTime(500);
           break;
         }
@@ -198,4 +206,24 @@ unsigned long _device::getTime(void) {
 
 void _device::waitTime(unsigned long _time) {
   delay(_time / 4);
+}
+
+void _device::discharge(void) {
+  if (!digitalRead(SW_RESET) && !digitalRead(SW_2)) {
+    while (true) {
+      LED.changeAll(LED.YELLOW);
+      RGBLED.show();
+      for (int i = 0; i <= 3; i++) {
+        motor.val[i] = 255;
+      }
+      motor.directDrive(motor.val);
+      device.waitTime(500);
+      
+      for (int i = 0; i <= 3; i++) {
+        motor.val[i] = -255;
+      }
+      motor.directDrive(motor.val);
+      device.waitTime(500);
+    }
+  }
 }
