@@ -206,3 +206,23 @@ unsigned long _device::getTime(void) {
 void _device::waitTime(unsigned long _time) {
   delay(_time / 4);
 }
+
+void _device::discharge(void) {
+  if (!digitalRead(SW_RESET) && !digitalRead(SW_2)) {
+    while (true) {
+      LED.changeAll(LED.YELLOW);
+      RGBLED.show();
+      for (int i = 0; i <= 3; i++) {
+        motor.val[i] = 255;
+      }
+      motor.directDrive(motor.val);
+      device.waitTime(500);
+      
+      for (int i = 0; i <= 3; i++) {
+        motor.val[i] = -255;
+      }
+      motor.directDrive(motor.val);
+      device.waitTime(500);
+    }
+  }
+}

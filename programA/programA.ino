@@ -133,6 +133,7 @@ class _device {
   void initialize(void);
   void check(void);
   void UI(void);
+  void discharge(void);
   unsigned long getTime(void);
   void waitTime(unsigned long _time);
 
@@ -207,6 +208,9 @@ void setup(void) {
   //起動イルミネーション
   LED.animation1();
   LED.animation2();
+  
+  //放電モード
+  device.discharge();
 
   gyro.offsetRead();
 }
