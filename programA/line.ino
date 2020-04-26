@@ -11,7 +11,14 @@ _line::_line(void) {
 
 void _line::process(void) {
   if (flag) {
-    if (mode == 0) {
+    if (mode == 1 && touch = true) {
+      line.deg = atan2(line.x, line.y);
+      line.deg = degrees(line.deg);
+      if (line.deg < 180) {
+        line.deg += 180;
+      } else {
+        line.deg -= 180;
+      }
     }
   } else {
     //リセット
@@ -71,7 +78,6 @@ void _line::read(void) {
   //読み込み
   for (int i = 0; i <= 19; i++) {
     if (!digitalRead(LINE[i])) {
-      val[i] = true;
       if (whited == 0) {
         first = i;
       }
@@ -81,6 +87,10 @@ void _line::read(void) {
         whited++;
         check[i] = 1;
       }
+      flag = true;
+      val[i] = true;
+      touch = true;
+      mode = 1;
     } else {
       val[i] = false;
     }

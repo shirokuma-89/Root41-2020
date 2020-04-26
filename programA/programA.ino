@@ -68,6 +68,7 @@ class _line {
   int whited;
 
   bool flag;
+  bool touch;
   int mode;
   int error;
 
@@ -123,15 +124,19 @@ class _gyro {
 class _tof {
  public:
   int read(void);
+  int _dist;
 
  private:
-  int _dist;
 } tof;
 
 class _position {
  public:
   void reflection(int _type);
+  void get(void);
 
+  bool rock;
+  int side[4];
+  int vertical[4];
   int reliability;  //信頼度
 
  private:
@@ -168,7 +173,7 @@ class _LED {
   bool white = false;
   bool dist = false;
 
-  int bright = 255;
+  int bright = 50;
 
   unsigned long defaultColor;
   unsigned long RED;
@@ -248,6 +253,7 @@ void loop(void) {
     }
   } else if (device.mode == 1) {  //駆動中
     //処理
+
     LED.degShow(ball.deg);
     if (gyro.deg >= 360) {
       LED.changeAll(LED.WHITE);
