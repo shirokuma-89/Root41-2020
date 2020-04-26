@@ -8,6 +8,8 @@ void _ball::read(int* b) {
   }
   // Serial.println(" ");
   digitalWrite(BALL_RESET, LOW);
+
+  *b *= 0.95;
 }
 
 void _ball::calc(void) {
@@ -31,7 +33,7 @@ void _ball::calc(void) {
 
     int offset = 0;
 
-    offset += dist * (abs(deg) * 0.03 + 12);
+    offset += dist * (abs(deg) * 0.02 + 12);
 
     deg += 720;
     deg %= 360;
@@ -42,10 +44,10 @@ void _ball::calc(void) {
 
     if (topDiff >= 1) {
       if (topDiff == 1)
-        offset *= 0.2;
+        offset *= 0.5;
 
       if (topDiff == 2)
-        offset *= 0.9;
+        offset *= 0.7;
 
       if (min(min(val[7], val[8]), val[9]) <= 300) {
         offset *= 3;
@@ -64,7 +66,7 @@ void _ball::calc(void) {
       holdTimer = device.getTime();
       kicker.val = false;
       if (dist >= 3 && top > 1 && top < 15) {
-        speed = 80;
+        speed = 90;
         // LED.changeAll(LED.WHITE);
       } else {
         speed = 100;
@@ -106,7 +108,7 @@ void _ball::readDistance(void) {
     }
   }
 
-  dist = constrain(myMap(tempDist, 350, 500, 5, 0), 0, 6);
+  dist = constrain(myMap(tempDist, 360, 530, 5, 0), 0, 5);
 
   // Serial.println(dist);
 }
