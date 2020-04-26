@@ -1,4 +1,10 @@
 void _device::initialize(void) {
+  TCCR0B = (TCCR0B & 0b11111000) | 0x04;
+  TCCR1B = (TCCR1B & 0b11111000) | 0x04;
+  TCCR2B = (TCCR2B & 0b11111000) | 0x04;
+  TCCR3B = (TCCR3B & 0b11111000) | 0x04;
+  TCCR4B = (TCCR4B & 0b11111000) | 0x04;
+
   LED.RED = RGBLED.Color(255, 0, 0);
   LED.BLUE = RGBLED.Color(0, 0, 255);
   LED.GREEN = RGBLED.Color(0, 255, 0);
@@ -9,6 +15,34 @@ void _device::initialize(void) {
   LED.MINT = RGBLED.Color(100, 255, 50);
   LED.LIME = RGBLED.Color(190, 255, 0);
   LED.NONE = RGBLED.Color(0, 0, 0);
+
+  for (int i = 0; i <= 359; i++) {
+    float s;
+    motor.calcVal[0][i] = round(sin(radians(i - 300)) * 100.0);
+    motor.calcVal[1][i] = round(sin(radians(i - 60)) * 100.0);
+    motor.calcVal[2][i] = round(sin(radians(i - 225)) * 100.0);
+    motor.calcVal[3][i] = round(sin(radians(i - 135)) * 100.0);
+
+    int valTemp[4];
+    for (int k = 0; k < 4; k++) {
+      valTemp[k] = motor.calcVal[k][i];
+    }
+
+    for (int k = 0; k < 4; ++k) {
+      for (int j = k + 1; j < 4; ++j) {
+        if (abs(valTemp[k]) >= abs(valTemp[j])) {
+          int temp = valTemp[k];
+          valTemp[k] = valTemp[j];
+          valTemp[j] = temp;
+        }
+      }
+    }
+    s = 255.0 / float(abs(valTemp[3]));
+    motor.calcVal[0][i] = round((float)motor.calcVal[0][i] * s);
+    motor.calcVal[1][i] = round((float)motor.calcVal[1][i] * s);
+    motor.calcVal[2][i] = round((float)motor.calcVal[2][i] * s);
+    motor.calcVal[3][i] = round((float)motor.calcVal[3][i] * s);
+  }
 
   Wire.begin();
 
@@ -22,9 +56,9 @@ void _device::initialize(void) {
   LED.changeAll(LED.BLUE);
   RGBLED.show();
 
-  for (int i = 0; i <= 15; i++) {
-    pinMode(BALL[i], INPUT);
-  }
+  // for (int i = 0; i <= 15; i++) {
+  //   pinMode(BALL[i], INPUT);
+  // }
   pinMode(BALL_RESET, OUTPUT);
   pinMode(BALL_HOLD, INPUT);
 
@@ -57,8 +91,6 @@ void _device::initialize(void) {
   gyro.eeprom[3] = (EEPROM[7] * 256) + EEPROM[8];
   gyro.eeprom[4] = (EEPROM[9] * 256) + EEPROM[10];
   gyro.eeprom[5] = (EEPROM[11] * 256) + EEPROM[12];
-
-  line.bright = EEPROM[13];
 }
 
 void _device::check(void) {
@@ -70,10 +102,12 @@ void _device::check(void) {
     device.mode = 0;
   } else if (!digitalRead(SW_1)) {
     device.mode = 1;
-    analogWrite(LINE_BRIGHT, line.bright);
+    // analogWrite(LINE_BRIGHT, line.bright);
+    digitalWrite(LINE_BRIGHT, HIGH);
   } else if (!digitalRead(SW_2)) {
     device.mode = 2;
-    analogWrite(LINE_BRIGHT, line.bright);
+    digitalWrite(LINE_BRIGHT, HIGH);
+    // analogWrite(LINE_BRIGHT, line.bright);
   }
 }
 
@@ -83,10 +117,10 @@ void _device::UI(void) {
       LED.changeAll(LED.BLUE);
       RGBLED.show();
 
-      delay(20);  //チャッタリング防止
+      device.waitTime(20);  //チャッタリング防止
       while (!digitalRead(SW_RESET)) {
       }
-      delay(200);
+      device.waitTime(200);
 
       while (true) {
         if (!digitalRead(SW_RESET)) {  //戻るボタン
@@ -96,9 +130,12 @@ void _device::UI(void) {
         if (!digitalRead(SW_1)) {
           LED.changeAll(LED.ORANGE);
           RGBLED.show();
-          line.autoadjustment();
+          gyro.deg = gyro.read();
+          if (gyro.deg != 0) {
+            gyro.offsetVal += gyro.deg;
+          }
           LED.animation1();
-          delay(500);
+          device.waitTime(500);
           break;
         }
 
@@ -113,9 +150,9 @@ void _device::UI(void) {
               LED.changeAll(LED.LIME);
               RGBLED.show();
               digitalWrite(SOLENOID, HIGH);
-              delay(200);
+              device.waitTime(200);
               digitalWrite(SOLENOID, LOW);
-              delay(1200);
+              device.waitTime(1200);
             }
 
             if (!digitalRead(SW_RESET)) {
@@ -130,10 +167,10 @@ void _device::UI(void) {
       LED.changeAll(LED.YELLOW);
       RGBLED.show();
 
-      delay(20);  //チャッタリング防止
+      device.waitTime(20);  //チャッタリング防止
       while (!digitalRead(SW_RESET)) {
       }
-      delay(200);
+      device.waitTime(200);
 
       while (true) {
         if (!digitalRead(SW_RESET)) {  //戻るボタン
@@ -144,6 +181,7 @@ void _device::UI(void) {
           LED.changeAll(LED.PURPLE);
           RGBLED.show();
           gyro.calibrationEEPROM();
+          gyro.offsetRead();
           break;
         }
 
@@ -153,10 +191,39 @@ void _device::UI(void) {
           gyro.setting();
           gyro.read();
           LED.animation1();
-          delay(500);
+          gyro.offsetRead();
+          device.waitTime(500);
           break;
         }
       }
+    }
+  }
+}
+
+unsigned long _device::getTime(void) {
+  return millis() * 4;
+}
+
+void _device::waitTime(unsigned long _time) {
+  delay(_time / 4);
+}
+
+void _device::discharge(void) {
+  if (!digitalRead(SW_RESET) && !digitalRead(SW_2)) {
+    while (true) {
+      LED.changeAll(LED.YELLOW);
+      RGBLED.show();
+      for (int i = 0; i <= 3; i++) {
+        motor.val[i] = 255;
+      }
+      motor.directDrive(motor.val);
+      device.waitTime(500);
+      
+      for (int i = 0; i <= 3; i++) {
+        motor.val[i] = -255;
+      }
+      motor.directDrive(motor.val);
+      device.waitTime(500);
     }
   }
 }

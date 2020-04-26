@@ -19,6 +19,32 @@
     {
       "name": "feature/ta-led",
       "base": "develop"
+    },
+    {
+      "name": "feature/motor",
+      "base": "develop"
+    },
+    {
+      "name": "feature/ta-ball",
+      "base": "develop"
+    },
+    {
+      "name": "feature/ta-ball",
+      "base": "develop"
+    },
+    {
+      "name": "feature/ta-sqrt-ball",
+      "base": "feature/ta-ball"
+    },
+    {
+      "name": "feature/ta-util",
+      "base": "develop"
     }
-  ]
+  ],
+  "files.associations": {
+    "*.ino": "cpp",
+    "*.pde": "cpp",
+    "cmath": "cpp",
+    "limits": "cpp"
+  }
 }
