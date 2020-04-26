@@ -3,10 +3,10 @@ void _ball::read(int* b) {
   for (int i = 0; i <= 15; i++) {
     // *(b + i) += (1 - LPF) * (analogRead(BALL[i]) - *(b + i));
     *(b + i) = analogRead(BALL[i]);
-    Serial.print(*(b + i));
-    Serial.print(" ");
+    // Serial.print(*(b + i));
+    // Serial.print(" ");
   }
-  Serial.println(" ");
+  // Serial.println(" ");
   digitalWrite(BALL_RESET, LOW);
 }
 
@@ -47,7 +47,7 @@ void _ball::calc(void) {
       if (topDiff == 2)
         offset *= 0.9;
 
-      if (min(min(val[7], val[8]), val[9]) <= 270) {
+      if (min(min(val[7], val[8]), val[9]) <= 300) {
         offset *= 3;
         offset = constrain(offset, 0, 85);
       }
@@ -64,7 +64,7 @@ void _ball::calc(void) {
       holdTimer = device.getTime();
       kicker.val = false;
       if (dist >= 3 && top > 1 && top < 15) {
-        speed = 100;
+        speed = 80;
         // LED.changeAll(LED.WHITE);
       } else {
         speed = 100;
