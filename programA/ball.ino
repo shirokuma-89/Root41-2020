@@ -106,7 +106,7 @@ void _ball::readDistance(void) {
     }
   }
 
-  dist = constrain(myMap(tempDist, 290, 440, 5, 0), 0, 6);
+  dist = constrain(myMap(tempDist, 350, 500, 5, 0), 0, 6);
 
   // Serial.println(dist);
 }
