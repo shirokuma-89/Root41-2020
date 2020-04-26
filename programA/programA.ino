@@ -61,6 +61,7 @@ class _line {
   int whited;
 
   bool flag;
+  bool touch;
   int mode;
   int error;
 
@@ -209,6 +210,8 @@ void loop(void) {
     device.UI();
   } else if (device.mode == 1) {  //駆動中
     //処理
+    line.read();
+    line.process();
 
     //駆動
   }
