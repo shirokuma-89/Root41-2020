@@ -17,7 +17,7 @@ void _ball::calc(void) {
     if (val[i] <= val[top]) {
       top = i;
     }
-    if (val[i] >= 500) {
+    if (val[i] >= 650) {
       existCount++;
     }
   }
