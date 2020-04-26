@@ -44,10 +44,10 @@ void _ball::calc(void) {
 
     if (topDiff >= 1) {
       if (topDiff == 1)
-        offset *= 0.5;
+        offset *= 0.6;
 
       if (topDiff == 2)
-        offset *= 0.7;
+        offset *= 0.8;
 
       if (min(min(val[7], val[8]), val[9]) <= 300) {
         offset *= 3;
@@ -66,7 +66,7 @@ void _ball::calc(void) {
       holdTimer = device.getTime();
       kicker.val = false;
       if (dist >= 3 && top > 1 && top < 15) {
-        speed = 90;
+        speed = 100;
         // LED.changeAll(LED.WHITE);
       } else {
         speed = 100;
@@ -78,7 +78,7 @@ void _ball::calc(void) {
     }
 
     if (digitalRead(BALL_HOLD) && !(top > 2 && top < 14)) {
-      if (device.getTime() - holdTimer >= 100) {
+      if (device.getTime() - holdTimer >= 300) {
         kicker.val = true;
       }
       speed = 100;
