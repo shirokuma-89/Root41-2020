@@ -9,6 +9,28 @@ _line::_line(void) {
   }
 }
 
+int _line::calc(void) {
+  int _deg;
+  float _x;
+  float _y;
+  if (flag) {
+    for (int i = 0; i <= 10; i++) {  //可変
+      _x += line.vector[order[i]][0];
+      _y += line.vector[order[i]][1];
+    }
+    _deg = atan2(_x, _y);
+    _deg = degrees(_deg);
+    if (_deg < 180) {
+      _deg += 180;
+    } else {
+      _deg -= 180;
+    }
+  } else {
+    _deg = 1000;
+  }
+  return _deg;
+}
+
 void _line::process(void) {
   if (flag) {
     if (mode == 1 && touch = true) {

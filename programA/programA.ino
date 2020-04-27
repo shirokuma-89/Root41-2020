@@ -57,6 +57,7 @@ class _line {
   void read(void);
   void brightnessAdjust(void);
   void process(void);
+  int calc(void);
 
   //配列系
   bool val[20];
@@ -71,6 +72,8 @@ class _line {
   bool touch;
   int mode;
   int error;
+
+  float vector[20][2];
 
   int bright;
   int dif;
@@ -212,6 +215,11 @@ void setup(void) {
   // TWBR = 12;
   device.mode = 0;
 
+  for (int i = 0; i <= 19; i++) {
+    line.vector[i][0] = sin(radians(i * 18)) * line.offsetX;
+    line.vector[i][1] = cos(radians(i * 18)) * line.offsetY;
+  }
+
   Serial.begin(115200);
   Serial.println("Root41 2020");
   Serial.print("Robot Number:");
@@ -222,7 +230,7 @@ void setup(void) {
   //起動イルミネーション
   LED.animation1();
   LED.animation2();
-  
+
   //放電モード
   device.discharge();
 
