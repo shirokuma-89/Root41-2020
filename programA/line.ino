@@ -10,13 +10,15 @@ _line::_line(void) {
 }
 
 int _line::calc(void) {
-  int _deg;
-  float _x;
-  float _y;
+  float _deg;
+  float _x = 0;
+  float _y = 0;
   if (flag) {
     for (int i = 0; i <= 10; i++) {  //可変
-      _x += line.vector[order[i]][0];
-      _y += line.vector[order[i]][1];
+      if (order[i] != 100) {
+        _x += vector[order[i]][0];
+        _y += vector[order[i]][1];
+      }
     }
     _deg = atan2(_x, _y);
     _deg = degrees(_deg);
@@ -33,15 +35,18 @@ int _line::calc(void) {
 
 void _line::process(void) {
   if (flag) {
-    if (mode == 1 && touch = true) {
-      line.deg = atan2(line.x, line.y);
-      line.deg = degrees(line.deg);
-      if (line.deg < 180) {
-        line.deg += 180;
-      } else {
-        line.deg -= 180;
-      }
+    if (!touch) {
+      flag = false;
     }
+    // if (mode == 1 && touch = true) {
+    //   line.deg = atan2(line.x, line.y);
+    //   line.deg = degrees(line.deg);
+    //   if (line.deg < 180) {
+    //     line.deg += 180;
+    //   } else {
+    //     line.deg -= 180;
+    //   }
+    // }
   } else {
     //リセット
     for (int i = 0; i <= 19; i++) {
@@ -84,7 +89,7 @@ void _line::brightnessAdjust(void) {
       highestBright = i;
       // break;
     }
-    //    delay(0);
+    delay(0);
   }
 
   bright = (lowestBright + highestBright * 2) / 3;
@@ -98,6 +103,7 @@ void _line::brightnessAdjust(void) {
 
 void _line::read(void) {
   //読み込み
+  touch = false;
   for (int i = 0; i <= 19; i++) {
     if (!digitalRead(LINE[i])) {
       if (whited == 0) {

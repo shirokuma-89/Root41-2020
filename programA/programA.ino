@@ -64,6 +64,8 @@ class _line {
   int order[20];
   int check[20];
 
+  int deg;
+
   int now;
   int first;
   int whited;
@@ -74,6 +76,8 @@ class _line {
   int error;
 
   float vector[20][2];
+  float x;
+  float y;
 
   int bright;
   int dif;
@@ -216,8 +220,8 @@ void setup(void) {
   device.mode = 0;
 
   for (int i = 0; i <= 19; i++) {
-    line.vector[i][0] = sin(radians(i * 18)) * line.offsetX;
-    line.vector[i][1] = cos(radians(i * 18)) * line.offsetY;
+    line.vector[i][0] = sin(radians(i * 18));
+    line.vector[i][1] = cos(radians(i * 18));
   }
 
   Serial.begin(115200);
@@ -274,6 +278,10 @@ void loop(void) {
     ball.readDistance();
     ball.calc();
 
+    line.read();
+    line.process();
+    line.deg = line.calc();
+
     //設定
     motor.deg = ball.deg;
     motor.speed = ball.speed;
@@ -295,4 +303,6 @@ void loop(void) {
     //駆動
     motor.drive(NULL, NULL);
   }
+
+  Serial.println(line.deg);
 }
