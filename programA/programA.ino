@@ -265,7 +265,9 @@ void loop(void) {
     }
   } else if (device.mode == 1) {  //駆動中
     //処理
-    LED.degShow(ball.deg);
+    // LED.degShow(ball.deg);
+    gyro.deg = gyro.read();
+    LED.gyroShow();
     ball.read(ball.val);
     ball.readDistance();
     ball.calc();
@@ -277,7 +279,7 @@ void loop(void) {
     //設定
     motor.deg = ball.deg;
     motor.speed = ball.speed;
-    
+
     if(line.flag){
       motor.deg = line.deg;
       motor.speed = 100;
@@ -289,9 +291,9 @@ void loop(void) {
     motor.timer = device.getTime();
     do {
       line.read();
-      line.process();
-      line.deg = line.calc();
-      
+      // line.process();
+      // line.deg = line.calc();
+
       motor.drive(motor.deg, motor.speed);
       if (device.getTime() - motor.timer >= 5) {
         digitalWrite(BALL_RESET, HIGH);

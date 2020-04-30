@@ -1,7 +1,7 @@
-// ISR(timer5Event) {
-//   //ラインの記述はここに
-//   line.read();
-// }
+ISR(timer5Event) {
+  //ラインの記述はここに
+  line.read();
+}
 
 _line::_line(void) {
   for (int i = 0; i <= 19; i++) {

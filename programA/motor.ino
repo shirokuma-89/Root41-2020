@@ -30,7 +30,7 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
 
       minimum = 70;
     } else {
-      Kp = 1.5;   //比例定数
+      Kp = 1.5;    //比例定数
       Ki = 0.004;  //積分定数
     }
 
