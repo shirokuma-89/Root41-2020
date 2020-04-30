@@ -265,15 +265,7 @@ void loop(void) {
     }
   } else if (device.mode == 1) {  //駆動中
     //処理
-
     LED.degShow(ball.deg);
-    if (gyro.deg >= 360) {
-      LED.changeAll(LED.WHITE);
-    }
-    if (gyro.deg <= -1) {
-      LED.changeAll(LED.RED);
-    }
-    // LED.gyroShow();
     ball.read(ball.val);
     ball.readDistance();
     ball.calc();
