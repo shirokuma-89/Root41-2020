@@ -180,7 +180,7 @@ class _LED {
   bool white = false;
   bool dist = false;
 
-  int bright = 50;
+  int bright = 150;
 
   unsigned long defaultColor;
   unsigned long RED;
@@ -265,15 +265,9 @@ void loop(void) {
     }
   } else if (device.mode == 1) {  //駆動中
     //処理
-
-    LED.degShow(ball.deg);
-    if (gyro.deg >= 360) {
-      LED.changeAll(LED.WHITE);
-    }
-    if (gyro.deg <= -1) {
-      LED.changeAll(LED.RED);
-    }
-    // LED.gyroShow();
+    // LED.degShow(ball.deg);
+    gyro.deg = gyro.read();
+    LED.gyroShow();
     ball.read(ball.val);
     ball.readDistance();
     ball.calc();
@@ -286,16 +280,25 @@ void loop(void) {
     motor.deg = ball.deg;
     motor.speed = ball.speed;
 
+    if(line.flag){
+      motor.deg = line.deg;
+      motor.speed = 100;
+    }
+
     //駆動
     kicker.kick(kicker.val);
 
     motor.timer = device.getTime();
     do {
+      line.read();
+      // line.process();
+      // line.deg = line.calc();
+
       motor.drive(motor.deg, motor.speed);
       if (device.getTime() - motor.timer >= 5) {
         digitalWrite(BALL_RESET, HIGH);
       }
-    } while (device.getTime() - motor.timer <= 30);
+    } while (device.getTime() - motor.timer <= 30 && !line.flag);
   } else if (device.mode == 2) {  //駆動中
     //処理
     LED.gyroShow();
