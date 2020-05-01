@@ -35,18 +35,29 @@ int _line::calc(void) {
 
 void _line::process(void) {
   if (flag) {
-    if (!touch) {
+    if (mode == 0) {
+      // none
       flag = false;
+    } else if (mode == 1) {
+      // stop
+      deg = 1000;
+      if (device.getTime() - stopTimer >= 100) {
+        mode = 2;
+      }
+    } else if (mode == 2) {
+      // move
+      if (!touch) {
+        overTimer = device.getTime();
+        mode = 3;
+      }
+    } else if (mode == 3) {
+      // over
+      if (device.getTime() - overTimer >= 200) {
+        mode = 0;
+      }
+    } else if (mode == 4) {
+      // error
     }
-    // if (mode == 1 && touch = true) {
-    //   line.deg = atan2(line.x, line.y);
-    //   line.deg = degrees(line.deg);
-    //   if (line.deg < 180) {
-    //     line.deg += 180;
-    //   } else {
-    //     line.deg -= 180;
-    //   }
-    // }
   } else {
     //リセット
     for (int i = 0; i <= 19; i++) {
@@ -115,10 +126,13 @@ void _line::read(void) {
         whited++;
         check[i] = 1;
       }
+      if (!flag) {
+        stopTimer = device.getTime();
+        mode = 1;
+      }
       flag = true;
       val[i] = true;
       touch = true;
-      mode = 1;
     } else {
       val[i] = false;
     }

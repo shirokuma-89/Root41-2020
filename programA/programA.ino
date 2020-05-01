@@ -83,6 +83,7 @@ class _line {
   int dif;
 
   unsigned long stopTimer;
+  unsigned long overTimer;
 
  private:
   // none
@@ -279,12 +280,17 @@ void loop(void) {
     ball.calc();
 
     line.read();
-    line.process();
     line.deg = line.calc();
+    line.process();
 
     //設定
-    motor.deg = ball.deg;
-    motor.speed = ball.speed;
+    if (line.flag) {
+      motor.deg = line.deg;
+      motor.speed = 100;
+    } else {
+      motor.deg = ball.deg;
+      motor.speed = ball.speed;
+    }
 
     //駆動
     kicker.kick(kicker.val);
@@ -304,5 +310,11 @@ void loop(void) {
     motor.drive(NULL, NULL);
   }
 
+  Serial.println(line.mode);
   Serial.println(line.deg);
+  Serial.println(motor.deg);
+  for (int i = 0; i <= 19; i++) {
+    Serial.print(line.val[i]);
+  }
+  Serial.println("");
 }
