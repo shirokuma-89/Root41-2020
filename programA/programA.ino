@@ -34,6 +34,7 @@ class _ball {
   void readDistance(void);
 
   bool exist;
+  bool isAvoid = false;
 
   int val[16];
   int top;
@@ -48,6 +49,7 @@ class _ball {
 
   unsigned long holdTimer;
   unsigned long topTimer;
+  unsigned long avoidTimer;
 
 } ball;
 
@@ -99,9 +101,12 @@ class _motor {
   int deg;
   int speed;
   int count;
-  int time = 3;
+  int time = 5;
+  int referenceAngle = 0;
 
   unsigned long timer;
+
+  int direction = 0;
 
  private:
   float Kp;
@@ -109,7 +114,6 @@ class _motor {
   float Kd;
 
   int integral = 0;
-  int direction = 0;
   int gyroOld;
 } motor;
 
@@ -294,7 +298,7 @@ void loop(void) {
     for (motor.count = 0; motor.count < motor.time; motor.count++) {
       line.read();
       motor.drive(motor.deg, motor.speed);
-      if (motor.count >= 0) {
+      if (motor.count >= 1) {
         digitalWrite(BALL_RESET, HIGH);
       }
 
