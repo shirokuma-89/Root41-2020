@@ -99,7 +99,7 @@ class _motor {
   int deg;
   int speed;
   int count;
-  int time = 5;  // int _oldDeg[5]と一致させること！
+  int time = 3;
 
   unsigned long timer;
 
@@ -111,8 +111,6 @@ class _motor {
   int integral = 0;
   int direction = 0;
   int gyroOld;
-
-  int _oldDeg[5];  // int timeと一致させること！
 } motor;
 
 class _gyro {
