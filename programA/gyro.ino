@@ -41,8 +41,8 @@ RESTART:
   mpu.setXGyroOffset(eeprom[0]);
   mpu.setYGyroOffset(eeprom[1]);
   mpu.setZGyroOffset(eeprom[2]);
-  // mpu.setXAccelOffset(eeprom[3]);
-  // mpu.setYAccelOffset(eeprom[4]);
+  mpu.setXAccelOffset(eeprom[3]);
+  mpu.setYAccelOffset(eeprom[4]);
   mpu.setZAccelOffset(eeprom[5]);
   mpu.setDMPEnabled(true);
 
@@ -72,6 +72,7 @@ int _gyro::read(void) {
     mpu.dmpGetQuaternion(&q, fifoBuffer);
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+    mpu.dmpGetGyro(&dmpgyro, fifoBuffer);
     Gyro_Now = degrees(ypr[0]);  // + 180;
     Gyro = Gyro_Now;
     while (Gyro <= 0) {

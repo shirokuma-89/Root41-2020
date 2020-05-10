@@ -25,21 +25,42 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
 
     //姿勢制御
     if (_deg == NULL && _power == NULL) {
-      Kp = 2;     //比例定数
-      Ki = 0.02;  //積分定数
+      Kp = 2.6;
+      Ki = 0.007;
+      Kd = 1;
 
       minimum = 70;
     } else {
-      Kp = 1.5;    //比例定数
-      Ki = 0.004;  //積分定数
+      // Kp = 1.5;    //比例定数
+      // Ki = 0.004;  //積分定数
+      Kp = 1.4;
+      Ki = 0.006;
+      Kd = 0.7;
     }
 
     direction = gyro.deg;
     direction = direction > 180 ? direction - 360 : direction;
+
+    int angularVelocity = dmpgyro.z;
+    if (abs(angularVelocity) <= 2) {
+      angularVelocity = 0;
+    }
+    if (angularVelocity >= 0 && direction <= 0) {
+      angularVelocity = 0;
+    } else if (angularVelocity <= 0 && direction >= 0) {
+      angularVelocity = 0;
+    }
+    if (abs(direction) <= 2) {
+      angularVelocity = 0;
+    }
+    Serial.println(angularVelocity);
+
     if (abs(direction) <= 50)
       integral += direction;
-    direction *= Kp * -1;        //比例制御
-    direction -= integral * Ki;  //積分制御
+
+    direction *= Kp * -1;               //比例制御
+    direction -= integral * Ki;         //積分制御
+    direction -= angularVelocity * Kd;  //積分制御
     if (direction >= 0) {
       direction = constrain(direction, 10 + minimum, 355);
     } else {

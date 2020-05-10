@@ -3,20 +3,12 @@
         {
             "name": "Win32",
             "includePath": [
-                "C:\\Users\\Takaki\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
-                "C:\\Users\\Takaki\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.2\\**",
-                "C:\\arduino-1.8.6-VScode\\hardware\\arduino\\avr\\**",
-                "C:\\arduino-1.8.6-VScode\\tools\\**",
                 "C:\\Apps\\Arduino\\hardware\\arduino\\avr\\**",
                 "C:\\Apps\\Arduino\\tools\\**"
             ],
             "forcedInclude": [
-                "C:\\Users\\Takaki\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.2\\cores\\arduino\\Arduino.h",
-                "C:\\arduino-1.8.6-VScode\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h",
                 "C:\\Apps\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
             ],
-            "intelliSenseMode": "msvc-x64",
-            "compilerPath": "C:\\MinGW\\bin\\gcc.exe",
             "cStandard": "c11",
             "cppStandard": "c++17"
         }

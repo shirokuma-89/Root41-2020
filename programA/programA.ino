@@ -98,6 +98,8 @@ class _motor {
   int calcVal[4][360];
   int deg;
   int speed;
+  int count;
+  int time = 3;
 
   unsigned long timer;
 
@@ -280,7 +282,7 @@ void loop(void) {
     motor.deg = ball.deg;
     motor.speed = ball.speed;
 
-    if(line.flag){
+    if (line.flag) {
       motor.deg = line.deg;
       motor.speed = 100;
     }
@@ -289,16 +291,17 @@ void loop(void) {
     kicker.kick(kicker.val);
 
     motor.timer = device.getTime();
-    do {
+    for (motor.count = 0; motor.count < motor.time; motor.count++) {
       line.read();
-      // line.process();
-      // line.deg = line.calc();
-
       motor.drive(motor.deg, motor.speed);
-      if (device.getTime() - motor.timer >= 5) {
+      if (motor.count >= 0) {
         digitalWrite(BALL_RESET, HIGH);
       }
-    } while (device.getTime() - motor.timer <= 30 && !line.flag);
+
+      if (line.flag) {
+        break;
+      }
+    }
   } else if (device.mode == 2) {  //駆動中
     //処理
     LED.gyroShow();
@@ -307,5 +310,5 @@ void loop(void) {
     motor.drive(NULL, NULL);
   }
 
-  Serial.println(line.deg);
+  // Serial.println(line.deg);
 }
