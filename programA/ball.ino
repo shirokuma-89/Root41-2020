@@ -66,10 +66,10 @@ void _ball::calc(void) {
       holdTimer = device.getTime();
       kicker.val = false;
       if (dist >= 3 && top > 1 && top < 15) {
-        speed = 90;
+        speed = 100;
         // LED.changeAll(LED.WHITE);
       } else {
-        speed = 90;
+        speed = 100;
       }
     }
 
