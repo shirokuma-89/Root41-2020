@@ -26,10 +26,10 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
     direction = (gyro.deg - referenceAngle + 360) % 360;
     direction = direction > 180 ? direction - 360 : direction;
 
-    if(abs(direction) >= 10 && ball.isAvoid){
-      _deg = NULL;
-      _power = NULL;
-    }
+    // if(abs(direction) >= 5 && ball.isAvoid){
+    //   _deg = NULL;
+    //   _power = NULL;
+    // }
 
     //姿勢制御
     if (_deg == NULL && _power == NULL) {
