@@ -25,10 +25,13 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
 
     //姿勢制御
     if (_deg == NULL && _power == NULL) {
-      Kp = 2;     //比例定数
-      Ki = 0.02;  //積分定数
+      // Kp = 2;     //比例定数
+      
+      Kp = 0;
+      Ki = 0;
+      Kd = 0;
 
-      minimum = 70;
+      // minimum = 70;
     } else {
       Kp = 1.5;    //比例定数
       Ki = 0.004;  //積分定数
@@ -36,7 +39,7 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
 
     direction = gyro.deg;
     direction = direction > 180 ? direction - 360 : direction;
-    
+
     if (abs(direction) <= 50)
       integral += direction;
 

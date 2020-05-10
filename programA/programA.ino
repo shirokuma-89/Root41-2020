@@ -98,6 +98,7 @@ class _motor {
   int calcVal[4][360];
   int deg;
   int speed;
+  int time = 5;  // int _deg[5]と一致させること！
 
   unsigned long timer;
 
@@ -109,6 +110,8 @@ class _motor {
   int integral = 0;
   int direction = 0;
   int gyroOld;
+
+  int _deg[5];  // int timeと一致させること！
 } motor;
 
 class _gyro {
@@ -280,7 +283,7 @@ void loop(void) {
     motor.deg = ball.deg;
     motor.speed = ball.speed;
 
-    if(line.flag){
+    if (line.flag) {
       motor.deg = line.deg;
       motor.speed = 100;
     }
@@ -289,16 +292,17 @@ void loop(void) {
     kicker.kick(kicker.val);
 
     motor.timer = device.getTime();
-    do {
+    for (int i = 0; i < motor.time; i++) {
       line.read();
-      // line.process();
-      // line.deg = line.calc();
-
       motor.drive(motor.deg, motor.speed);
-      if (device.getTime() - motor.timer >= 5) {
+      if (i >= 1) {
         digitalWrite(BALL_RESET, HIGH);
       }
-    } while (device.getTime() - motor.timer <= 30 && !line.flag);
+
+      if (line.flag) {
+        break;
+      }
+    }
   } else if (device.mode == 2) {  //駆動中
     //処理
     LED.gyroShow();
