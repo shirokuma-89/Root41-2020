@@ -53,7 +53,6 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
     if (abs(direction) <= 2) {
       angularVelocity = 0;
     }
-    Serial.println(angularVelocity);
 
     if (abs(direction) <= 50)
       integral += direction;
