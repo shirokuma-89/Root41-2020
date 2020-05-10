@@ -294,7 +294,7 @@ void loop(void) {
     for (motor.count = 0; motor.count < motor.time; motor.count++) {
       line.read();
       motor.drive(motor.deg, motor.speed);
-      if (motor.count >= 1) {
+      if (motor.count >= 0) {
         digitalWrite(BALL_RESET, HIGH);
       }
 
