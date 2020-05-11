@@ -21,12 +21,13 @@ int _line::calc(void) {
       }
     }
     if (_x == 0 || _y == 0) {
-      if (_x = 0) {
+      if (_x == 0) {
         if (_y > 0) {
           deg = 0;
         } else {
           deg = 180;
         }
+      } else if (_y == 0) {
         if (_x > 0) {
           deg = 90;
         } else {
