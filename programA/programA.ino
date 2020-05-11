@@ -296,6 +296,7 @@ void loop(void) {
     if (line.flag) {
       motor.deg = line.deg;
       motor.speed = 100;
+      LED.changeAll(LED.WHITE);
     }
 
     //駆動
@@ -325,7 +326,7 @@ void loop(void) {
     //駆動
     motor.drive(NULL, NULL);
   }
-  
+
   Serial.println(line.mode);
   Serial.println(line.deg);
   Serial.println(line.s);

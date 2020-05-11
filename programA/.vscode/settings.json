@@ -43,6 +43,10 @@
     {
       "name": "feature/ta-ball002",
       "base": "develop"
+    },
+    {
+      "name": "feature/ta-bug",
+      "base": "develop"
     }
   ],
   "files.associations": {
