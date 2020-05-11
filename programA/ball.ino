@@ -3,8 +3,11 @@ void _ball::read(int* b) {
   for (int i = 0; i <= 15; i++) {
     // *(b + i) += (1 - LPF) * (analogRead(BALL[i]) - *(b + i));
     *(b + i) = analogRead(BALL[i]);
-    // Serial.print(*(b + i));
-    // Serial.print(" ");
+    if (i == 6) {
+      *(b + i) = 900;
+    }
+    Serial.print(*(b + i));
+    Serial.print(" ");
   }
   // Serial.println(" ");
   digitalWrite(BALL_RESET, LOW);

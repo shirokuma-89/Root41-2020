@@ -20,12 +20,27 @@ int _line::calc(void) {
         _y += vector[order[i]][1];
       }
     }
-    _deg = atan2(_x, _y);
-    _deg = degrees(_deg);
-    if (_deg < 180) {
-      _deg += 180;
+    if (_x == 0 || _y == 0) {
+      if (_x = 0) {
+        if (_y > 0) {
+          deg = 0;
+        } else {
+          deg = 180;
+        }
+        if (_x > 0) {
+          deg = 90;
+        } else {
+          deg = 270;
+        }
+      }
     } else {
-      _deg -= 180;
+      _deg = atan2(_x, _y);
+      _deg = degrees(_deg);
+      if (_deg < 180) {
+        _deg += 180;
+      } else {
+        _deg -= 180;
+      }
     }
   } else {
     _deg = 1000;
@@ -35,25 +50,48 @@ int _line::calc(void) {
 
 void _line::process(void) {
   if (flag) {
-    if (!touch) {
+    if (mode == 0) {
+      // none
       flag = false;
+    } else if (mode == 1) {
+      // stop
+      deg = 1000;
+      if (!touch) {
+        overTimer = device.getTime();
+        mode = 3;
+      }
+      if (device.getTime() - stopTimer >= 2000) {
+        mode = 2;
+      }
+      for (int i = 0; i <= 19; i++) {
+        if (stopTime[i] >= 150) {
+          mode = 2;
+          s = true;
+        }
+      }
+    } else if (mode == 2) {
+      // move
+      if (!touch) {
+        overTimer = device.getTime();
+        mode = 0;
+      }
+    } else if (mode == 3) {
+      // over
+      if (touch || device.getTime() - overTimer >= 1000) {
+        mode = 2;
+      }
+    } else if (mode == 4) {
+      // error
     }
-    // if (mode == 1 && touch = true) {
-    //   line.deg = atan2(line.x, line.y);
-    //   line.deg = degrees(line.deg);
-    //   if (line.deg < 180) {
-    //     line.deg += 180;
-    //   } else {
-    //     line.deg -= 180;
-    //   }
-    // }
   } else {
     //リセット
     for (int i = 0; i <= 19; i++) {
       val[i] = false;
       order[i] = 100;
       check[i] = 0;
+      stopTime[i] = 0;
     }
+    s = false;
     now = 100;
     first = 100;
     whited = 0;
@@ -115,10 +153,18 @@ void _line::read(void) {
         whited++;
         check[i] = 1;
       }
+      if (!flag) {
+        stopTimer = device.getTime();
+        first = now;
+        mode = 1;
+      }
+      if (!val[i]) {
+        stopingTimer[i] = device.getTime();
+      }
+      stopTime[i] = device.getTime() - stopingTimer[i];
       flag = true;
       val[i] = true;
       touch = true;
-      mode = 1;
     } else {
       val[i] = false;
     }
