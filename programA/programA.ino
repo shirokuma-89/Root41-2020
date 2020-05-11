@@ -65,6 +65,7 @@ class _line {
   int check[20];
 
   int deg;
+  int deglog;
 
   int now;
   int first;
@@ -72,6 +73,8 @@ class _line {
 
   bool flag;
   bool touch;
+  bool stoping;
+  bool s;
   int mode;
   int error;
 
@@ -84,6 +87,9 @@ class _line {
 
   unsigned long stopTimer;
   unsigned long overTimer;
+  unsigned long stopingTimer[20];
+
+  int stopTime[20];
 
  private:
   // none
@@ -284,12 +290,12 @@ void loop(void) {
     line.process();
 
     //設定
+    motor.deg = ball.deg;
+    motor.speed = ball.speed;
+
     if (line.flag) {
       motor.deg = line.deg;
       motor.speed = 100;
-    } else {
-      motor.deg = ball.deg;
-      motor.speed = ball.speed;
     }
 
     //駆動
@@ -297,7 +303,11 @@ void loop(void) {
 
     motor.timer = device.getTime();
     do {
-      motor.drive(motor.deg, motor.speed);
+      if (motor.deg == 1000) {
+        motor.drive(NULL, NULL, true);
+      } else {
+        motor.drive(motor.deg, motor.speed);
+      }
       if (device.getTime() - motor.timer >= 5) {
         digitalWrite(BALL_RESET, HIGH);
       }
@@ -312,9 +322,10 @@ void loop(void) {
 
   Serial.println(line.mode);
   Serial.println(line.deg);
-  Serial.println(motor.deg);
+  Serial.println(line.s);
   for (int i = 0; i <= 19; i++) {
-    Serial.print(line.val[i]);
+    Serial.print(line.stopTime[i]);
+    Serial.print(" ");
   }
   Serial.println("");
 }

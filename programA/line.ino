@@ -20,12 +20,27 @@ int _line::calc(void) {
         _y += vector[order[i]][1];
       }
     }
-    _deg = atan2(_x, _y);
-    _deg = degrees(_deg);
-    if (_deg < 180) {
-      _deg += 180;
+    if (_x == 0 || _y == 0) {
+      if (_x = 0) {
+        if (_y > 0) {
+          deg = 0;
+        } else {
+          deg = 180;
+        }
+        if (_x > 0) {
+          deg = 90;
+        } else {
+          deg = 270;
+        }
+      }
     } else {
-      _deg -= 180;
+      _deg = atan2(_x, _y);
+      _deg = degrees(_deg);
+      if (_deg < 180) {
+        _deg += 180;
+      } else {
+        _deg -= 180;
+      }
     }
   } else {
     _deg = 1000;
@@ -41,19 +56,29 @@ void _line::process(void) {
     } else if (mode == 1) {
       // stop
       deg = 1000;
-      if (device.getTime() - stopTimer >= 100) {
+      if (!touch) {
+        overTimer = device.getTime();
+        mode = 3;
+      }
+      if (device.getTime() - stopTimer >= 2000) {
         mode = 2;
+      }
+      for (int i = 0; i <= 19; i++) {
+        if (stopTime[i] >= 150) {
+          mode = 2;
+          s = true;
+        }
       }
     } else if (mode == 2) {
       // move
       if (!touch) {
         overTimer = device.getTime();
-        mode = 3;
+        mode = 0;
       }
     } else if (mode == 3) {
       // over
-      if (device.getTime() - overTimer >= 200) {
-        mode = 0;
+      if (touch || device.getTime() - overTimer >= 1000) {
+        mode = 2;
       }
     } else if (mode == 4) {
       // error
@@ -64,7 +89,9 @@ void _line::process(void) {
       val[i] = false;
       order[i] = 100;
       check[i] = 0;
+      stopTime[i] = 0;
     }
+    s = false;
     now = 100;
     first = 100;
     whited = 0;
@@ -128,8 +155,13 @@ void _line::read(void) {
       }
       if (!flag) {
         stopTimer = device.getTime();
+        first = now;
         mode = 1;
       }
+      if (!val[i]) {
+        stopingTimer[i] = device.getTime();
+      }
+      stopTime[i] = device.getTime() - stopingTimer[i];
       flag = true;
       val[i] = true;
       touch = true;
