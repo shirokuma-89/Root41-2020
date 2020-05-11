@@ -23,6 +23,14 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
 
     int minimum = 0;
 
+    direction = (gyro.deg - referenceAngle + 360) % 360;
+    direction = direction > 180 ? direction - 360 : direction;
+
+    // if(abs(direction) >= 5 && ball.isAvoid){
+    //   _deg = NULL;
+    //   _power = NULL;
+    // }
+
     //姿勢制御
     if (_deg == NULL && _power == NULL) {
       Kp = 2.6;
@@ -34,12 +42,9 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
       // Kp = 1.5;    //比例定数
       // Ki = 0.004;  //積分定数
       Kp = 1.4;
-      Ki = 0.006;
+      Ki = 0.012;
       Kd = 0.7;
     }
-
-    direction = gyro.deg;
-    direction = direction > 180 ? direction - 360 : direction;
 
     int angularVelocity = dmpgyro.z;
     if (abs(angularVelocity) <= 2) {

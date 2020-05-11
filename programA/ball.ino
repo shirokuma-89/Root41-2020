@@ -66,7 +66,12 @@ void _ball::calc(void) {
 
     //ホールド処理
     if (!digitalRead(BALL_HOLD)) {
+      // motor.referenceAngle = 0;
+      // isAvoid = false;
       holdTimer = device.getTime();
+      if (!isAvoid) {
+        avoidTimer = device.getTime();
+      }
       kicker.val = false;
       if (dist >= 3 && top > 1 && top < 15) {
         speed = 100;
@@ -80,13 +85,29 @@ void _ball::calc(void) {
       topTimer = device.getTime();
     }
 
-    if (digitalRead(BALL_HOLD) && !(top > 2 && top < 14)) {
-      if (device.getTime() - holdTimer >= 300) {
+    if (digitalRead(BALL_HOLD) && !(top > 3 && top < 13)) {
+      if (device.getTime() - holdTimer >= 200) {
         kicker.val = true;
       }
       speed = 100;
-
       deg = 0;
+
+      if (device.getTime() - avoidTimer >= 500 && !isAvoid) {
+        int angle = 1;
+        // if (motor.direction >= 0) {
+        //   angle = -1;
+        // }
+        isAvoid = true;
+        motor.referenceAngle = 35 * angle;
+        // ball.deg = (80 * angle + 360) % 360;
+        deg = 90;
+        exist = true;
+      }
+    }
+
+    if (device.getTime() - avoidTimer >= 1700) {
+      motor.referenceAngle = 0;
+      isAvoid = false;
     }
 
     LED.dist = true;
