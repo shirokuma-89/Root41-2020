@@ -130,10 +130,7 @@ void _device::UI(void) {
         if (!digitalRead(SW_1)) {
           LED.changeAll(LED.ORANGE);
           RGBLED.show();
-          gyro.deg = gyro.read();
-          if (gyro.deg != 0) {
-            gyro.offsetVal += gyro.deg;
-          }
+          gyro.offsetRead();
           LED.animation1();
           device.waitTime(500);
           break;
@@ -218,7 +215,7 @@ void _device::discharge(void) {
       }
       motor.directDrive(motor.val);
       device.waitTime(500);
-      
+
       for (int i = 0; i <= 3; i++) {
         motor.val[i] = -255;
       }

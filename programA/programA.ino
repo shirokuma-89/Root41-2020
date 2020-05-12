@@ -62,39 +62,42 @@ class _line {
   int calc(void);
 
   //配列系
-  bool val[20];
-  int order[20];
-  int check[20];
 
   int deg;
+
+  bool flag;
+  bool touch;
+
+  int bright;
+  int dif;
+
+ private:
+  // none
+  int _mode;
+
   int deglog;
 
   int now;
   int first;
   int whited;
 
-  bool flag;
-  bool touch;
   bool stoping;
   bool s;
-  int mode;
   int error;
 
   float vector[20][2];
   float x;
   float y;
 
-  int bright;
-  int dif;
+  bool val[20];
+  int order[20];
+  int check[20];
 
   unsigned long stopTimer;
   unsigned long overTimer;
   unsigned long stopingTimer[20];
 
   unsigned long stopTime[20];
-
- private:
-  // none
 } line;
 
 class _motor {
@@ -133,12 +136,12 @@ class _gyro {
   int differentialRead(void);
 
   int deg;
-  int differentialDeg = 0;
   int eeprom[6];
-  int offsetVal;
 
  private:
   // none
+  int differentialDeg = 0;
+  int offsetVal;
 } gyro;
 
 class _tof {
@@ -267,14 +270,9 @@ void loop(void) {
     device.UI();
 
     //ジャイロ補正
+
     if (device.getTime() - device.startTimer <= 1000) {
-      if (gyro.deg != 0) {
-        gyro.offsetVal += gyro.deg;
-      }
-      while (gyro.offsetVal < 0) {
-        gyro.offsetVal += 360;
-      }
-      gyro.offsetVal %= 360;
+      gyro.offsetRead();
     }
   } else if (device.mode == 1) {  //駆動中
 
@@ -296,15 +294,15 @@ void loop(void) {
     motor.speed = ball.speed;
     bool stop = false;
 
-    // if (line.flag) {
-    //   motor.deg = line.deg;
-    //   motor.speed = 100;
-    //   LED.changeAll(LED.WHITE);
+    if (line.flag) {
+      motor.deg = line.deg;
+      motor.speed = 100;
+      LED.changeAll(LED.WHITE);
 
-    //   if (motor.deg == 1000) {
-    //     stop = true;
-    //   }
-    // }
+      if (motor.deg == 1000) {
+        stop = true;
+      }
+    }
 
     //駆動
     kicker.kick(kicker.val);
@@ -312,16 +310,16 @@ void loop(void) {
     motor.timer = device.getTime();
 
     for (motor.count = 0; motor.count < motor.time; motor.count++) {
-      // line.read();
+      line.read();
 
       motor.drive(motor.deg, motor.speed, stop);
       if (motor.count >= 1) {
         digitalWrite(BALL_RESET, HIGH);
       }
 
-      // if (line.flag) {
-      //   break;
-      // }
+      if (line.flag) {
+        break;
+      }
     }
   } else if (device.mode == 2) {  //駆動中
     //処理
@@ -331,12 +329,12 @@ void loop(void) {
     motor.drive(NULL, NULL);
   }
 
-  Serial.println(line.mode);
-  Serial.println(line.deg);
-  Serial.println(line.s);
-  for (int i = 0; i <= 19; i++) {
-    Serial.print(line.stopTime[i]);
-    Serial.print(" ");
-  }
-  Serial.println("");
+  // Serial.println(line.mode);
+  // Serial.println(line.deg);
+  // Serial.println(line.s);
+  // for (int i = 0; i <= 19; i++) {
+  //   Serial.print(line.stopTime[i]);
+  //   Serial.print(" ");
+  // }
+  // Serial.println("");
 }

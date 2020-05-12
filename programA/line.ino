@@ -51,37 +51,37 @@ int _line::calc(void) {
 
 void _line::process(void) {
   if (flag) {
-    if (mode == 0) {
+    if (_mode == 0) {
       // none
       flag = false;
-    } else if (mode == 1) {
+    } else if (_mode == 1) {
       // stop
       deg = 1000;
       if (!touch) {
         overTimer = device.getTime();
-        mode = 3;
+        _mode = 3;
       }
       if (device.getTime() - stopTimer >= 2000) {
-        mode = 2;
+        _mode = 2;
       }
       for (int i = 0; i <= 19; i++) {
         if (stopTime[i] >= 150) {
-          mode = 2;
+          _mode = 2;
           s = true;
         }
       }
-    } else if (mode == 2) {
+    } else if (_mode == 2) {
       // move
       if (!touch) {
         overTimer = device.getTime();
-        mode = 0;
+        _mode = 0;
       }
-    } else if (mode == 3) {
+    } else if (_mode == 3) {
       // over
       if (touch || device.getTime() - overTimer >= 1000) {
-        mode = 2;
+        _mode = 2;
       }
-    } else if (mode == 4) {
+    } else if (_mode == 4) {
       // error
     }
   } else {
@@ -96,7 +96,7 @@ void _line::process(void) {
     now = 100;
     first = 100;
     whited = 0;
-    mode = 0;
+    _mode = 0;
     error = 0;
   }
 }
@@ -157,7 +157,7 @@ void _line::read(void) {
       if (!flag) {
         stopTimer = device.getTime();
         first = now;
-        mode = 1;
+        _mode = 1;
       }
       if (!val[i]) {
         stopingTimer[i] = device.getTime();

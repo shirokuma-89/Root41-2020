@@ -22,9 +22,9 @@ float euler[3];
 volatile bool mpuInterrupt = false;
 
 //割り込み
-void dmpDataReady() {
-  mpuInterrupt = true;
-}
+// void dmpDataReady() {
+//   mpuInterrupt = true;
+// }
 
 //初期化
 void _gyro::setting(void) {
@@ -46,7 +46,7 @@ RESTART:
   mpu.setZAccelOffset(eeprom[5]);
   mpu.setDMPEnabled(true);
 
-  attachInterrupt(0, dmpDataReady, RISING);
+  // attachInterrupt(0, dmpDataReady, RISING);
   mpuIntStatus = mpu.getIntStatus();
 
   dmpReady = true;
@@ -292,7 +292,7 @@ void _gyro::offsetRead(void) {
   Serial.println(offsetVal);
 
   // for (int i = 0; i < 150; i++) {
-  //   deg = gyro.read();
+  deg = gyro.read();
   // }
 
   // delay(100);
