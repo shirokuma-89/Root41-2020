@@ -72,6 +72,7 @@ int _gyro::read(void) {
     mpu.dmpGetQuaternion(&q, fifoBuffer);
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+    // if (!line.flag)
     mpu.dmpGetGyro(&dmpgyro, fifoBuffer);
     Gyro_Now = degrees(ypr[0]);  // + 180;
     Gyro = Gyro_Now;
