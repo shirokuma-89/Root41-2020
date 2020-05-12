@@ -277,14 +277,15 @@ void loop(void) {
       gyro.offsetVal %= 360;
     }
   } else if (device.mode == 1) {  //駆動中
+
     //処理
     // LED.degShow(ball.deg);
-    if (!line.flag) {
-      LED.gyroShow();
-      ball.read(ball.val);
-      ball.readDistance();
-      ball.calc();
-    }
+    // if (!line.flag) {
+    LED.gyroShow();
+    ball.read(ball.val);
+    ball.readDistance();
+    ball.calc();
+    // }
 
     line.read();
     // line.deg = line.calc();
@@ -295,15 +296,15 @@ void loop(void) {
     motor.speed = ball.speed;
     bool stop = false;
 
-    if (line.flag) {
-      motor.deg = line.deg;
-      motor.speed = 100;
-      LED.changeAll(LED.WHITE);
+    // if (line.flag) {
+    //   motor.deg = line.deg;
+    //   motor.speed = 100;
+    //   LED.changeAll(LED.WHITE);
 
-      if (motor.deg == 1000) {
-        stop = true;
-      }
-    }
+    //   if (motor.deg == 1000) {
+    //     stop = true;
+    //   }
+    // }
 
     //駆動
     kicker.kick(kicker.val);
