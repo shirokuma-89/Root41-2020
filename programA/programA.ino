@@ -288,8 +288,8 @@ void loop(void) {
     // }
 
     line.read();
-    // line.deg = line.calc();
-    // line.process();
+    line.deg = line.calc();
+    line.process();
 
     //設定
     motor.deg = ball.deg;
