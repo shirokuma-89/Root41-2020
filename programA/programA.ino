@@ -325,7 +325,7 @@ void loop(void) {
     }
 
     //I2Cバッファクリア
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 4; i++) {
       gyro.deg = gyro.read();
     }
   } else if (device.mode == 2) {  //駆動中
