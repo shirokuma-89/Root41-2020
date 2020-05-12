@@ -6,8 +6,8 @@ void _ball::read(int* b) {
     if (i == 6) {
       *(b + i) = 900;
     }
-    Serial.print(*(b + i));
-    Serial.print(" ");
+    // Serial.print(*(b + i));
+    // Serial.print(" ");
   }
   // Serial.println(" ");
   digitalWrite(BALL_RESET, LOW);

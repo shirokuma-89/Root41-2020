@@ -2,7 +2,7 @@
 #include <Adafruit_NeoPixel.h>
 #include <EEPROM.h>
 #include <MPU6050_6Axis_MotionApps20.h>
-#include <Timer5.h>
+// #include <Timer5.h>
 #include <VL53L0X.h>
 #include <Wire.h>
 
@@ -68,6 +68,8 @@ class _line {
   bool flag;
   bool touch;
 
+  float vector[20][2];
+
   int bright;
   int dif;
 
@@ -85,7 +87,6 @@ class _line {
   bool s;
   int error;
 
-  float vector[20][2];
   float x;
   float y;
 
@@ -258,6 +259,7 @@ void setup(void) {
 }
 
 void loop(void) {
+  unsigned long errorTimer = device.getTime();
   device.check();
 
   if (device.mode == 0) {  //待機中
@@ -312,6 +314,7 @@ void loop(void) {
     for (motor.count = 0; motor.count < motor.time; motor.count++) {
       line.read();
 
+      gyro.deg = gyro.read();
       motor.drive(motor.deg, motor.speed, stop);
       if (motor.count >= 1) {
         digitalWrite(BALL_RESET, HIGH);
@@ -337,4 +340,6 @@ void loop(void) {
   //   Serial.print(" ");
   // }
   // Serial.println("");
+
+  Serial.println(device.getTime() - errorTimer);
 }
