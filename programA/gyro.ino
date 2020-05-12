@@ -58,6 +58,8 @@ RESTART:
 
 //角度取得
 int _gyro::read(void) {
+  int tempDeg;
+
   mpuIntStatus = false;
   mpuIntStatus = mpu.getIntStatus();
   fifoCount = mpu.getFIFOCount();
@@ -72,6 +74,7 @@ int _gyro::read(void) {
     mpu.dmpGetQuaternion(&q, fifoBuffer);
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+    // if (!line.flag)
     mpu.dmpGetGyro(&dmpgyro, fifoBuffer);
     Gyro_Now = degrees(ypr[0]);  // + 180;
     Gyro = Gyro_Now;
@@ -80,9 +83,12 @@ int _gyro::read(void) {
     }
     Gyro %= 360;
   }
-  int tempDeg = ((360 - Gyro) % 360 - offsetVal + 720) % 360;
+  tempDeg = ((360 - Gyro) % 360 - offsetVal + 720) % 360;
   while (tempDeg < 0) {
     tempDeg += 360;
+  }
+  while (Wire.available()) {
+    Wire.read();
   }
   return tempDeg % 360;
 }
@@ -291,7 +297,7 @@ void _gyro::offsetRead(void) {
   Serial.println(offsetVal);
 
   // for (int i = 0; i < 150; i++) {
-  //   deg = gyro.read();
+  deg = gyro.read();
   // }
 
   // delay(100);
@@ -307,5 +313,7 @@ void _gyro::offsetRead(void) {
 
   Serial.println(gyro.read());
 
-  device.startTimer = device.getTime();
+  if (device.getTime() - device.startTimer >= 1200) {
+    device.startTimer = device.getTime();
+  }
 }
