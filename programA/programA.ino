@@ -314,7 +314,10 @@ void loop(void) {
     for (motor.count = 0; motor.count < motor.time; motor.count++) {
       line.read();
 
-      gyro.deg = gyro.read();
+      for (int i = 0; i < 3; i++) {
+        gyro.deg = gyro.read();
+      }
+
       motor.drive(motor.deg, motor.speed, stop);
       if (motor.count >= 1) {
         digitalWrite(BALL_RESET, HIGH);

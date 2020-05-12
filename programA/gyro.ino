@@ -22,9 +22,9 @@ float euler[3];
 volatile bool mpuInterrupt = false;
 
 //割り込み
-// void dmpDataReady() {
-//   mpuInterrupt = true;
-// }
+void dmpDataReady() {
+  mpuInterrupt = true;
+}
 
 //初期化
 void _gyro::setting(void) {
@@ -46,7 +46,7 @@ RESTART:
   mpu.setZAccelOffset(eeprom[5]);
   mpu.setDMPEnabled(true);
 
-  // attachInterrupt(0, dmpDataReady, RISING);
+  attachInterrupt(0, dmpDataReady, RISING);
   mpuIntStatus = mpu.getIntStatus();
 
   dmpReady = true;
@@ -58,6 +58,8 @@ RESTART:
 
 //角度取得
 int _gyro::read(void) {
+  int tempDeg;
+
   mpuIntStatus = false;
   mpuIntStatus = mpu.getIntStatus();
   fifoCount = mpu.getFIFOCount();
@@ -81,9 +83,12 @@ int _gyro::read(void) {
     }
     Gyro %= 360;
   }
-  int tempDeg = ((360 - Gyro) % 360 - offsetVal + 720) % 360;
+  tempDeg = ((360 - Gyro) % 360 - offsetVal + 720) % 360;
   while (tempDeg < 0) {
     tempDeg += 360;
+  }
+  while (Wire.available()) {
+    Wire.read();
   }
   return tempDeg % 360;
 }
@@ -308,5 +313,7 @@ void _gyro::offsetRead(void) {
 
   Serial.println(gyro.read());
 
-  device.startTimer = device.getTime();
+  if (device.getTime() - device.startTimer >= 1200) {
+    device.startTimer = device.getTime();
+  }
 }
