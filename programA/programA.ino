@@ -91,7 +91,7 @@ class _line {
   unsigned long overTimer;
   unsigned long stopingTimer[20];
 
-  int stopTime[20];
+  unsigned long stopTime[20];
 
  private:
   // none
@@ -279,14 +279,16 @@ void loop(void) {
   } else if (device.mode == 1) {  //駆動中
     //処理
     // LED.degShow(ball.deg);
-    LED.gyroShow();
-    ball.read(ball.val);
-    ball.readDistance();
-    ball.calc();
+    if (!line.flag) {
+      LED.gyroShow();
+      ball.read(ball.val);
+      ball.readDistance();
+      ball.calc();
+    }
 
     line.read();
-    line.deg = line.calc();
-    line.process();
+    // line.deg = line.calc();
+    // line.process();
 
     //設定
     motor.deg = ball.deg;
@@ -309,16 +311,16 @@ void loop(void) {
     motor.timer = device.getTime();
 
     for (motor.count = 0; motor.count < motor.time; motor.count++) {
-      line.read();
+      // line.read();
 
       motor.drive(motor.deg, motor.speed, stop);
       if (motor.count >= 1) {
         digitalWrite(BALL_RESET, HIGH);
       }
 
-      if (line.flag) {
-        break;
-      }
+      // if (line.flag) {
+      //   break;
+      // }
     }
   } else if (device.mode == 2) {  //駆動中
     //処理
