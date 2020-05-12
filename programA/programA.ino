@@ -280,12 +280,12 @@ void loop(void) {
 
     //処理
     // LED.degShow(ball.deg);
-    // if (!line.flag) {
-    LED.gyroShow();
-    ball.read(ball.val);
-    ball.readDistance();
-    ball.calc();
-    // }
+    if (!line.flag) {
+      LED.gyroShow();
+      ball.read(ball.val);
+      ball.readDistance();
+      ball.calc();
+    }
 
     line.read();
     line.deg = line.calc();
@@ -314,10 +314,6 @@ void loop(void) {
     for (motor.count = 0; motor.count < motor.time; motor.count++) {
       line.read();
 
-      for (int i = 0; i < 3; i++) {
-        gyro.deg = gyro.read();
-      }
-
       motor.drive(motor.deg, motor.speed, stop);
       if (motor.count >= 1) {
         digitalWrite(BALL_RESET, HIGH);
@@ -326,6 +322,11 @@ void loop(void) {
       if (line.flag) {
         break;
       }
+    }
+
+    //I2Cバッファクリア
+    for (int i = 0; i < 3; i++) {
+      gyro.deg = gyro.read();
     }
   } else if (device.mode == 2) {  //駆動中
     //処理
