@@ -345,5 +345,5 @@ void loop(void) {
   // }
   // Serial.println("");
 
-  Serial.println(device.getTime() - errorTimer);
+  // Serial.println(device.getTime() - errorTimer);
 }

@@ -3,13 +3,13 @@ void _ball::read(int* b) {
   for (int i = 0; i <= 15; i++) {
     // *(b + i) += (1 - LPF) * (analogRead(BALL[i]) - *(b + i));
     *(b + i) = analogRead(BALL[i]);
-    if (i == 6) {
-      *(b + i) = 900;
-    }
-    // Serial.print(*(b + i));
-    // Serial.print(" ");
+    // if (i == 6) {
+    //   *(b + i) = 900;
+    // }
+    Serial.print(*(b + i));
+    Serial.print(" ");
   }
-  // Serial.println(" ");
+  Serial.println(" ");
   digitalWrite(BALL_RESET, LOW);
 
   *b *= 0.95;
@@ -22,7 +22,7 @@ void _ball::calc(void) {
     if (val[i] <= val[top]) {
       top = i;
     }
-    if (val[i] >= 650) {
+    if (val[i] >= 560) {
       existCount++;
     }
   }
@@ -47,9 +47,6 @@ void _ball::calc(void) {
 
     if (topDiff >= 1) {
       if (topDiff == 1)
-        offset *= 0.6;
-
-      if (topDiff == 2)
         offset *= 0.8;
 
       if (min(min(val[7], val[8]), val[9]) <= 300) {
@@ -66,8 +63,6 @@ void _ball::calc(void) {
 
     //ホールド処理
     if (!digitalRead(BALL_HOLD)) {
-      // motor.referenceAngle = 0;
-      // isAvoid = false;
       holdTimer = device.getTime();
       if (!isAvoid) {
         avoidTimer = device.getTime();
@@ -75,7 +70,6 @@ void _ball::calc(void) {
       kicker.val = false;
       if (dist >= 3 && top > 1 && top < 15) {
         speed = 100;
-        // LED.changeAll(LED.WHITE);
       } else {
         speed = 100;
       }
