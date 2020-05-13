@@ -36,7 +36,7 @@ void _ball::calc(void) {
 
     int offset = 0;
 
-    offset += abs(deg) * 0.06 + dist * 8;
+    offset += abs(deg) * 0.03 * dist + dist * 6;
 
     deg += 720;
     deg %= 360;
@@ -47,7 +47,7 @@ void _ball::calc(void) {
 
     if (topDiff >= 1) {
       if (topDiff == 1)
-        offset *= 0.8;
+        offset *= 0.9;
 
       if (min(min(val[7], val[8]), val[9]) <= 300) {
         offset *= 3;
@@ -126,10 +126,10 @@ void _ball::readDistance(void) {
     }
   }
 
-  dist = constrain(myMap(tempDist, 340, 560, 5, 0), 0, 5);
+  dist = constrain(myMap(tempDist, 340, 580, 5, 0), 1, 5);
 
-  if (dist <= 1) {  //切り捨て
-    dist = 0;
+  if (dist <= 2 && (top <= 6 || top >= 10)) {  //切り捨て
+    dist = 1;
   }
 
   // Serial.println(dist);
