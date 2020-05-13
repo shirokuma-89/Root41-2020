@@ -36,7 +36,7 @@ void _ball::calc(void) {
 
     int offset = 0;
 
-    offset += dist * (abs(deg) * 0.08 + 7);
+    offset += abs(deg) * 0.06 + dist * 8;
 
     deg += 720;
     deg %= 360;
@@ -126,9 +126,9 @@ void _ball::readDistance(void) {
     }
   }
 
-  dist = constrain(myMap(tempDist, 360, 560, 5, 0), 0, 5);
+  dist = constrain(myMap(tempDist, 340, 560, 5, 0), 0, 5);
 
-  if (dist <= 2) {  //切り捨て
+  if (dist <= 1) {  //切り捨て
     dist = 0;
   }
 
