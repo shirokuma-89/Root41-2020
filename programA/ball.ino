@@ -12,7 +12,7 @@ void _ball::read(int* b) {
   Serial.println(" ");
   digitalWrite(BALL_RESET, LOW);
 
-  *b *= 0.95;
+  // *b *= 0.95;
 }
 
 void _ball::calc(void) {
@@ -36,7 +36,7 @@ void _ball::calc(void) {
 
     int offset = 0;
 
-    offset += abs(deg) * 0.03 * dist + dist * 6;
+    offset += abs(deg) * 0.03 * dist + dist * 7;
 
     deg += 720;
     deg %= 360;
@@ -47,7 +47,7 @@ void _ball::calc(void) {
 
     if (topDiff >= 1) {
       if (topDiff == 1)
-        offset *= 0.9;
+        offset *= 0.95;
 
       if (min(min(val[7], val[8]), val[9]) <= 300) {
         offset *= 3;
@@ -115,9 +115,18 @@ void _ball::calc(void) {
 
 void _ball::readDistance(void) {
   static float tempDist;
-  if (false) {  // trueでローパス
-    tempDist +=
-        (1 - 0.1) * (min(val[(top + 2) % 16], val[(top + 14) % 16]) - tempDist);
+  if (true) {  // trueでローパス
+    // tempDist +=
+    //     (1 - 0.3) * (min(val[(top + 2) % 16], val[(top + 14) % 16]) -
+    //     tempDist);
+    if (top != 4 && top != 12) {
+      // tempDist = min(val[(top + 2) % 16], val[(top + 14) % 16]);
+      tempDist += (1 - 0.2) *
+                  (min(val[(top + 2) % 16], val[(top + 14) % 16]) - tempDist);
+    } else {
+      tempDist += (1 - 0.2) *
+                  (min(val[(top + 1) % 16], val[(top + 15) % 16]) - tempDist);
+    }
   } else {
     if (top != 4 && top != 12) {
       tempDist = min(val[(top + 2) % 16], val[(top + 14) % 16]);
@@ -126,7 +135,7 @@ void _ball::readDistance(void) {
     }
   }
 
-  dist = constrain(myMap(tempDist, 340, 580, 5, 0), 1, 5);
+  dist = constrain(myMap(tempDist, 360, 580, 5, 0), 1, 5);
 
   if (dist <= 2 && (top <= 6 || top >= 10)) {  //切り捨て
     dist = 1;

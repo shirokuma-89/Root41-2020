@@ -279,9 +279,9 @@ void loop(void) {
   } else if (device.mode == 1) {  //駆動中
 
     //処理
-    // LED.degShow(ball.deg);
     if (!line.flag) {
-      LED.gyroShow();
+      LED.degShow(ball.deg);
+      // LED.gyroShow();
       ball.read(ball.val);
       ball.readDistance();
       ball.calc();
@@ -324,7 +324,7 @@ void loop(void) {
       }
     }
 
-    //I2Cバッファクリア
+    // I2Cバッファクリア
     for (int i = 0; i < 4; i++) {
       gyro.deg = gyro.read();
     }
