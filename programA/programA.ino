@@ -44,6 +44,8 @@ class _ball {
 
   int speed;
 
+  unsigned long speedTimer;
+
  private:
   float LPF = 0.4;
 
@@ -285,6 +287,11 @@ void loop(void) {
       ball.read(ball.val);
       ball.readDistance();
       ball.calc();
+      // if (device.getTime() - ball.speedTimer <= 800 && ball.speedTimer != 0)
+      // {
+      //   ball.speed =
+      //       100 - (map(device.getTime() - ball.speedTimer, 0, 800, 10, 30));
+      // }
     }
 
     line.read();
@@ -324,7 +331,7 @@ void loop(void) {
       }
     }
 
-    //I2Cバッファクリア
+    // I2Cバッファクリア
     for (int i = 0; i < 3; i++) {
       gyro.deg = gyro.read();
     }
