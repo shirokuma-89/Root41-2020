@@ -157,13 +157,14 @@ class _tof {
 
 class _position {
  public:
-  void reflection(int _type);
+  void reflection(void);
   void get(void);
 
   bool rock;
   int side[4];
   int vertical[4];
   int reliability;  //信頼度
+  unsigned long offTimer;
 
  private:
 } position;
@@ -296,6 +297,9 @@ void loop(void) {
     line.read();
     line.deg = line.calc();
     line.process();
+
+    position.get();
+    position.reflection();
 
     //設定
     motor.deg = ball.deg;
