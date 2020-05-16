@@ -287,11 +287,10 @@ void loop(void) {
       ball.read(ball.val);
       ball.readDistance();
       ball.calc();
-      // if (device.getTime() - ball.speedTimer <= 800 && ball.speedTimer != 0)
-      // {
-      //   ball.speed =
-      //       100 - (map(device.getTime() - ball.speedTimer, 0, 800, 10, 30));
-      // }
+      if (device.getTime() - ball.speedTimer <= 800 && ball.speedTimer != 0) {
+        ball.speed =
+            100 - (map(device.getTime() - ball.speedTimer, 0, 800, 10, 30));
+      }
     }
 
     line.read();
