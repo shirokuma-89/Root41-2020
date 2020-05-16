@@ -1,26 +1,35 @@
-void _position::reflection(int _type) {
-  if (_type == 0) {
-    reliability = 0;
-  } else if (_type == 1) {
-    // tof
-    if (tof._dist >= 300) {
-      reliability += 3;
-      vertical[1] = 1;
+void _position::reflection(void) {
+  if (rock) {
+    if (side[0] == 1) {
+      motor.referenceAngle = -20;
+    } else if (side[0] == -1) {
+      motor.referenceAngle = 20;
+    } else {
+      motor.referenceAngle = 0;
     }
-  } else if (_type == 2) {
-    // line
-  } else if (_type == 3) {
-    // ball
-  } else if (_type == 4) {
-    // kick
+  } else {
+    motor.referenceAngle = 0;
   }
 }
 
 void _position::get(void) {
-  if (reliability >= 3) {
-  } else {
+  if (ball.deg >= 30 && ball.deg <= 150) {
+    if (line.deg >= 210 && line.deg <= 330) {
+      side[0] = 1;
+      offTimer = device.getTime();
+      rock = true;
+    }
+  }
+  if (ball.deg >= 210 && ball.deg <= 330) {
+    if (line.deg >= 30 && line.deg <= 150) {
+      side[0] = -1;
+      offTimer = device.getTime();
+      rock = true;
+    }
+  }
+  if (device.getTime() - offTimer >= 1000) {
     rock = false;
-    vertical[0] = 0;
     side[0] = 0;
+    offTimer = 0;
   }
 }
