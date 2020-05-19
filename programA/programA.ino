@@ -200,7 +200,7 @@ class _LED {
   bool white = false;
   bool dist = false;
 
-  int bright = 150;
+  int bright = 50;
 
   unsigned long defaultColor;
   unsigned long RED;
@@ -334,7 +334,7 @@ void loop(void) {
       }
     }
 
-    //I2Cバッファクリア
+    // I2Cバッファクリア
     for (int i = 0; i < 4; i++) {
       gyro.deg = gyro.read();
     }

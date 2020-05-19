@@ -55,6 +55,10 @@
     {
       "name": "feature/ak-line003",
       "base": "develop"
+    },
+    {
+      "name": "feature/ak-line004",
+      "base": "develop"
     }
   ],
   "files.associations": {
