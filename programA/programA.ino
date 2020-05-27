@@ -308,6 +308,13 @@ void loop(void) {
       }
     }
 
+    //持ち上げ消灯
+    if (gyro.isLift) {
+      digitalWrite(LINE_BRIGHT, LOW);
+    } else {
+      digitalWrite(LINE_BRIGHT, HIGH);
+    }
+
     //駆動
     kicker.kick(kicker.val);
 
