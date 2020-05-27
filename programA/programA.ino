@@ -139,6 +139,8 @@ class _gyro {
   int deg;
   int eeprom[6];
 
+  bool isLift = false;
+
  private:
   // none
   int differentialDeg = 0;
