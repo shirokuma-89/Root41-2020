@@ -44,6 +44,8 @@ class _ball {
 
   int speed;
 
+  unsigned long speedTimer;
+
  private:
   float LPF = 0.4;
 
@@ -157,13 +159,14 @@ class _tof {
 
 class _position {
  public:
-  void reflection(int _type);
+  void reflection(void);
   void get(void);
 
   bool rock;
   int side[4];
   int vertical[4];
   int reliability;  //信頼度
+  unsigned long offTimer;
 
  private:
 } position;
@@ -287,11 +290,18 @@ void loop(void) {
       ball.read(ball.val);
       ball.readDistance();
       ball.calc();
+      if (device.getTime() - ball.speedTimer <= 800 && ball.speedTimer != 0) {
+        ball.speed =
+            100 - (map(device.getTime() - ball.speedTimer, 0, 800, 10, 30));
+      }
     }
 
     line.read();
     line.deg = line.calc();
     line.process();
+
+    position.get();
+    position.reflection();
 
     //設定
     motor.deg = ball.deg;
