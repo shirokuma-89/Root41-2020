@@ -3,16 +3,16 @@ void _ball::read(int* b) {
   for (int i = 0; i <= 15; i++) {
     // *(b + i) += (1 - LPF) * (analogRead(BALL[i]) - *(b + i));
     *(b + i) = analogRead(BALL[i]);
-    if (i == 6) {
-      *(b + i) = 900;
-    }
+    // if (i == 6) {
+    //   *(b + i) = 900;
+    // }
     // Serial.print(*(b + i));
     // Serial.print(" ");
   }
   // Serial.println(" ");
   digitalWrite(BALL_RESET, LOW);
 
-  *b *= 0.95;
+  *b *= 0.98;
 }
 
 void _ball::calc(void) {
@@ -22,7 +22,7 @@ void _ball::calc(void) {
     if (val[i] <= val[top]) {
       top = i;
     }
-    if (val[i] >= 650) {
+    if (val[i] >= 560) {
       existCount++;
     }
   }
@@ -36,7 +36,7 @@ void _ball::calc(void) {
 
     int offset = 0;
 
-    offset += dist * (abs(deg) * 0.02 + 12);
+    offset += abs(deg) * 0.03 * dist + dist * 7;
 
     deg += 720;
     deg %= 360;
@@ -47,10 +47,7 @@ void _ball::calc(void) {
 
     if (topDiff >= 1) {
       if (topDiff == 1)
-        offset *= 0.6;
-
-      if (topDiff == 2)
-        offset *= 0.8;
+        offset *= 0.95;
 
       if (min(min(val[7], val[8]), val[9]) <= 300) {
         offset *= 3;
@@ -66,8 +63,6 @@ void _ball::calc(void) {
 
     //ホールド処理
     if (!digitalRead(BALL_HOLD)) {
-      // motor.referenceAngle = 0;
-      // isAvoid = false;
       holdTimer = device.getTime();
       if (!isAvoid) {
         avoidTimer = device.getTime();
@@ -75,7 +70,6 @@ void _ball::calc(void) {
       kicker.val = false;
       if (dist >= 3 && top > 1 && top < 15) {
         speed = 100;
-        // LED.changeAll(LED.WHITE);
       } else {
         speed = 100;
       }
@@ -101,14 +95,14 @@ void _ball::calc(void) {
         //   angle = -1;
         // }
         isAvoid = true;
-        motor.referenceAngle = 35 * angle;
+        // motor.referenceAngle = 45 * angle;
         // ball.deg = (80 * angle + 360) % 360;
         deg = 90;
         exist = true;
       }
     }
 
-    if (device.getTime() - avoidTimer >= 1700) {
+    if (device.getTime() - avoidTimer >= 1500) {
       motor.referenceAngle = 0;
       isAvoid = false;
     }
@@ -124,9 +118,16 @@ void _ball::calc(void) {
 
 void _ball::readDistance(void) {
   static float tempDist;
-  if (false) {  // trueでローパス
-    tempDist +=
-        (1 - 0.1) * (min(val[(top + 2) % 16], val[(top + 14) % 16]) - tempDist);
+  if (true) {  // trueでローパス
+    if (top != 4 && top != 12) {
+      val[4] *= 0.98;
+      val[12] *= 0.98;
+      tempDist += (1 - 0.2) *
+                  (min(val[(top + 2) % 16], val[(top + 14) % 16]) - tempDist);
+    } else {
+      tempDist += (1 - 0.2) *
+                  (min(val[(top + 1) % 16], val[(top + 15) % 16]) - tempDist);
+    }
   } else {
     if (top != 4 && top != 12) {
       tempDist = min(val[(top + 2) % 16], val[(top + 14) % 16]);
@@ -135,7 +136,11 @@ void _ball::readDistance(void) {
     }
   }
 
-  dist = constrain(myMap(tempDist, 360, 530, 5, 0), 0, 5);
+  dist = constrain(myMap(tempDist, 360, 580, 5, 0), 1, 5);
+
+  if (dist <= 2 && (top <= 6 || top >= 10)) {  //切り捨て
+    dist = 1;
+  }
 
   // Serial.println(dist);
 }

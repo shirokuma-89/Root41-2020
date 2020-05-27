@@ -141,6 +141,8 @@ class _gyro {
   int deg;
   int eeprom[6];
 
+  bool isLift = false;
+
  private:
   // none
   int differentialDeg = 0;
@@ -282,9 +284,9 @@ void loop(void) {
   } else if (device.mode == 1) {  //駆動中
 
     //処理
-    // LED.degShow(ball.deg);
     if (!line.flag) {
-      LED.gyroShow();
+      LED.degShow(ball.deg);
+      // LED.gyroShow();
       ball.read(ball.val);
       ball.readDistance();
       ball.calc();
@@ -316,6 +318,13 @@ void loop(void) {
       }
     }
 
+    //持ち上げ消灯
+    if (gyro.isLift) {
+      digitalWrite(LINE_BRIGHT, LOW);
+    } else {
+      digitalWrite(LINE_BRIGHT, HIGH);
+    }
+
     //駆動
     kicker.kick(kicker.val);
 
@@ -334,7 +343,7 @@ void loop(void) {
       }
     }
 
-    //I2Cバッファクリア
+    // I2Cバッファクリア
     for (int i = 0; i < 4; i++) {
       gyro.deg = gyro.read();
     }
@@ -355,5 +364,5 @@ void loop(void) {
   // }
   // Serial.println("");
 
-  Serial.println(device.getTime() - errorTimer);
+  // Serial.println(device.getTime() - errorTimer);
 }
