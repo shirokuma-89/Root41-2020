@@ -36,7 +36,7 @@ void _ball::calc(void) {
 
     int offset = 0;
 
-    offset += dist * (abs(deg) * 0.02 + 12);
+    offset += max(dist, 2) * abs(deg) * 0.04 + dist * 10;
 
     deg += 720;
     deg %= 360;
