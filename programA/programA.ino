@@ -38,6 +38,8 @@ class _ball {
 
   int val[16];
   int top;
+  int second;
+  int third;
   int deg;
 
   float dist;
@@ -283,7 +285,6 @@ void loop(void) {
     if (!line.flag) {
       LED.gyroShow();
       ball.read(ball.val);
-      ball.readDistance();
       ball.calc();
     }
 
@@ -345,5 +346,5 @@ void loop(void) {
   // }
   // Serial.println("");
 
-  Serial.println(device.getTime() - errorTimer);
+  // Serial.println(device.getTime() - errorTimer);
 }

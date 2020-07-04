@@ -20,8 +20,16 @@ void _ball::calc(void) {
   top = 0;
   for (int i = 0; i <= 15; i++) {
     if (val[i] <= val[top]) {
+      third = second;
+      second = top;
       top = i;
+    } else if (val[i] <= val[second]) {
+      third = second;
+      second = i;
+    } else if (val[i] <= val[third]) {
+      third = i;
     }
+
     if (val[i] >= 650) {
       existCount++;
     }
@@ -30,14 +38,33 @@ void _ball::calc(void) {
     exist = true;
     deg = top * 22.5;
 
+    float x = 0;
+    float y = 0;
+    x += sin(radians(top * 22.5)) * (724 - val[top]);
+    x += sin(radians(second * 22.5)) * (724 - val[second]);
+    x += sin(radians(third * 22.5)) * (724 - val[third]);
+    y += cos(radians(top * 22.5)) * (724 - val[top]);
+    y += cos(radians(second * 22.5)) * (724 - val[second]);
+    y += cos(radians(third * 22.5)) * (724 - val[third]);
+
+    deg = round(degrees(atan2(x, y)) + 360) % 360;
+
+    if (top == 8)
+      deg = 180;
+
     if (deg >= 180) {
       deg -= 360;
     }
 
-    int offset = 0;
-    
+    top = round((float)deg / 22.5) % 16;
+    readDistance();
 
-    offset += max(dist, 2) * abs(deg) * 0.04 + dist * 10;
+    int offset = 0;
+
+    if (dist <= 2) {
+      dist = 0;
+    }
+    offset += max(dist, 1) * abs(deg) * 0.05 + dist * 7;
 
     deg += 720;
     deg %= 360;
@@ -47,12 +74,6 @@ void _ball::calc(void) {
     int topDiff = abs(top > 8 ? top - 16 : top);
 
     if (topDiff >= 1) {
-      if (topDiff == 1)
-        offset *= 0.6;
-
-      if (topDiff == 2)
-        offset *= 0.8;
-
       if (min(min(val[7], val[8]), val[9]) <= 300) {
         offset *= 3;
         offset = constrain(offset, 0, 85);
@@ -126,14 +147,17 @@ void _ball::readDistance(void) {
     tempDist +=
         (1 - 0.1) * (min(val[(top + 2) % 16], val[(top + 14) % 16]) - tempDist);
   } else {
-    if (top != 4 && top != 12) {
+    if (top != 4 && top != 12 && top != 8 && top != 0) {
       tempDist = min(val[(top + 2) % 16], val[(top + 14) % 16]);
     } else {
       tempDist = min(val[(top + 1) % 16], val[(top + 15) % 16]);
     }
   }
 
-  dist = constrain(myMap(tempDist, 360, 530, 5, 0), 0, 5);
+  dist = constrain(myMap(tempDist, 400, 530, 5, 0), 0, 6);
+  if (abs(8 - top) >= 6) {
+    dist *= 0.9;
+  }
 
   // Serial.println(dist);
 }
