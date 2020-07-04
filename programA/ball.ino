@@ -40,14 +40,17 @@ void _ball::calc(void) {
 
     float x = 0;
     float y = 0;
-    x += sin(radians(top * 22.5)) * (724 - val[top]);
+    x += sin(radians(top * 22.5)) * (724 - val[top]) * 2;
     x += sin(radians(second * 22.5)) * (724 - val[second]);
     x += sin(radians(third * 22.5)) * (724 - val[third]);
-    y += cos(radians(top * 22.5)) * (724 - val[top]);
+    y += cos(radians(top * 22.5)) * (724 - val[top]) * 2;
     y += cos(radians(second * 22.5)) * (724 - val[second]);
     y += cos(radians(third * 22.5)) * (724 - val[third]);
 
     deg = round(degrees(atan2(x, y)) + 360) % 360;
+
+    top = round((float)deg / 22.5) % 16;
+    readDistance();
 
     if (top == 8)
       deg = 180;
@@ -56,15 +59,12 @@ void _ball::calc(void) {
       deg -= 360;
     }
 
-    top = round((float)deg / 22.5) % 16;
-    readDistance();
-
     int offset = 0;
 
     if (dist <= 2) {
       dist = 0;
     }
-    offset += max(dist, 1) * abs(deg) * 0.05 + dist * 7;
+    offset += max(dist, 0) * abs(deg) * 0.02 + dist * 8;
 
     deg += 720;
     deg %= 360;
@@ -73,7 +73,9 @@ void _ball::calc(void) {
 
     int topDiff = abs(top > 8 ? top - 16 : top);
 
-    if (topDiff >= 1) {
+    if (abs(deg) >= 0) {
+      deg += 720;
+      deg %= 360;
       if (min(min(val[7], val[8]), val[9]) <= 300) {
         offset *= 3;
         offset = constrain(offset, 0, 85);
@@ -85,6 +87,9 @@ void _ball::calc(void) {
         deg += offset;
       }
     }
+
+    deg += 720;
+    deg %= 360;
 
     //ホールド処理
     if (!digitalRead(BALL_HOLD)) {
