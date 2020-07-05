@@ -38,16 +38,16 @@ void _ball::calc(void) {
     exist = true;
     deg = top * 22.5;
 
-    float x = 0;
-    float y = 0;
-    x += sin(radians(top * 22.5)) * (724 - val[top]) * 2;
-    x += sin(radians(second * 22.5)) * (724 - val[second]);
-    x += sin(radians(third * 22.5)) * (724 - val[third]);
-    y += cos(radians(top * 22.5)) * (724 - val[top]) * 2;
-    y += cos(radians(second * 22.5)) * (724 - val[second]);
-    y += cos(radians(third * 22.5)) * (724 - val[third]);
+    // float x = 0;
+    // float y = 0;
+    // x += sin(radians(top * 22.5)) * 3;
+    // x += sin(radians(second * 22.5)) * 2;
+    // x += sin(radians(third * 22.5)) * 1;
+    // y += cos(radians(top * 22.5)) * 3;
+    // y += cos(radians(second * 22.5)) * 2;
+    // y += cos(radians(third * 22.5)) * 1;
 
-    deg = round(degrees(atan2(x, y)) + 360) % 360;
+    // deg = round(degrees(atan2(x, y)) + 360) % 360;
 
     top = round((float)deg / 22.5) % 16;
     readDistance();
@@ -93,23 +93,8 @@ void _ball::calc(void) {
 
     //ホールド処理
     if (!digitalRead(BALL_HOLD)) {
-      // motor.referenceAngle = 0;
-      // isAvoid = false;
       holdTimer = device.getTime();
-      if (!isAvoid) {
-        avoidTimer = device.getTime();
-      }
       kicker.val = false;
-      if (dist >= 3 && top > 1 && top < 15) {
-        speed = 100;
-        // LED.changeAll(LED.WHITE);
-      } else {
-        speed = 100;
-      }
-    }
-
-    if (val[0] <= 250 && top == 0) {
-      topTimer = device.getTime();
     }
 
     if (digitalRead(BALL_HOLD) && !(top > 3 && top < 13)) {
@@ -118,23 +103,6 @@ void _ball::calc(void) {
       }
       speed = 100;
       deg = 0;
-
-      if (device.getTime() - avoidTimer >= 500 && !isAvoid) {
-        int angle = 1;
-        // if (motor.direction >= 0) {
-        //   angle = -1;
-        // }
-        isAvoid = true;
-        motor.referenceAngle = 35 * angle;
-        // ball.deg = (80 * angle + 360) % 360;
-        deg = 90;
-        exist = true;
-      }
-    }
-
-    if (device.getTime() - avoidTimer >= 1700) {
-      motor.referenceAngle = 0;
-      isAvoid = false;
     }
 
     LED.dist = true;
