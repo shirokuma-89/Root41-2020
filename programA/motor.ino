@@ -111,8 +111,8 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
 void _motor::directDrive(int* p) {
   for (int i = 0; i <= 3; i++) {
     if (*(p + i) == 0) {
-      digitalWrite(4 + i * 2, LOW);
-      digitalWrite(5 + i * 2, LOW);
+      digitalWrite(4 + i * 2, HIGH);
+      digitalWrite(5 + i * 2, HIGH);
     } else if (*(p + i) > 0) {
       analogWrite(4 + i * 2, *(p + i));
       digitalWrite(5 + i * 2, LOW);
