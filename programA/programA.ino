@@ -46,6 +46,8 @@ class _ball {
 
   int speed;
 
+  unsigned long speedTimer;
+
  private:
   float LPF = 0.4;
 
@@ -139,6 +141,8 @@ class _gyro {
   int deg;
   int eeprom[6];
 
+  bool isLift = false;
+
  private:
   // none
   int differentialDeg = 0;
@@ -155,13 +159,14 @@ class _tof {
 
 class _position {
  public:
-  void reflection(int _type);
+  void reflection(void);
   void get(void);
 
   bool rock;
   int side[4];
   int vertical[4];
   int reliability;  //信頼度
+  unsigned long offTimer;
 
  private:
 } position;
@@ -279,16 +284,23 @@ void loop(void) {
   } else if (device.mode == 1) {  //駆動中
 
     //処理
-    // LED.degShow(ball.deg);
     if (!line.flag) {
-      LED.gyroShow();
+      LED.degShow(ball.deg);
+      // LED.gyroShow();
       ball.read(ball.val);
       ball.calc();
+      if (device.getTime() - ball.speedTimer <= 800 && ball.speedTimer != 0) {
+        ball.speed =
+            100 - (map(device.getTime() - ball.speedTimer, 0, 800, 10, 30));
+      }
     }
 
     line.read();
     line.deg = line.calc();
     line.process();
+
+    position.get();
+    position.reflection();
 
     //設定
     motor.deg = ball.deg;
@@ -303,6 +315,13 @@ void loop(void) {
       if (motor.deg == 1000) {
         stop = true;
       }
+    }
+
+    //持ち上げ消灯
+    if (gyro.isLift) {
+      digitalWrite(LINE_BRIGHT, LOW);
+    } else {
+      digitalWrite(LINE_BRIGHT, HIGH);
     }
 
     //駆動

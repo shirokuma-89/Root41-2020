@@ -3,16 +3,16 @@ void _ball::read(int* b) {
   for (int i = 0; i <= 15; i++) {
     // *(b + i) += (1 - LPF) * (analogRead(BALL[i]) - *(b + i));
     *(b + i) = analogRead(BALL[i]);
-    if (i == 6) {
-      *(b + i) = 900;
-    }
+    // if (i == 6) {
+    //   *(b + i) = 900;
+    // }
     // Serial.print(*(b + i));
     // Serial.print(" ");
   }
   // Serial.println(" ");
   digitalWrite(BALL_RESET, LOW);
 
-  *b *= 0.95;
+  *b *= 0.98;
 }
 
 void _ball::calc(void) {
@@ -78,6 +78,9 @@ void _ball::calc(void) {
     if (digitalRead(BALL_HOLD) && !(top > 3 && top < 13)) {
       if (device.getTime() - holdTimer >= 200) {
         kicker.val = true;
+        if (device.getTime() - speedTimer >= 600 || speedTimer == 0) {
+          speedTimer = device.getTime();
+        }
       }
     }
 
@@ -94,9 +97,16 @@ void _ball::calc(void) {
 
 void _ball::readDistance(void) {
   static float tempDist;
-  if (false) {  // trueでローパス
-    tempDist +=
-        (1 - 0.1) * (min(val[(top + 2) % 16], val[(top + 14) % 16]) - tempDist);
+  if (true) {  // trueでローパス
+    if (top != 4 && top != 12) {
+      val[4] *= 0.98;
+      val[12] *= 0.98;
+      tempDist += (1 - 0.2) *
+                  (min(val[(top + 2) % 16], val[(top + 14) % 16]) - tempDist);
+    } else {
+      tempDist += (1 - 0.2) *
+                  (min(val[(top + 1) % 16], val[(top + 15) % 16]) - tempDist);
+    }
   } else {
     if (top != 4 && top != 12 && top != 8 && top != 0) {
       tempDist = min(val[(top + 2) % 16], val[(top + 14) % 16]);

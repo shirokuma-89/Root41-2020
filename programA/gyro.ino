@@ -90,6 +90,15 @@ int _gyro::read(void) {
   while (Wire.available()) {
     Wire.read();
   }
+  // Serial.println(degrees(ypr[2]));
+  Serial.println(isLift);
+  if (degrees(ypr[2]) <= 165 && degrees(ypr[2]) >= -165) {
+    isLift = true;
+  } else if (degrees(ypr[1]) <= 165 && degrees(ypr[1]) >= -165) {
+    isLift = true;
+  } else {
+    isLift = false;
+  }
   return tempDeg % 360;
 }
 
