@@ -34,7 +34,6 @@ class _ball {
   void readDistance(void);
 
   bool exist;
-  bool isAvoid = false;
 
   int val[16];
   int top;
@@ -50,8 +49,6 @@ class _ball {
   float LPF = 0.4;
 
   unsigned long holdTimer;
-  unsigned long topTimer;
-  unsigned long avoidTimer;
 
 } ball;
 

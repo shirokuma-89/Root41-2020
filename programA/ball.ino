@@ -18,6 +18,7 @@ void _ball::read(int* b) {
 void _ball::calc(void) {
   int existCount = 0;
   top = 0;
+  dist = 0;
   for (int i = 0; i <= 15; i++) {
     if (val[i] <= val[top]) {
       third = second;
@@ -32,12 +33,32 @@ void _ball::calc(void) {
 
     if (val[i] >= 650) {
       existCount++;
+    } else {
+      // dist += val[i];
     }
+    dist += val[i];
   }
+
+  dist /= 16;  // - existCount;
+
+  Serial.println(dist);
   if (existCount <= 14) {  //ボールあります
     exist = true;
     deg = top * 22.5;
+    dist = constrain(map(dist, 520, 650, 10, 0), 0, 10);
+    // if (dist > 5) {
+    //   dist += (dist - 5) * 2 - 1;
+    // }
 
+    // if (abs(8 - top) <= 7) {
+    //   if (dist <= 480) {
+    //     if (top <= 8) {
+    //       deg += dist * 6;
+    //     } else {
+    //       deg -= dist * 6;
+    //     }
+    //   }
+    // }
     deg += 720;
     deg %= 360;
 
@@ -55,7 +76,7 @@ void _ball::calc(void) {
 
     LED.dist = true;
 
-    speed = 100; 
+    speed = 100;
 
   } else {  //ボールなし
     exist = false;
