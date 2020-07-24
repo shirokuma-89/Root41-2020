@@ -33,34 +33,41 @@ void _ball::calc(void) {
 
     if (val[i] >= 650) {
       existCount++;
+      dist += 690;
     } else {
-      // dist += val[i];
+      dist += val[i];
     }
-    dist += val[i];
+    // dist += val[i];
   }
 
   dist /= 16;  // - existCount;
 
-  Serial.println(dist);
+  // Serial.println(dist);
   if (existCount <= 14) {  //ボールあります
     exist = true;
     deg = top * 22.5;
-    dist = constrain(map(dist, 520, 650, 10, 0), 0, 10);
-    // if (dist > 5) {
-    //   dist += (dist - 5) * 2 - 1;
-    // }
+    offset = 180 - abs(180 - deg);
 
-    // if (abs(8 - top) <= 7) {
-    //   if (dist <= 480) {
-    //     if (top <= 8) {
-    //       deg += dist * 6;
-    //     } else {
-    //       deg -= dist * 6;
-    //     }
-    //   }
-    // }
-    deg += 720;
-    deg %= 360;
+    offset = offset * 0.2;  // + dist * 3;
+    if (dist <= 550) {
+      offset *= 1.7;
+      offset += 40;
+    } else if (dist <= 590) {
+      // offset *= 1.2;
+      offset += 25;
+    }
+    offset = constrain(offset, 0, 100);
+    Serial.print(offset);
+    Serial.print("\t");
+    Serial.println(dist);
+
+    if (top >= 2 && top <= 14) {
+      if (top <= 8) {
+        deg += offset;
+      } else {
+        deg -= offset;
+      }
+    }
 
     //ホールド処理
     if (!digitalRead(BALL_HOLD)) {

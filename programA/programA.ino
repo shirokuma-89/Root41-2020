@@ -40,6 +40,7 @@ class _ball {
   int second;
   int third;
   int deg;
+  int offset;
 
   float dist;
 
@@ -322,7 +323,7 @@ void loop(void) {
       }
     }
 
-    //I2Cバッファクリア
+    // I2Cバッファクリア
     for (int i = 0; i < 4; i++) {
       gyro.deg = gyro.read();
     }
