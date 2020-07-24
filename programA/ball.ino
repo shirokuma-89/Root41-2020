@@ -18,65 +18,61 @@ void _ball::read(int* b) {
 void _ball::calc(void) {
   int existCount = 0;
   top = 0;
+  dist = 0;
   for (int i = 0; i <= 15; i++) {
     if (val[i] <= val[top]) {
+      third = second;
+      second = top;
       top = i;
+    } else if (val[i] <= val[second]) {
+      third = second;
+      second = i;
+    } else if (val[i] <= val[third]) {
+      third = i;
     }
-    if (val[i] >= 560) {
+
+    if (val[i] >= 650) {
       existCount++;
+      dist += 690;
+    } else {
+      dist += val[i];
     }
+    // dist += val[i];
   }
+
+  dist /= 16;  // - existCount;
+
+  // Serial.println(dist);
   if (existCount <= 14) {  //ボールあります
     exist = true;
     deg = top * 22.5;
+    offset = 180 - abs(180 - deg);
 
-    if (deg >= 180) {
-      deg -= 360;
+    offset = offset * 0.2;  // + dist * 3;
+    if (dist <= 550) {
+      offset *= 1.7;
+      offset += 40;
+    } else if (dist <= 590) {
+      // offset *= 1.2;
+      offset += 25;
     }
+    offset = constrain(offset, 0, 100);
+    Serial.print(offset);
+    Serial.print("\t");
+    Serial.println(dist);
 
-    int offset = 0;
-
-    offset += abs(deg) * 0.03 * dist + dist * 7;
-
-    deg += 720;
-    deg %= 360;
-
-    const int error = 3;
-
-    int topDiff = abs(top > 8 ? top - 16 : top);
-
-    if (topDiff >= 1) {
-      if (topDiff == 1)
-        offset *= 0.95;
-
-      if (min(min(val[7], val[8]), val[9]) <= 300) {
-        offset *= 3;
-        offset = constrain(offset, 0, 85);
-      }
-
-      if (top >= 8) {
-        deg -= offset;
-      } else {
+    if (top >= 2 && top <= 14) {
+      if (top <= 8) {
         deg += offset;
+      } else {
+        deg -= offset;
       }
     }
 
     //ホールド処理
     if (!digitalRead(BALL_HOLD)) {
       holdTimer = device.getTime();
-      if (!isAvoid) {
-        avoidTimer = device.getTime();
-      }
       kicker.val = false;
-      if (dist >= 3 && top > 1 && top < 15) {
-        speed = 100;
-      } else {
-        speed = 100;
-      }
-    }
-
-    if (val[0] <= 250 && top == 0) {
-      topTimer = device.getTime();
     }
 
     if (digitalRead(BALL_HOLD) && !(top > 3 && top < 13)) {
@@ -86,28 +82,11 @@ void _ball::calc(void) {
           speedTimer = device.getTime();
         }
       }
-      speed = 100;
-      deg = 0;
-
-      if (device.getTime() - avoidTimer >= 500 && !isAvoid) {
-        int angle = 1;
-        // if (motor.direction >= 0) {
-        //   angle = -1;
-        // }
-        isAvoid = true;
-        // motor.referenceAngle = 45 * angle;
-        // ball.deg = (80 * angle + 360) % 360;
-        deg = 90;
-        exist = true;
-      }
-    }
-
-    if (device.getTime() - avoidTimer >= 1500) {
-      motor.referenceAngle = 0;
-      isAvoid = false;
     }
 
     LED.dist = true;
+
+    speed = 100;
 
   } else {  //ボールなし
     exist = false;
@@ -129,17 +108,16 @@ void _ball::readDistance(void) {
                   (min(val[(top + 1) % 16], val[(top + 15) % 16]) - tempDist);
     }
   } else {
-    if (top != 4 && top != 12) {
+    if (top != 4 && top != 12 && top != 8 && top != 0) {
       tempDist = min(val[(top + 2) % 16], val[(top + 14) % 16]);
     } else {
       tempDist = min(val[(top + 1) % 16], val[(top + 15) % 16]);
     }
   }
 
-  dist = constrain(myMap(tempDist, 360, 580, 5, 0), 1, 5);
-
-  if (dist <= 2 && (top <= 6 || top >= 10)) {  //切り捨て
-    dist = 1;
+  dist = constrain(myMap(tempDist, 400, 530, 5, 0), 0, 6);
+  if (abs(8 - top) >= 6) {
+    dist *= 0.9;
   }
 
   // Serial.println(dist);

@@ -34,11 +34,13 @@ class _ball {
   void readDistance(void);
 
   bool exist;
-  bool isAvoid = false;
 
   int val[16];
   int top;
+  int second;
+  int third;
   int deg;
+  int offset;
 
   float dist;
 
@@ -50,8 +52,6 @@ class _ball {
   float LPF = 0.4;
 
   unsigned long holdTimer;
-  unsigned long topTimer;
-  unsigned long avoidTimer;
 
 } ball;
 
@@ -288,7 +288,6 @@ void loop(void) {
       LED.degShow(ball.deg);
       // LED.gyroShow();
       ball.read(ball.val);
-      ball.readDistance();
       ball.calc();
       if (device.getTime() - ball.speedTimer <= 800 && ball.speedTimer != 0) {
         ball.speed =
