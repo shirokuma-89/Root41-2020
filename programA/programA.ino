@@ -48,9 +48,12 @@ class _ball {
 
   unsigned long speedTimer;
 
+  int position = 0;
+  unsigned long positionTimer;
+  unsigned long driftTimer;
+
  private:
   float LPF = 0.4;
-
   unsigned long holdTimer;
 
 } ball;

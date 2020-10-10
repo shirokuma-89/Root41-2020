@@ -57,11 +57,11 @@ void _ball::calc(void) {
       offset += 15;
     }
     offset = constrain(offset, 0, 100);
-    Serial.print(offset);
-    Serial.print("\t");
-    Serial.println(dist);
+    // Serial.print(offset);
+    // Serial.print("\t");
+    // Serial.println(dist);
 
-    if (top >= 2 && top <= 14) {
+    if (top >= 1 && top <= 15) {
       if (top <= 8) {
         deg += offset;
       } else {
@@ -90,6 +90,24 @@ void _ball::calc(void) {
     }
 
     LED.dist = true;
+
+    if (deg >= 50 && deg <= 150) {
+      if (position < 0) {
+        position = 0;
+        positionTimer = device.getTime();
+      } else {
+        position++;
+      }
+    } else if (deg >= 210 && deg <= 310) {
+      if (position > 0) {
+        position = 0;
+        positionTimer = device.getTime();
+      } else {
+        position--;
+      }
+    }
+
+    Serial.println(position);
 
     speed = 100;
 
