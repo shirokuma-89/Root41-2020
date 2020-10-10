@@ -34,11 +34,13 @@ class _ball {
   void readDistance(void);
 
   bool exist;
-  bool isAvoid = false;
 
   int val[16];
   int top;
+  int second;
+  int third;
   int deg;
+  int offset;
 
   float dist;
 
@@ -46,12 +48,13 @@ class _ball {
 
   unsigned long speedTimer;
 
+  int position = 0;
+  unsigned long positionTimer;
+  unsigned long driftTimer;
+
  private:
   float LPF = 0.4;
-
   unsigned long holdTimer;
-  unsigned long topTimer;
-  unsigned long avoidTimer;
 
 } ball;
 
@@ -146,6 +149,8 @@ class _gyro {
 
   int deg;
   int eeprom[6];
+
+  bool isLift = false;
 
  private:
   // none
@@ -242,7 +247,7 @@ void setup(void) {
   RGBLED.show();
 
   device.initialize();
-  // TWBR = 12;
+  TWBR = 12;
   device.mode = 0;
 
   for (int i = 0; i <= 19; i++) {
@@ -288,16 +293,17 @@ void loop(void) {
   } else if (device.mode == 1) {  //駆動中
 
     //処理
-    // LED.degShow(ball.deg);
     if (!line.flag) {
       LED.gyroShow();
       ball.read(ball.val);
-      ball.readDistance();
       ball.calc();
-      if (device.getTime() - ball.speedTimer <= 800 && ball.speedTimer != 0) {
-        ball.speed =
-            100 - (map(device.getTime() - ball.speedTimer, 0, 800, 10, 30));
-      }
+      // LED.degShow(ball.deg);
+
+      // if (device.getTime() - ball.speedTimer <= 800 && ball.speedTimer != 0)
+      // {
+      //   ball.speed =
+      //       100 - (map(device.getTime() - ball.speedTimer, 0, 800, 10, 30));
+      // }
     }
 
     line.read();
@@ -322,6 +328,13 @@ void loop(void) {
       }
     }
 
+    //持ち上げ消灯
+    if (gyro.isLift) {
+      digitalWrite(LINE_BRIGHT, LOW);
+    } else {
+      digitalWrite(LINE_BRIGHT, HIGH);
+    }
+
     //駆動
     kicker.kick(kicker.val);
 
@@ -329,7 +342,9 @@ void loop(void) {
 
     for (motor.count = 0; motor.count < motor.time; motor.count++) {
       line.read();
-
+      line.deg = line.calc();
+      line.process();
+      gyro.deg = gyro.read();
       motor.drive(motor.deg, motor.speed, stop);
       if (motor.count >= 1) {
         digitalWrite(BALL_RESET, HIGH);
@@ -340,10 +355,6 @@ void loop(void) {
       }
     }
 
-    // I2Cバッファクリア
-    for (int i = 0; i < 4; i++) {
-      gyro.deg = gyro.read();
-    }
   } else if (device.mode == 2) {  //駆動中
     //処理
     LED.gyroShow();
@@ -351,6 +362,14 @@ void loop(void) {
     //駆動
     motor.drive(NULL, NULL);
   }
+
+  while (Wire.available()) {
+    Wire.read();
+  }
+
+  // while (Wire.available()) {
+  //   gyro.read();
+  // }
 
   // Serial.println(line.mode);
   // Serial.println(line.deg);
@@ -360,8 +379,4 @@ void loop(void) {
   //   Serial.print(" ");
   // }
   // Serial.println("");
-
-  Serial.println(line.deg);
-  Serial.println(line._mode);
-  Serial.println(line.approach);
 }
