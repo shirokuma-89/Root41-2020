@@ -243,7 +243,7 @@ void setup(void) {
   RGBLED.show();
 
   device.initialize();
-  // TWBR = 12;
+  TWBR = 12;
   device.mode = 0;
 
   for (int i = 0; i <= 19; i++) {
@@ -290,14 +290,16 @@ void loop(void) {
 
     //処理
     if (!line.flag) {
-      // LED.degShow(ball.deg);
       LED.gyroShow();
       ball.read(ball.val);
       ball.calc();
-      if (device.getTime() - ball.speedTimer <= 800 && ball.speedTimer != 0) {
-        ball.speed =
-            100 - (map(device.getTime() - ball.speedTimer, 0, 800, 10, 30));
-      }
+      // LED.degShow(ball.deg);
+
+      // if (device.getTime() - ball.speedTimer <= 800 && ball.speedTimer != 0)
+      // {
+      //   ball.speed =
+      //       100 - (map(device.getTime() - ball.speedTimer, 0, 800, 10, 30));
+      // }
     }
 
     line.read();
@@ -336,6 +338,8 @@ void loop(void) {
 
     for (motor.count = 0; motor.count < motor.time; motor.count++) {
       line.read();
+      line.deg = line.calc();
+      line.process();
       gyro.deg = gyro.read();
       motor.drive(motor.deg, motor.speed, stop);
       if (motor.count >= 1) {
@@ -359,9 +363,9 @@ void loop(void) {
     Wire.read();
   }
 
-  while (Wire.available()) {
-    gyro.read();
-  }
+  // while (Wire.available()) {
+  //   gyro.read();
+  // }
 
   // Serial.println(line.mode);
   // Serial.println(line.deg);

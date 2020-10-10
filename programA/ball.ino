@@ -49,12 +49,12 @@ void _ball::calc(void) {
     offset = 180 - abs(180 - deg);
 
     offset = offset * 0.2;  // + dist * 3;
-    if (dist <= 550) {
-      offset *= 1.7;
+    if (dist <= 510) {
+      offset *= 1.4;
       offset += 40;
-    } else if (dist <= 590) {
+    } else if (dist <= 550) {
       // offset *= 1.2;
-      offset += 25;
+      offset += 15;
     }
     offset = constrain(offset, 0, 100);
     Serial.print(offset);
