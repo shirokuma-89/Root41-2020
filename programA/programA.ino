@@ -72,6 +72,7 @@ class _line {
 
   bool flag;
   bool touch;
+  bool approach;
 
   float vector[20][2];
 
@@ -94,7 +95,7 @@ class _line {
 
   bool stoping;
   bool s;
-  bool approach;
+
   int error;
 
   float x;

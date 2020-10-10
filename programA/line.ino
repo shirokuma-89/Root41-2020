@@ -75,26 +75,31 @@ void _line::process(void) {
         overTimer = device.getTime();
         _mode = 3;
       }
-      if (device.getTime() - stopTimer >= 2000) {
+      if (device.getTime() - stopTimer >= 400) {
         //通常の動きに移行
         _mode = 2;
       }
       //センサーのタイマーでアプローチするかを判断
+      approach = false;
       for (int i = 0; i <= 19; i++) {
-        if (stopTime[i] >= 10) {
-          _mode = 2;
-          approach = false;
+        if (stopTime[i] >= 200) {
+          if (abs(side) == 1) {
+            if (ball.top >= 3 && ball.top <= 5) {
+              _mode = 2;
+              approachdeg = ball.top * 22.5;
+              approach = true;
+            } else if (ball.top >= 11 && ball.top <= 13) {
+              _mode = 2;
+              approachdeg = ball.top * 22.5;
+              approach = true;
+            }
+          }
         }
       }
     } else if (_mode == 2) {
       // move
       if (approach) {
-        deg = approachdeg;
-        if (approachdeg <= 180) {
-          deg += 180;
-        } else {
-          deg -= 180;
-        }
+        _mode = 4;
       }
       if (!touch) {
         overTimer = device.getTime();
@@ -102,7 +107,7 @@ void _line::process(void) {
       }
     } else if (_mode == 3) {
       // over
-      if (touch || device.getTime() - overTimer >= 1000) {
+      if (touch) {
         _mode = 2;
       }
     } else if (_mode == 4) {
@@ -112,8 +117,11 @@ void _line::process(void) {
           deg = approachdeg;
           speed = 80;
         } else {
-          _mode = 0;
+          approach = false;
+          _mode = 3;
         }
+      } else {
+        _mode = 2;
       }
     }
   } else {
