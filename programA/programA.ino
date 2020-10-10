@@ -290,8 +290,8 @@ void loop(void) {
 
     //処理
     if (!line.flag) {
-      LED.degShow(ball.deg);
-      // LED.gyroShow();
+      // LED.degShow(ball.deg);
+      LED.gyroShow();
       ball.read(ball.val);
       ball.calc();
       if (device.getTime() - ball.speedTimer <= 800 && ball.speedTimer != 0) {
@@ -348,7 +348,7 @@ void loop(void) {
     }
 
     // I2Cバッファクリア
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 6; i++) {
       gyro.deg = gyro.read();
     }
   } else if (device.mode == 2) {  //駆動中

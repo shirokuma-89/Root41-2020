@@ -26,7 +26,7 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
     direction = (gyro.deg - referenceAngle + 360) % 360;
     direction = direction > 180 ? direction - 360 : direction;
 
-    if(abs(direction) >= 10 && ball.isAvoid){
+    if(abs(direction) >= 20){
       _deg = NULL;
       _power = NULL;
     }
