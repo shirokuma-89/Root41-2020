@@ -76,7 +76,7 @@ void _ball::calc(void) {
     }
 
     if (digitalRead(BALL_HOLD) && !(top > 3 && top < 13)) {
-      if (device.getTime() - holdTimer >= 200) {
+      if (device.getTime() - holdTimer >= 100) {
         kicker.val = true;
         if (motor.referenceAngle != 0) {
           if (device.getTime() - holdTimer < 300) {
