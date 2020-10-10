@@ -336,7 +336,7 @@ void loop(void) {
 
     for (motor.count = 0; motor.count < motor.time; motor.count++) {
       line.read();
-
+      gyro.deg = gyro.read();
       motor.drive(motor.deg, motor.speed, stop);
       if (motor.count >= 1) {
         digitalWrite(BALL_RESET, HIGH);
@@ -347,16 +347,20 @@ void loop(void) {
       }
     }
 
-    // I2Cバッファクリア
-    for (int i = 0; i < 6; i++) {
-      gyro.deg = gyro.read();
-    }
   } else if (device.mode == 2) {  //駆動中
     //処理
     LED.gyroShow();
 
     //駆動
     motor.drive(NULL, NULL);
+  }
+
+  while (Wire.available()) {
+    Wire.read();
+  }
+
+  while (Wire.available()) {
+    gyro.read();
   }
 
   // Serial.println(line.mode);

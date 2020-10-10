@@ -19,7 +19,7 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
   }
 
   if (!_stop) {
-    gyro.deg = gyro.read();
+    // gyro.deg = gyro.read();
 
     int minimum = 0;
 

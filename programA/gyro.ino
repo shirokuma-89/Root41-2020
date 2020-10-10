@@ -46,7 +46,7 @@ RESTART:
   mpu.setZAccelOffset(eeprom[5]);
   mpu.setDMPEnabled(true);
 
-  attachInterrupt(0, dmpDataReady, RISING);
+  // attachInterrupt(0, dmpDataReady, RISING);
   mpuIntStatus = mpu.getIntStatus();
 
   dmpReady = true;
@@ -87,14 +87,14 @@ int _gyro::read(void) {
   while (tempDeg < 0) {
     tempDeg += 360;
   }
-  while (Wire.available()) {
-    Wire.read();
-  }
+  // while (Wire.available()) {
+  //   Wire.read();
+  // }
   // Serial.println(degrees(ypr[2]));
-  Serial.println(isLift);
-  if (degrees(ypr[2]) <= 165 && degrees(ypr[2]) >= -165) {
+  // Serial.println(isLift);
+  if (degrees(ypr[2]) <= 165 && degrees(ypr[2]) >= -170) {
     isLift = true;
-  } else if (degrees(ypr[1]) <= 165 && degrees(ypr[1]) >= -165) {
+  } else if (degrees(ypr[1]) <= 165 && degrees(ypr[1]) >= -170) {
     isLift = true;
   } else {
     isLift = false;

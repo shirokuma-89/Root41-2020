@@ -3,9 +3,9 @@ void _ball::read(int* b) {
   for (int i = 0; i <= 15; i++) {
     // *(b + i) += (1 - LPF) * (analogRead(BALL[i]) - *(b + i));
     *(b + i) = analogRead(BALL[i]);
-    // if (i == 6) {
-    //   *(b + i) = 900;
-    // }
+    if (i == 6 && !device.robot) {
+      *(b + i) = 900;
+    }
     // Serial.print(*(b + i));
     // Serial.print(" ");
   }
