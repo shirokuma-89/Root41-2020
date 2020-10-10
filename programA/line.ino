@@ -14,7 +14,7 @@ int _line::calc(void) {
   float _x = 0;
   float _y = 0;
   if (flag) {
-    for (int i = 0; i <= 10; i++) {  //可変
+    for (int i = 0; i <= 11; i++) {  //可変
       if (order[i] != 100) {
         _x += vector[order[i]][0];
         _y += vector[order[i]][1];
@@ -50,7 +50,20 @@ int _line::calc(void) {
 }
 
 void _line::process(void) {
+  speed = 100;
   if (flag) {
+    if (deg != 1000) {
+      //ラインタッチ方向判定（四方向）
+      if (deg <= 35 || deg >= 325) {
+        side = 0;  //↑
+      } else if (deg >= 145 && deg <= 215) {
+        side = 2;  //↓
+      } else if (deg < 180) {
+        side = -1;  //→
+      } else if (deg > 180) {
+        side = 1;  //←
+      }
+    }
     if (_mode == 0) {
       // none
       flag = false;
@@ -58,20 +71,31 @@ void _line::process(void) {
       // stop
       deg = 1000;
       if (!touch) {
+        //ストップ中にオーバーしたら緊急でもどる
         overTimer = device.getTime();
         _mode = 3;
       }
       if (device.getTime() - stopTimer >= 2000) {
+        //通常の動きに移行
         _mode = 2;
       }
+      //センサーのタイマーでアプローチするかを判断
       for (int i = 0; i <= 19; i++) {
-        if (stopTime[i] >= 150) {
+        if (stopTime[i] >= 10) {
           _mode = 2;
-          s = true;
+          approach = false;
         }
       }
     } else if (_mode == 2) {
       // move
+      if (approach) {
+        deg = approachdeg;
+        if (approachdeg <= 180) {
+          deg += 180;
+        } else {
+          deg -= 180;
+        }
+      }
       if (!touch) {
         overTimer = device.getTime();
         _mode = 0;
@@ -82,7 +106,15 @@ void _line::process(void) {
         _mode = 2;
       }
     } else if (_mode == 4) {
-      // error
+      // approach
+      if (ball.deg != 1000) {
+        if (touch) {
+          deg = approachdeg;
+          speed = 80;
+        } else {
+          _mode = 0;
+        }
+      }
     }
   } else {
     //リセット
@@ -93,9 +125,11 @@ void _line::process(void) {
       stopTime[i] = 0;
     }
     s = false;
+    approach = false;
     now = 100;
     first = 100;
     whited = 0;
+    side = 0;
     _mode = 0;
     error = 0;
   }

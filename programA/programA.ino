@@ -72,12 +72,16 @@ class _line {
 
   float vector[20][2];
 
+  int _mode;
+
   int bright;
   int dif;
+  int speed = 100;
+  int side;
+  int approachdeg;
 
  private:
   // none
-  int _mode;
 
   int deglog;
 
@@ -87,6 +91,7 @@ class _line {
 
   bool stoping;
   bool s;
+  bool approach;
   int error;
 
   float x;
@@ -308,7 +313,7 @@ void loop(void) {
 
     if (line.flag) {
       motor.deg = line.deg;
-      motor.speed = 100;
+      motor.speed = line.speed;
       LED.changeAll(LED.WHITE);
 
       if (motor.deg == 1000) {
@@ -355,5 +360,7 @@ void loop(void) {
   // }
   // Serial.println("");
 
-  Serial.println(device.getTime() - errorTimer);
+  Serial.println(line.deg);
+  Serial.println(line._mode);
+  Serial.println(line.approachdeg);
 }
