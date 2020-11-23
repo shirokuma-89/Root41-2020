@@ -87,11 +87,11 @@ void _line::process(void) {
             if (ball.top >= 3 && ball.top <= 5) {
               _mode = 2;
               approachdeg = ball.top * 22.5;
-              approach = true;
+              // approach = true;
             } else if (ball.top >= 11 && ball.top <= 13) {
               _mode = 2;
               approachdeg = ball.top * 22.5;
-              approach = true;
+              // approach = true;
             }
           }
         }

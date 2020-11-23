@@ -363,7 +363,7 @@ void loop(void) {
     motor.drive(NULL, NULL);
   }
 
-  while (Wire.available()) {
+  while (Wire.available() ) {
     Wire.read();
   }
 
