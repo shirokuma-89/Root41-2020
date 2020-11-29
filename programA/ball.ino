@@ -48,11 +48,13 @@ void _ball::calc(void) {
     deg = top * 22.5;
     offset = 180 - abs(180 - deg);
 
+    Serial.println(position);
+
     offset = offset * 0.2;  // + dist * 3;
-    if (dist <= 510) {
+    if (dist <= 490) {
       offset *= 1.4;
       offset += 40;
-    } else if (dist <= 550) {
+    } else if (dist <= 530) {
       // offset *= 1.2;
       offset += 15;
     }
@@ -73,16 +75,17 @@ void _ball::calc(void) {
     if (!digitalRead(BALL_HOLD)) {
       holdTimer = device.getTime();
       kicker.val = false;
+      // position = 0;
     }
 
     if (digitalRead(BALL_HOLD) && !(top > 3 && top < 13)) {
-      if (device.getTime() - holdTimer >= 100) {
+      if (device.getTime() - holdTimer >= 140) {
         kicker.val = true;
-        if (motor.referenceAngle != 0) {
-          if (device.getTime() - holdTimer < 300) {
-            kicker.val = false;
-          }
-        }
+        // if (motor.referenceAngle != 0) {
+        //   if (device.getTime() - holdTimer < 300) {
+        //     kicker.val = false;
+        //   }
+        // }
         if (device.getTime() - speedTimer >= 600 || speedTimer == 0) {
           speedTimer = device.getTime();
         }
@@ -91,14 +94,18 @@ void _ball::calc(void) {
 
     LED.dist = true;
 
-    if (deg >= 50 && deg <= 150) {
+    
+    speed = 100;
+
+    
+    if (deg >= 50 && deg <= 120) {
       if (position < 0) {
         position = 0;
         positionTimer = device.getTime();
       } else {
         position++;
       }
-    } else if (deg >= 210 && deg <= 310) {
+    } else if (deg >= 200 && deg <= 240) {
       if (position > 0) {
         position = 0;
         positionTimer = device.getTime();
@@ -107,9 +114,6 @@ void _ball::calc(void) {
       }
     }
 
-    Serial.println(position);
-
-    speed = 100;
 
   } else {  //ボールなし
     exist = false;

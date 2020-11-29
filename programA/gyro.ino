@@ -90,11 +90,12 @@ int _gyro::read(void) {
   // while (Wire.available()) {
   //   Wire.read();
   // }
+  // Serial.print(degrees(ypr[1]));
+  // Serial.print("\t");
   // Serial.println(degrees(ypr[2]));
-  // Serial.println(isLift);
-  if (degrees(ypr[2]) <= 165 && degrees(ypr[2]) >= -170) {
+  if (degrees(ypr[2]) <= 165 && degrees(ypr[2]) >= -165) {
     isLift = true;
-  } else if (degrees(ypr[1]) <= 165 && degrees(ypr[1]) >= -170) {
+  } else if (degrees(ypr[1]) <= 165 && degrees(ypr[1]) >= -165) {
     isLift = true;
   } else {
     isLift = false;
@@ -294,22 +295,23 @@ void calibration() {
     else
       gz_offset = gz_offset - mean_gz / (giro_deadzone + 1);
 
-    if (ready >= 2)
+    if (ready >= 6)
       break;
   }
 }
 
 void _gyro::offsetRead(void) {
   offsetVal = 0;
-  Serial.println(gyro.read());
-  offsetVal = deg;
-  Serial.println(offsetVal);
+  // Serial.println(gyro.read());
+  // offsetVal = deg;
+  // Serial.println(offsetVal);
 
-  // for (int i = 0; i < 150; i++) {
+  for (int i = 0; i < 150; i++) {
+    deg = gyro.read();
+  }
+
+  delay(100);
   deg = gyro.read();
-  // }
-
-  // delay(100);
 
   if (deg != 0) {
     offsetVal += deg;
@@ -322,7 +324,7 @@ void _gyro::offsetRead(void) {
 
   Serial.println(gyro.read());
 
-  if (device.getTime() - device.startTimer >= 1200) {
-    device.startTimer = device.getTime();
-  }
+  // if (device.getTime() - device.startTimer >= 1200) {
+  //   device.startTimer = device.getTime();
+  // }
 }

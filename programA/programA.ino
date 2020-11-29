@@ -211,7 +211,7 @@ class _LED {
   bool white = false;
   bool dist = false;
 
-  int bright = 50;
+  int bright = 150;
 
   unsigned long defaultColor;
   unsigned long RED;
@@ -259,6 +259,18 @@ void setup(void) {
   Serial.println("Root41 2020");
   Serial.print("Robot Number:");
   Serial.println(device.robot + 1);
+  Serial.print("GyroOffsetX:");
+  Serial.println(gyro.eeprom[0]);
+  Serial.print("GyroOffsetY:");
+  Serial.println(gyro.eeprom[1]);
+  Serial.print("GyroOffsetZ:");
+  Serial.println(gyro.eeprom[2]);
+  Serial.print("AccelOffsetX:");
+  Serial.println(gyro.eeprom[3]);
+  Serial.print("AccelOffsetY:");
+  Serial.println(gyro.eeprom[4]);
+  Serial.print("AccelOffsetZ:");
+  Serial.println(gyro.eeprom[5]);
 
   gyro.setting();
 
@@ -329,11 +341,11 @@ void loop(void) {
     }
 
     //持ち上げ消灯
-    if (gyro.isLift) {
-      digitalWrite(LINE_BRIGHT, LOW);
-    } else {
-      digitalWrite(LINE_BRIGHT, HIGH);
-    }
+    // if (gyro.isLift && !device.robot) {
+    //   digitalWrite(LINE_BRIGHT, LOW);
+    // } else {
+    digitalWrite(LINE_BRIGHT, HIGH);
+    // }
 
     //駆動
     kicker.kick(kicker.val);
@@ -363,7 +375,7 @@ void loop(void) {
     motor.drive(NULL, NULL);
   }
 
-  while (Wire.available() ) {
+  while (Wire.available()) {
     Wire.read();
   }
 
