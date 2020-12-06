@@ -253,6 +253,8 @@ void setup(void) {
   for (int i = 0; i <= 19; i++) {
     line.vector[i][0] = sin(radians(i * 18));
     line.vector[i][1] = cos(radians(i * 18));
+    line.vector[5][1]=0;
+    line.vector[15][1]=0;
   }
 
   Serial.begin(115200);
@@ -391,4 +393,9 @@ void loop(void) {
   //   Serial.print(" ");
   // }
   // Serial.println("");
+  Serial.println("*************");
+  Serial.println(line.deg);
+  Serial.println(line._mode);
+  // Serial,println(line.stsopTimer);
+  Serial.println(line.approach);
 }
