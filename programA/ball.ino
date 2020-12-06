@@ -79,7 +79,7 @@ void _ball::calc(void) {
     }
 
     if (digitalRead(BALL_HOLD) && !(top > 3 && top < 13)) {
-      if (device.getTime() - holdTimer >= 60) {
+      if (device.getTime() - holdTimer >= 100) {
         kicker.val = true;
         // if (motor.referenceAngle != 0) {
         //   if (device.getTime() - holdTimer < 300) {
@@ -94,10 +94,10 @@ void _ball::calc(void) {
 
     LED.dist = true;
 
-    
+
     speed = 100;
 
-    
+
     if (deg >= 50 && deg <= 120) {
       if (position < 0) {
         position = 0;
