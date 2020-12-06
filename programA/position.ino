@@ -23,14 +23,14 @@ void _position::reflection(void) {
           ball.positionTimer = device.getTime();
           if (ball.position > 10) {
             if (digitalRead(BALL_HOLD)) {
-              ball.deg = 330;
+              ball.deg = 340;
             }
-            motor.referenceAngle = -15;
+            motor.referenceAngle = -10;
           } else if (ball.position < -10) {
             if (digitalRead(BALL_HOLD)) {
-              ball.deg = 30;
+              ball.deg = 20;
             }
-            motor.referenceAngle = 15;
+            motor.referenceAngle = 10;
           }
         }
       }

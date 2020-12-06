@@ -26,7 +26,7 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
     direction = (gyro.deg - referenceAngle + 360) % 360;
     direction = direction > 180 ? direction - 360 : direction;
 
-    if(abs(direction) >= 20){
+    if(abs(direction) >= 50){
       _deg = NULL;
       _power = NULL;
     }
@@ -43,7 +43,7 @@ void _motor::drive(int _deg, int _power, bool _stop = false) {
       // Ki = 0.004;  //積分定数
       Kp = 1.4;
       Ki = 0.012;
-      Kd = 0.6;
+      Kd = 0.65;
     }
 
     int angularVelocity = dmpgyro.z;

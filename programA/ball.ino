@@ -51,10 +51,13 @@ void _ball::calc(void) {
     Serial.println(position);
 
     offset = offset * 0.2;  // + dist * 3;
-    if (dist <= 490) {
+    if (dist <= 455) {
       offset *= 1.4;
       offset += 40;
-    } else if (dist <= 530) {
+    } else if (dist <= 475 && (top <= 4 || top >= 12)) {
+      offset *= 1.3;
+      offset += 40;
+    } else if (dist <= 510) {
       // offset *= 1.2;
       offset += 15;
     }
@@ -79,7 +82,7 @@ void _ball::calc(void) {
     }
 
     if (digitalRead(BALL_HOLD) && !(top > 3 && top < 13)) {
-      if (device.getTime() - holdTimer >= 140) {
+      if (device.getTime() - holdTimer >= 70) {
         kicker.val = true;
         // if (motor.referenceAngle != 0) {
         //   if (device.getTime() - holdTimer < 300) {
@@ -94,10 +97,10 @@ void _ball::calc(void) {
 
     LED.dist = true;
 
-    
+
     speed = 100;
 
-    
+
     if (deg >= 50 && deg <= 120) {
       if (position < 0) {
         position = 0;
