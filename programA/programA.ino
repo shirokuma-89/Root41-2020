@@ -272,8 +272,8 @@ void setup(void) {
   for (int i = 0; i <= 19; i++) {
     line.vector[i][0] = sin(radians(i * 18));
     line.vector[i][1] = cos(radians(i * 18));
-    line.vector[5][1]=0;
-    line.vector[15][1]=0;
+    line.vector[5][1] = 0;
+    line.vector[15][1] = 0;
   }
 
   Serial.begin(115200);
@@ -406,7 +406,7 @@ void loop(void) {
       // motor.drive(line.deg, 70, false);
       for (motor.count = 0; motor.count < motor.time; motor.count++) {
         // line.read();
-
+        gyro.deg = gyro.read();
         motor.drive(keeper.deg, keeper.speed, false);
         if (motor.count >= 3) {
           digitalWrite(BALL_RESET, HIGH);
