@@ -203,8 +203,11 @@ void _line::brightnessAdjust(void) {
 void _line::read(void) {
   //読み込み
   touch = false;
+  whiting = 0;
   for (int i = 0; i <= 19; i++) {
     if (!digitalRead(LINE[i])) {
+      whiting++;
+      just = i;
       if (whited == 0) {
         first = i;
       }
@@ -228,6 +231,49 @@ void _line::read(void) {
       touch = true;
     } else {
       val[i] = false;
+    }
+  }
+}
+
+void _line::linetrace(void) {
+  if (!keeper.setup) {
+    if (touch) {
+      keeper.mode = 0;
+    } else {
+      device.mode = 1;
+      //とりあえず
+    }
+    keeper.setup = true;
+  }
+  if (keeper.mode == 0) {
+    // inline&&moving
+    if (line.whiting <= 1) {
+      keeper.mode = 3;
+      keeper.offTimer = device.getTime();
+    }
+    if (ball.top <= 7) {
+      line.deg = 90;
+    } else {
+      line.deg = 270;
+    }
+  } else if (keeper.mode == 1) {
+    // inline&&touching
+  } else if (keeper.mode == 2) {
+    // offline&&attacking
+  } else if (keeper.mode == 3) {
+    // offline&&missing
+    if (whiting <= 3) {
+      line.deg = just * 18;
+      // if (device.getTime() - keeper.offTimer >= 300) {
+      //   if (just >= 3 && just <= 5) {
+      //     line.deg = 20;
+      //   } else if (just >= 13 && just <= 16) {
+      //     line.deg = 340;
+      //   }
+      // }
+    } else {
+      line.deg = 1000;
+      keeper.mode = 0;
     }
   }
 }
