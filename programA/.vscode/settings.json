@@ -49,15 +49,15 @@
       "base": "develop"
     },
     {
-      "name": "feature/ak-line003",
-      "base": "develop"
-    },
-    {
-      "name": "feature/ak-line003",
+      "name": "feature/ta-ball003",
       "base": "develop"
     },
     {
       "name": "feature/ak-line004",
+      "base": "develop"
+    },
+    {
+      "name": "feature/ball006",
       "base": "develop"
     }
   ],

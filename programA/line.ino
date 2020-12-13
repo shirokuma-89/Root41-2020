@@ -17,7 +17,7 @@ int _line::calc(void) {
     for (int i = 0; i <= 11; i++) {  //可変
       if (order[i] != 100) {
         _x += vector[order[i]][0];
-        _y += vector[order[i]][1] * 1.5;
+        _y += vector[order[i]][1];
       }
     }
     if (_x == 0 || _y == 0) {
@@ -54,8 +54,7 @@ void _line::process(void) {
   if (flag) {
     if (deg != 1000) {
       //ラインタッチ方向判定（四方向）
-      if (deg <= 35 || deg >= 325) {
-        side = 0;  //↑
+      if (deg <= 35 || deg >= 325) { side = 0;  //↑
       } else if (deg >= 145 && deg <= 215) {
         side = 2;  //↓
       } else if (deg < 180) {
@@ -88,13 +87,13 @@ void _line::process(void) {
               if (abs(side) == 1) {
                 _mode = 2;
                 approachdeg = ball.top * 22.5;
-                approach = true;
+                // approach = true;
               }
             } else if (ball.top >= 11 && ball.top <= 14) {
               if (abs(side) == 1) {
                 _mode = 2;
                 approachdeg = ball.top * 22.5;
-                approach = true;
+                // approach = true;
               }
             }
           }
@@ -105,15 +104,15 @@ void _line::process(void) {
       if (approach) {
         _mode = 4;
       }
-      if (touch && side == 1) {
+      if (touch && side == 2) {
         // overrun
-        if (device.getTime() - stopTimer >= 800) {
-          if (x >= 0) {
-            deg = 225;
-          } else {
-            deg = 135;
-          }
-        }
+        // if (device.getTime() - stopTimer >= 800) {
+        //   if (x >= 0) {
+        //     deg = 225;
+        //   } else {
+        //     deg = 135;
+        //   }
+        // }
       }
       if (!touch) {
         overTimer = device.getTime();
@@ -121,11 +120,11 @@ void _line::process(void) {
       }
     } else if (_mode == 3) {
       // over
-      if (approachdeg >= 180) {
-        deg = approachdeg - 180;
-      } else {
-        deg = approachdeg + 180;
-      }
+      // if (approachdeg >= 180) {
+      //   deg = approachdeg - 180;
+      // } else {
+      //   deg = approachdeg + 180;
+      // }
       if (touch) {
         _mode = 2;
       }

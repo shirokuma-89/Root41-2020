@@ -113,7 +113,11 @@ void _device::check(void) {
 
 void _device::UI(void) {
   if (!digitalRead(SW_RESET)) {
+    RGBLED.setBrightness(LED.bright * 0.2);
+    RGBLED.show();
     if (!digitalRead(SW_1)) {
+      RGBLED.setBrightness(LED.bright);
+      RGBLED.show();
       LED.changeAll(LED.BLUE);
       RGBLED.show();
 
@@ -130,6 +134,8 @@ void _device::UI(void) {
         if (!digitalRead(SW_1)) {
           LED.changeAll(LED.ORANGE);
           RGBLED.show();
+          gyro.offsetRead();
+          gyro.offsetRead();
           gyro.offsetRead();
           LED.animation1();
           device.waitTime(500);
@@ -161,6 +167,8 @@ void _device::UI(void) {
       }
 
     } else if (!digitalRead(SW_2)) {
+      RGBLED.setBrightness(LED.bright);
+      RGBLED.show();
       LED.changeAll(LED.YELLOW);
       RGBLED.show();
 
@@ -194,6 +202,9 @@ void _device::UI(void) {
         }
       }
     }
+  } else {
+    RGBLED.setBrightness(LED.bright);
+    RGBLED.show();
   }
 }
 

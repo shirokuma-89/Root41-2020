@@ -34,11 +34,13 @@ class _ball {
   void readDistance(void);
 
   bool exist;
-  bool isAvoid = false;
 
   int val[16];
   int top;
+  int second;
+  int third;
   int deg;
+  int offset;
 
   float dist;
 
@@ -46,12 +48,13 @@ class _ball {
 
   unsigned long speedTimer;
 
+  int position = 0;
+  unsigned long positionTimer;
+  unsigned long driftTimer;
+
  private:
   float LPF = 0.4;
-
   unsigned long holdTimer;
-  unsigned long topTimer;
-  unsigned long avoidTimer;
 
 } ball;
 
@@ -154,6 +157,8 @@ class _gyro {
   int deg;
   int eeprom[6];
 
+  bool isLift = false;
+
  private:
   // none
   int differentialDeg = 0;
@@ -213,7 +218,7 @@ class _LED {
   bool white = false;
   bool dist = false;
 
-  int bright = 50;
+  int bright = 150;
 
   unsigned long defaultColor;
   unsigned long RED;
@@ -261,18 +266,32 @@ void setup(void) {
   RGBLED.show();
 
   device.initialize();
-  // TWBR = 12;
+  TWBR = 12;
   device.mode = 0;
 
   for (int i = 0; i <= 19; i++) {
     line.vector[i][0] = sin(radians(i * 18));
     line.vector[i][1] = cos(radians(i * 18));
+    line.vector[5][1]=0;
+    line.vector[15][1]=0;
   }
 
   Serial.begin(115200);
   Serial.println("Root41 2020");
   Serial.print("Robot Number:");
   Serial.println(device.robot + 1);
+  Serial.print("GyroOffsetX:");
+  Serial.println(gyro.eeprom[0]);
+  Serial.print("GyroOffsetY:");
+  Serial.println(gyro.eeprom[1]);
+  Serial.print("GyroOffsetZ:");
+  Serial.println(gyro.eeprom[2]);
+  Serial.print("AccelOffsetX:");
+  Serial.println(gyro.eeprom[3]);
+  Serial.print("AccelOffsetY:");
+  Serial.println(gyro.eeprom[4]);
+  Serial.print("AccelOffsetZ:");
+  Serial.println(gyro.eeprom[5]);
 
   gyro.setting();
 
@@ -307,16 +326,17 @@ void loop(void) {
   } else if (device.mode == 1) {  //駆動中
 
     //処理
-    // LED.degShow(ball.deg);
     if (!line.flag) {
       LED.gyroShow();
       ball.read(ball.val);
-      ball.readDistance();
       ball.calc();
-      if (device.getTime() - ball.speedTimer <= 800 && ball.speedTimer != 0) {
-        ball.speed =
-            100 - (map(device.getTime() - ball.speedTimer, 0, 800, 10, 30));
-      }
+      // LED.degShow(ball.deg);
+
+      // if (device.getTime() - ball.speedTimer <= 800 && ball.speedTimer != 0)
+      // {
+      //   ball.speed =
+      //       100 - (map(device.getTime() - ball.speedTimer, 0, 800, 10, 30));
+      // }
     }
 
     line.read();
@@ -341,6 +361,13 @@ void loop(void) {
       }
     }
 
+    //持ち上げ消灯
+    // if (gyro.isLift && !device.robot) {
+    //   digitalWrite(LINE_BRIGHT, LOW);
+    // } else {
+    digitalWrite(LINE_BRIGHT, HIGH);
+    // }
+
     //駆動
     kicker.kick(kicker.val);
 
@@ -348,7 +375,9 @@ void loop(void) {
 
     for (motor.count = 0; motor.count < motor.time; motor.count++) {
       line.read();
-
+      line.deg = line.calc();
+      line.process();
+      gyro.deg = gyro.read();
       motor.drive(motor.deg, motor.speed, stop);
       if (motor.count >= 1) {
         digitalWrite(BALL_RESET, HIGH);
@@ -359,10 +388,6 @@ void loop(void) {
       }
     }
 
-    // I2Cバッファクリア
-    for (int i = 0; i < 4; i++) {
-      gyro.deg = gyro.read();
-    }
   } else if (device.mode == 2) {  //駆動中
     //処理
     LED.gyroShow();
@@ -392,6 +417,14 @@ void loop(void) {
     }
     // motor.drive(NULL, NULL);
   }
+
+  while (Wire.available()) {
+    Wire.read();
+  }
+
+  // while (Wire.available()) {
+  //   gyro.read();
+  // }
 
   // Serial.println(line.mode);
   // Serial.println(line.deg);
