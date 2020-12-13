@@ -64,6 +64,7 @@ class _line {
   void read(void);
   void brightnessAdjust(void);
   void process(void);
+  void linetrace(void);
   int calc(void);
 
   //配列系
@@ -83,6 +84,12 @@ class _line {
   int speed = 100;
   int side;
   int approachdeg;
+
+  int incount = 100;
+  int over;
+  int whiting;
+  int reflection;
+  int just;
 
  private:
   // none
@@ -242,6 +249,18 @@ class _kicker {
   unsigned long kickTimer = 0;
 } kicker;
 
+class _keeper {
+ public:
+  int supportdistance;
+  int mode;
+  int deg;
+  int speed;
+  bool setup = 0;
+  unsigned long offTimer;
+
+ private:
+} keeper;
+
 void setup(void) {
   RGBLED.begin();
   RGBLED.show();
@@ -373,8 +392,30 @@ void loop(void) {
     //処理
     LED.gyroShow();
 
+    ball.read(ball.val);
+    // ball.readDistance();
+    ball.calc();
+    line.read();
+    line.linetrace();
+    position.reflection();
+
+    keeper.speed = 100;
+    keeper.deg = line.deg;
     //駆動
-    motor.drive(NULL, NULL);
+    if (keeper.deg != 1000) {
+      // motor.drive(line.deg, 70, false);
+      for (motor.count = 0; motor.count < motor.time; motor.count++) {
+        // line.read();
+
+        motor.drive(keeper.deg, keeper.speed, false);
+        if (motor.count >= 3) {
+          digitalWrite(BALL_RESET, HIGH);
+        }
+      }
+    } else {
+      motor.drive(NULL, NULL);
+    }
+    // motor.drive(NULL, NULL);
   }
 
   while (Wire.available()) {
@@ -392,10 +433,9 @@ void loop(void) {
   //   Serial.print(line.stopTime[i]);
   //   Serial.print(" ");
   // }
-  // Serial.println("");
-  Serial.println("*************");
+  Serial.println("**************************");
+
+  Serial.println(line.just);
   Serial.println(line.deg);
-  Serial.println(line._mode);
-  // Serial,println(line.stsopTimer);
-  Serial.println(line.approach);
+  Serial.println(ball.dist);
 }
