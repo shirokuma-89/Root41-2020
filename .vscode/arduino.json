@@ -2,5 +2,5 @@
     "board": "arduino:avr:mega",
     "configuration": "cpu=atmega2560",
     "sketch": "programA/programA.ino",
-    "port": "/dev/tty.usbserial-141130"
+    "port": "/dev/tty.usbserial-1410"
 }
