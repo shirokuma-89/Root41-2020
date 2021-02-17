@@ -74,6 +74,7 @@ class _line {
   bool flag;
   bool touch;
   bool approach;
+  bool gyrobreak;
 
   float vector[20][2];
 
@@ -399,7 +400,13 @@ void loop(void) {
     line.linetrace();
     position.reflection();
 
-    keeper.speed = 100;
+    if (ball.top < 3 || ball.top > 13) {
+      keeper.speed = 75;
+    } else if (ball.top <= 5 || ball.top >= 11) {
+      keeper.speed = 85;
+    } else {
+      keeper.speed = 85;
+    }
     keeper.deg = line.deg;
     //駆動
     if (keeper.deg != 1000) {
@@ -413,7 +420,7 @@ void loop(void) {
         }
       }
     } else {
-      motor.drive(NULL, NULL);
+      motor.drive(0, 0, true);
     }
     // motor.drive(NULL, NULL);
   }
@@ -436,6 +443,6 @@ void loop(void) {
   Serial.println("**************************");
 
   Serial.println(line.just);
-  Serial.println(line.deg);
-  Serial.println(ball.dist);
+  Serial.println(keeper.deg);
+  Serial.println(ball.top);
 }
