@@ -74,6 +74,7 @@ class _line {
   bool flag;
   bool touch;
   bool approach;
+  bool gyrobreak;
 
   float vector[20][2];
 
@@ -256,6 +257,13 @@ class _keeper {
   int deg;
   int speed;
   bool setup = 0;
+  bool Front;
+  bool frontmode;
+  int modein;
+  int count;
+  int frontball;
+  unsigned long banTimer;
+  unsigned long atackTimer;
   unsigned long offTimer;
 
  private:
@@ -399,21 +407,32 @@ void loop(void) {
     line.linetrace();
     position.reflection();
 
-    keeper.speed = 100;
+    if (ball.top < 3 || ball.top > 13) {
+      keeper.speed = 85;
+    } else if (ball.top <= 5 || ball.top >= 11) {
+      keeper.speed = 85;
+    } else {
+      keeper.speed = 85;
+    }
     keeper.deg = line.deg;
+    gyro.deg = gyro.read();
     //駆動
     if (keeper.deg != 1000) {
-      // motor.drive(line.deg, 70, false);
-      for (motor.count = 0; motor.count < motor.time; motor.count++) {
-        // line.read();
-        gyro.deg = gyro.read();
-        motor.drive(keeper.deg, keeper.speed, false);
-        if (motor.count >= 3) {
-          digitalWrite(BALL_RESET, HIGH);
+      if (gyro.deg <= 40 || gyro.deg >= 320) {
+        // motor.drive(line.deg, 70, false);
+        for (motor.count = 0; motor.count < motor.time; motor.count++) {
+          // line.read();
+          gyro.deg = gyro.read();
+          motor.drive(keeper.deg, keeper.speed, false);
+          if (motor.count >= 3) {
+            digitalWrite(BALL_RESET, HIGH);
+          }
         }
+      } else {
+        motor.drive(0, 0, true);
       }
     } else {
-      motor.drive(NULL, NULL);
+      motor.drive(0, 0, true);
     }
     // motor.drive(NULL, NULL);
   }
@@ -435,7 +454,7 @@ void loop(void) {
   // }
   Serial.println("**************************");
 
-  Serial.println(line.just);
   Serial.println(line.deg);
-  Serial.println(ball.dist);
+  Serial.println(keeper.Front);
+  Serial.println(keeper.frontball);
 }

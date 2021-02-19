@@ -54,7 +54,8 @@ void _line::process(void) {
   if (flag) {
     if (deg != 1000) {
       //ラインタッチ方向判定（四方向）
-      if (deg <= 35 || deg >= 325) { side = 0;  //↑
+      if (deg <= 35 || deg >= 325) {
+        side = 0;  //↑
       } else if (deg >= 145 && deg <= 215) {
         side = 2;  //↓
       } else if (deg < 180) {
@@ -249,21 +250,93 @@ void _line::linetrace(void) {
     // inline&&moving
     if (line.whiting <= 1) {
       keeper.mode = 3;
+      // if (abs(180 - gyro.deg) <= 120) {
+      //   line.gyrobreak = true;
+      // } else {
+      //   line.gyrobreak = false;
+      // }
       keeper.offTimer = device.getTime();
     }
-    if (ball.top <= 7) {
+    if (keeper.modein >= 5 && keeper.frontmode &&
+        device.getTime() - keeper.banTimer >= 3000) {
+      keeper.mode = 2;
+      keeper.atackTimer = device.getTime();
+    }
+    if (keeper.count >= 50) {
+      if (keeper.frontball >= 45) {
+        keeper.Front = true;
+        keeper.modein++;
+      } else {
+        keeper.Front = false;
+        keeper.modein = 0;
+      }
+      keeper.frontball = 0;
+      keeper.count = 0;
+    } else {
+      if (ball.top < 2 || ball.top > 14) {
+        keeper.frontball++;
+      }
+      keeper.count++;
+    }
+    keeper.frontmode = false;
+    if (ball.top < 2 || ball.top > 14) {
+      line.deg = 1000;
+      keeper.frontmode = true;
+      // motor.referenceAngle = 0;
+    } else if (ball.top < 4 || ball.top > 12) {
+      if (ball.top < 8) {
+        line.deg = 90;
+        // motor.referenceAngle = ball.top * 22.5;
+      } else {
+        line.deg = 270;
+        // motor.referenceAngle = ball.top * 22.5;
+      }
+    } else if (ball.top <= 7) {
       line.deg = 90;
     } else {
       line.deg = 270;
+    }
+    int checkFront = 0;
+    for (int i = 0; i <= 19; i++) {
+      if (i < 4 || i > 14) {
+        if (line.val[i]) {
+          checkFront++;
+        }
+      }
+    }
+    if (checkFront < 2 && whiting > 0 && line.deg != 1000) {
+      if (line.deg < 180) {
+        line.deg += 20;
+      } else {
+        line.deg -= 20;
+      }
     }
   } else if (keeper.mode == 1) {
     // inline&&touching
   } else if (keeper.mode == 2) {
     // offline&&attacking
+    if (device.getTime() - keeper.atackTimer <= 250) {
+      line.deg = 0;
+    } else {
+      keeper.mode = 0;
+    }
+    keeper.banTimer = device.getTime();
   } else if (keeper.mode == 3) {
     // offline&&missing
-    if (whiting <= 3) {
+    if (gyrobreak && whiting <= 3) {
+      line.deg = 180;
+    } else if (whiting <= 3) {
       line.deg = just * 18;
+      if (just >= 4 && just <= 16) {
+        if (line.deg < 180) {
+          line.deg -= 35;
+        } else {
+          line.deg += 35;
+        }
+      }
+      if (device.getTime() - keeper.offTimer >= 500) {
+        line.deg = 180;
+      }
       // if (device.getTime() - keeper.offTimer >= 300) {
       //   if (just >= 3 && just <= 5) {
       //     line.deg = 20;
