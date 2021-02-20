@@ -52,10 +52,13 @@ void _ball::calc(void) {
 
     offset = offset * 0.2;  // + dist * 3;
     if (dist <= 455) {
-      offset *= 1.35;
+      offset *= 1.4;
       offset += 40;
     } else if (dist <= 475 && (top <= 4 || top >= 12)) {
-      offset *= 1.3;
+      offset *= 1.23;
+      offset += 40;
+    } else if (dist <= 525 && (top > 4 && top > 12)) {
+      offset *= 1.23;
       offset += 40;
     } else if (dist <= 510) {
       // offset *= 1.2;
