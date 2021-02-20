@@ -51,10 +51,10 @@ class _ball {
   int position = 0;
   unsigned long positionTimer;
   unsigned long driftTimer;
+  unsigned long holdTimer;
 
  private:
   float LPF = 0.4;
-  unsigned long holdTimer;
 
 } ball;
 
@@ -410,15 +410,19 @@ void loop(void) {
     if (ball.top < 3 || ball.top > 13) {
       keeper.speed = 85;
     } else if (ball.top <= 5 || ball.top >= 11) {
-      keeper.speed = 85;
+      keeper.speed = 95;
     } else {
-      keeper.speed = 85;
+      keeper.speed = 95;
     }
     keeper.deg = line.deg;
     gyro.deg = gyro.read();
     //駆動
+
+    kicker.kick(kicker.val);
+
     if (keeper.deg != 1000) {
-      if (gyro.deg <= 40 || gyro.deg >= 320) {
+      if (gyro.deg <= 30 || gyro.deg >= 330) {
+        //動きのスムーズ
         // motor.drive(line.deg, 70, false);
         for (motor.count = 0; motor.count < motor.time; motor.count++) {
           // line.read();
@@ -457,4 +461,5 @@ void loop(void) {
   Serial.println(line.deg);
   Serial.println(keeper.Front);
   Serial.println(keeper.frontball);
+  Serial.println(ball.dist);
 }
