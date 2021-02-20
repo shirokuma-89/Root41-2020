@@ -55,7 +55,10 @@ void _ball::calc(void) {
       offset *= 1.4;
       offset += 40;
     } else if (dist <= 475 && (top <= 4 || top >= 12)) {
-      offset *= 1.3;
+      offset *= 1.23;
+      offset += 40;
+    } else if (dist <= 525 && (top > 4 && top > 12)) {
+      offset *= 1.23;
       offset += 40;
     } else if (dist <= 510) {
       // offset *= 1.2;
@@ -82,7 +85,7 @@ void _ball::calc(void) {
     }
 
     if (digitalRead(BALL_HOLD) && !(top > 3 && top < 13)) {
-      if (device.getTime() - holdTimer >= 70) {
+      if (device.getTime() - holdTimer >= 60) {
         kicker.val = true;
         // if (motor.referenceAngle != 0) {
         //   if (device.getTime() - holdTimer < 300) {
