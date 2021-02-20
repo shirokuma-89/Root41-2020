@@ -257,11 +257,34 @@ void _line::linetrace(void) {
       // }
       keeper.offTimer = device.getTime();
     }
+    if (!digitalRead(BALL_HOLD)) {
+      ball.holdTimer = device.getTime();
+      kicker.val = false;
+      // position = 0;
+    }
+    if (digitalRead(BALL_HOLD) && !(ball.top > 3 && ball.top < 13)) {
+      if (device.getTime() - ball.holdTimer >= 70) {
+        kicker.val = true;
+        // if (motor.referenceAngle != 0) {
+        //   if (device.getTime() - holdTimer < 300) {
+        //     kicker.val = false;
+        //   }
+        // }
+        // if (device.getTime() - speedTimer >= 600 || speedTimer == 0) {
+        //   speedTimer = device.getTime();
+        // }
+      }
+    }
     if (keeper.modein >= 5 && keeper.frontmode &&
         device.getTime() - keeper.banTimer >= 3000) {
       keeper.mode = 2;
       keeper.atackTimer = device.getTime();
     }
+    // else if (keeper.modein >= 8 && keeper.frontmode &&
+    //            device.getTime() - keeper.banTimer >= 3000) {
+    //   keeper.mode = 4;
+    //   keeper.atackTimer = device.getTime();
+    // }
     if (keeper.count >= 50) {
       if (keeper.frontball >= 45) {
         keeper.Front = true;
@@ -291,7 +314,7 @@ void _line::linetrace(void) {
         line.deg = 270;
         // motor.referenceAngle = ball.top * 22.5;
       }
-    } else if (ball.top <= 7) {
+    } else if (ball.top < 8) {
       line.deg = 90;
     } else {
       line.deg = 270;
@@ -348,5 +371,13 @@ void _line::linetrace(void) {
       line.deg = 1000;
       keeper.mode = 0;
     }
+  } else if (keeper.mode == 4) {
+    // offline&&going
+    if (device.getTime() - keeper.atackTimer <= 1000) {
+      line.deg = 0;
+    } else {
+      keeper.mode = 0;
+    }
+    keeper.banTimer = device.getTime();
   }
 }
