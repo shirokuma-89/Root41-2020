@@ -456,10 +456,10 @@ void loop(void) {
   //   Serial.print(line.stopTime[i]);
   //   Serial.print(" ");
   // }
-  Serial.println("**************************");
+  // Serial.println("**************************");
 
-  Serial.println(line.deg);
-  Serial.println(keeper.Front);
-  Serial.println(keeper.frontball);
-  Serial.println(ball.dist);
+  // Serial.println(line.deg);
+  // Serial.println(keeper.Front);
+  // Serial.println(keeper.frontball);
+  // Serial.println(ball.dist);
 }

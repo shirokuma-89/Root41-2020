@@ -3,13 +3,13 @@ void _ball::read(int* b) {
   for (int i = 0; i <= 15; i++) {
     // *(b + i) += (1 - LPF) * (analogRead(BALL[i]) - *(b + i));
     *(b + i) = analogRead(BALL[i]);
-    if (i == 6 && !device.robot) {
-      *(b + i) = 900;
+    if ((i == 6 || i == 13) && !device.robot) {
+      *(b + i) = 700;
     }
-    // Serial.print(*(b + i));
-    // Serial.print(" ");
+    Serial.print(*(b + i));
+    Serial.print(" ");
   }
-  // Serial.println(" ");
+  Serial.println(" ");
   digitalWrite(BALL_RESET, LOW);
 
   *b *= 0.98;
@@ -31,7 +31,7 @@ void _ball::calc(void) {
       third = i;
     }
 
-    if (val[i] >= 650) {
+    if (val[i] >= 690) {
       existCount++;
       dist += 690;
     } else {
@@ -43,25 +43,25 @@ void _ball::calc(void) {
   dist /= 16;  // - existCount;
 
   // Serial.println(dist);
-  if (existCount <= 14) {  //ボールあります
+  if (existCount <= 13) {  //ボールあります
     exist = true;
     deg = top * 22.5;
     offset = 180 - abs(180 - deg);
 
     Serial.println(position);
 
-    offset = offset * 0.2;  // + dist * 3;
-    if (dist <= 455) {
+    offset = offset * 0.3;  // + dist * 3;
+    if (dist <= 465) {
       offset *= 1.4;
       offset += 40;
-    } else if (dist <= 475 && (top <= 4 || top >= 12)) {
+    } else if (dist <= 485 && (top <= 4 || top >= 12)) {
       offset *= 1.23;
       offset += 40;
-    } else if (dist <= 525 && (top > 4 && top > 12)) {
-      offset *= 1.23;
+    } else if (dist <= 525 && (top > 4 && top < 12)) {
+      offset *= 1.4;
       offset += 40;
     } else if (dist <= 510) {
-      // offset *= 1.2;
+      offset *= 1.2;
       offset += 15;
     }
     offset = constrain(offset, 0, 100);
