@@ -338,7 +338,7 @@ void _line::linetrace(void) {
     // inline&&touching
   } else if (keeper.mode == 2) {
     // offline&&attacking
-    if (device.getTime() - keeper.atackTimer <= 250) {
+    if (device.getTime() - keeper.atackTimer <= 100) {
       line.deg = 0;
     } else {
       keeper.mode = 0;

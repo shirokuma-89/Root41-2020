@@ -311,6 +311,8 @@ void setup(void) {
   device.discharge();
 
   gyro.offsetRead();
+
+  device.mode = 1;
 }
 
 void loop(void) {
